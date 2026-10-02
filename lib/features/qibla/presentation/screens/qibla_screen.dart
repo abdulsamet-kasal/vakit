@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -26,7 +27,10 @@ class QiblaScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final qiblaState = ref.watch(qiblaProvider);
-    final prayerState = ref.watch(prayerTimesProvider);
+    // Yalnızca şehir izlenir; saniyelik sayaç güncellemeleri ekranı gereksiz yeniden kurmasın
+    final selectedCity = ref.watch(
+      prayerTimesProvider.select((s) => s.selectedCity),
+    );
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final qiblaDegreesRounded = qiblaState.qiblaBearing.round();
@@ -72,7 +76,7 @@ class QiblaScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        prayerState.selectedCity.displayName,
+                        selectedCity.displayName,
                         style: AppTypography.bodyMedium(
                           color: isDark ? AppColors.darkText : AppColors.ink,
                         ).copyWith(fontWeight: FontWeight.w600),
@@ -140,7 +144,10 @@ class QiblaScreen extends ConsumerWidget {
 
                 const Spacer(),
 
-                // 4. Hizalanma Durumu veya Canlı Kalibrasyon Rehberi
+                // 4. Hizalanma Durumu / Canlı Kalibrasyon Rehberi / Sensörsüz Statik Rehber
+                if (qiblaState.needsCalibration && !qiblaState.isLiveTracking) ...[
+                  _buildSensorGuideCard(context, ref, qiblaState, isDark),
+                ] else
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
@@ -197,8 +204,8 @@ class QiblaScreen extends ConsumerWidget {
 
                 const SizedBox(height: 14),
 
-                // Kalibrasyon Rehberi (8 Çizme İpucu)
-                if (qiblaState.needsCalibration)
+                // Kalibrasyon Rehberi (8 Çizme İpucu) — yalnızca canlı takipte
+                if (qiblaState.needsCalibration && qiblaState.isLiveTracking)
                   Container(
                     margin: const EdgeInsets.only(bottom: 6),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
@@ -224,6 +231,81 @@ class QiblaScreen extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// Sensör verisi alınamadığında gösterilen statik yön rehberi.
+  /// Cihazın üst kenarı Kuzey kabul edilerek Kâbe yönü ve mesafesi gösterilir.
+  Widget _buildSensorGuideCard(
+    BuildContext context,
+    WidgetRef ref,
+    QiblaState qiblaState,
+    bool isDark,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
+      decoration: BoxDecoration(
+        color: isDark
+            ? AppColors.darkSurfaceElevated
+            : Colors.white.withValues(alpha: 0.92),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.clayAmber.withValues(alpha: 0.35)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.sensors_off, size: 18, color: AppColors.clayAmber),
+              const SizedBox(width: 8),
+              Text(
+                'Pusula sensörü yanıt vermiyor',
+                style: AppTypography.labelLarge(
+                  color: isDark ? AppColors.darkText : AppColors.ink,
+                  isBold: true,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Transform.rotate(
+            angle: qiblaState.qiblaBearing * (math.pi / 180.0),
+            child: const Icon(
+              Icons.navigation_rounded,
+              size: 44,
+              color: AppColors.brassGold,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Cihazı Kuzeye (K) tutun; Kâbe '
+            '${qiblaState.qiblaBearing.round()}° yönünde • '
+            '${qiblaState.distanceKm.round()} km',
+            textAlign: TextAlign.center,
+            style: AppTypography.bodySmall(
+              color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+            ),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            onPressed: () => ref.read(qiblaProvider.notifier).retrySensors(),
+            icon: const Icon(Icons.refresh_rounded, size: 18),
+            label: const Text('Tekrar Dene'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: isDark ? AppColors.brassGold : const Color(0xFF9E7728),
+              side: BorderSide(color: AppColors.brassGold.withValues(alpha: 0.5)),
+            ),
+          ),
+        ],
       ),
     );
   }
