@@ -63,6 +63,13 @@ class VakitApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      builder: (context, child) {
+        return MediaQuery.withClampedTextScaling(
+          minScaleFactor: 0.85,
+          maxScaleFactor: 1.35,
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

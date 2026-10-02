@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_typography.dart';
 import '../../domain/city_model.dart';
@@ -116,8 +117,14 @@ class _CitySelectorSheetState extends State<CitySelectorSheet> {
                           navigator.pop();
                         } else {
                           messenger.showSnackBar(
-                            const SnackBar(
-                              content: Text('Konum alınamadı. Lütfen GPS iznini kontrol edin veya listeden seçin.'),
+                            SnackBar(
+                              content: const Text('Konum alınamadı. Lütfen GPS iznini kontrol edin veya listeden seçin.'),
+                              action: SnackBarAction(
+                                label: 'Ayarlar',
+                                onPressed: () {
+                                  Geolocator.openAppSettings();
+                                },
+                              ),
                             ),
                           );
                         }
