@@ -10,6 +10,17 @@ import '../features/settings/presentation/screens/settings_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/vakitler',
+  redirect: (context, state) {
+    final uriStr = state.uri.toString();
+    if (uriStr.startsWith('vakit:')) {
+      if (uriStr.contains('ayet')) return '/ayet';
+      if (uriStr.contains('hadis')) return '/hadis';
+      if (uriStr.contains('kible')) return '/kible';
+      if (uriStr.contains('ayarlar')) return '/ayarlar';
+      return '/vakitler';
+    }
+    return null;
+  },
   routes: [
     ShellRoute(
       builder: (context, state, child) {

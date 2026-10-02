@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    <!-- Arka Plan: Orman Yeşili Kavisli Dikdörtgen -->
+    <path
+        android:fillColor="#0F3D2E"
+        android:pathData="M 20,4 C 11.2,4 4,11.2 4,20 L 4,180 C 4,188.8 11.2,196 20,196 L 180,196 C 188.8,196 196,188.8 196,180 L 196,20 C 196,11.2 188.8,4 180,4 Z" />
+    <!-- İnce Pirinç Kılcal Kenarlık -->
+    <path
+        android:strokeColor="#33B8934A"
+        android:strokeWidth="1.5"
+        android:pathData="M 20,4 C 11.2,4 4,11.2 4,20 L 4,180 C 4,188.8 11.2,196 20,196 L 180,196 C 188.8,196 196,188.8 196,180 L 196,20 C 196,11.2 188.8,4 180,4 Z" />
+    <!-- Mihrap Kemer Motifi (Silik Arka Plan Rozeti) -->
+    <path
+        android:fillColor="#15FFFFFF"
+        android:pathData="M 100,28 C 94,36 82,48 82,62 L 82,75 L 118,75 L 118,62 C 118,48 106,36 100,28 Z" />
+    <!-- Üst Şehir Çizgisi -->
+    <path
+        android:fillColor="#A9C4B0"
+        android:pathData="M 80,44 L 120,44 L 120,47 L 80,47 Z" />
+    <!-- Sıradaki Vakit Rozeti -->
+    <path
+        android:fillColor="#22A9C4B0"
+        android:pathData="M 70,56 L 130,56 L 130,64 L 70,64 Z" />
+    <!-- Vakit Adı Kutusu (ÖĞLE) -->
+    <path
+        android:fillColor="#F3EEE0"
+        android:pathData="M 60,78 L 140,78 L 140,98 L 60,98 Z" />
+    <!-- Canlı Geri Sayım Kutusu (02:45:12) -->
+    <path
+        android:fillColor="#B8934A"
+        android:pathData="M 50,110 L 150,110 L 150,128 L 50,128 Z" />
+    <!-- Ezan Saati Kutusu (13:06) -->
+    <path
+        android:fillColor="#A9C4B0"
+        android:pathData="M 75,138 L 125,138 L 125,146 L 75,146 Z" />
+    <!-- Alt Kerahat Rozeti / İnce Çizgi -->
+    <path
+        android:fillColor="#C27A3E"
+        android:pathData="M 85,160 L 115,160 L 115,168 L 85,168 Z" />
+</vector>

@@ -26,38 +26,49 @@ class HomeWidgetService {
     try {
       await HomeWidget.setAppGroupId(appGroupId);
 
-      // Dinle: Widget tıklandığında gelen Uri
+      // Dinle: Uygulama açık/arkaplandayken widget tıklandığında gelen Uri
       HomeWidget.widgetClicked.listen((Uri? uri) {
         if (uri != null) {
           _handleUri(uri);
         }
       });
-
-      // Uygulama kapalıyken widget tıklandıysa kontrol et
-      final initialUri = await HomeWidget.initiallyLaunchedFromHomeWidget();
-      if (initialUri != null) {
-        _handleUri(initialUri);
-      }
     } catch (e) {
       debugPrint('HomeWidgetService.initialize hatası: $e');
     }
   }
 
+  /// Uygulama kapalıyken (cold start) widget tıklandıysa kontrol eder
+  static Future<void> checkInitialLaunch() async {
+    try {
+      final initialUri = await HomeWidget.initiallyLaunchedFromHomeWidget();
+      if (initialUri != null) {
+        _handleUri(initialUri);
+      }
+    } catch (e) {
+      debugPrint('HomeWidgetService.checkInitialLaunch hatası: $e');
+    }
+  }
+
   static void _handleUri(Uri uri) {
     debugPrint('HomeWidget click URI: $uri');
-    final host = uri.host;
-    final path = uri.path;
+    final uriStr = uri.toString().toLowerCase();
     String target = '/vakitler';
-    if (host == 'ayet' || path.contains('ayet')) {
+    if (uriStr.contains('ayet')) {
       target = '/ayet';
-    } else if (host == 'hadis' || path.contains('hadis')) {
+    } else if (uriStr.contains('hadis')) {
       target = '/hadis';
-    } else if (host == 'kible' || path.contains('kible')) {
+    } else if (uriStr.contains('kible')) {
       target = '/kible';
+    } else if (uriStr.contains('ayarlar')) {
+      target = '/ayarlar';
     } else {
       target = '/vakitler';
     }
-    appRouter.go(target);
+    try {
+      appRouter.go(target);
+    } catch (e) {
+      debugPrint('appRouter.go hatası: $e');
+    }
   }
 
   /// 7 günlük vakitleri ve günün âyet/hadis verisini kaydeder ve tüm widget'ları günceller
@@ -117,7 +128,7 @@ class HomeWidgetService {
         };
       }).toList();
 
-      await HomeWidget.saveWidgetData<String>('city_name', city.name);
+      await HomeWidget.saveWidgetData<String>('city_name', city.displayName);
       await HomeWidget.saveWidgetData<String>('days_prayer_json', jsonEncode(daysPayload));
 
       // Âyet ve hadis sağlanmadıysa bugünün içeriğini getir

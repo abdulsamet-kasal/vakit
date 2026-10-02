@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="70dp"
+    android:viewportWidth="300"
+    android:viewportHeight="70">
+    <!-- Arka Plan: Orman Yeşili -->
+    <path
+        android:fillColor="#0F3D2E"
+        android:pathData="M 14,4 C 8.5,4 4,8.5 4,14 L 4,56 C 4,61.5 8.5,66 14,66 L 286,66 C 291.5,66 296,61.5 296,56 L 296,14 C 296,8.5 291.5,4 286,4 Z" />
+    <!-- İnce Pirinç Kılcal Kenarlık -->
+    <path
+        android:strokeColor="#33B8934A"
+        android:strokeWidth="1.2"
+        android:pathData="M 14,4 C 8.5,4 4,8.5 4,14 L 4,56 C 4,61.5 8.5,66 14,66 L 286,66 C 291.5,66 296,61.5 296,56 L 296,14 C 296,8.5 291.5,4 286,4 Z" />
+    <!-- Sol: Şehir & Sıradaki -->
+    <path
+        android:fillColor="#A9C4B0"
+        android:pathData="M 20,24 L 64,24 L 64,32 L 20,32 Z" />
+    <path
+        android:fillColor="#80A9C4B0"
+        android:pathData="M 20,38 L 54,38 L 54,44 L 20,44 Z" />
+    <!-- Dikey Ayırıcı Çizgi -->
+    <path
+        android:fillColor="#33FFFFFF"
+        android:pathData="M 76,20 L 78,20 L 78,50 L 76,50 Z" />
+    <!-- Orta: Vakit Adı & Saati -->
+    <path
+        android:fillColor="#F3EEE0"
+        android:pathData="M 90,22 L 130,22 L 130,34 L 90,34 Z" />
+    <path
+        android:fillColor="#A9C4B0"
+        android:pathData="M 90,40 L 120,40 L 120,48 L 90,48 Z" />
+    <!-- Sağ: Geri Sayım Sayacı -->
+    <path
+        android:fillColor="#B8934A"
+        android:pathData="M 190,26 L 276,26 L 276,44 L 190,44 Z" />
+</vector>

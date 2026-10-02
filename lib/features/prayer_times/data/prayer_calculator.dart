@@ -22,7 +22,7 @@ class PrayerCalculator {
 
     return PrayerTimesModel(
       date: DateTime(date.year, date.month, date.day),
-      cityName: city.name,
+      cityName: city.displayName,
       imsak: prayerTimes.fajr,
       gunes: prayerTimes.sunrise,
       ogle: prayerTimes.dhuhr,
