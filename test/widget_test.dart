@@ -16,7 +16,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Tasarım önizleme ekranının açıldığını doğrula
-    expect(find.text('Vakit • Tasarım Önizleme'), findsOneWidget);
+    // Ana namaz vakitleri ekranının başarıyla açıldığını doğrula
+    expect(find.text('İstanbul'), findsOneWidget);
+    expect(find.text('Vakitler'), findsOneWidget);
   });
 }
