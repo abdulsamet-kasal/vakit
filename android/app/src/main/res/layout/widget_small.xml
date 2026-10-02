@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_small_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg_forest"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="14dp">
+
+    <TextView
+        android:id="@+id/tv_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="İstanbul"
+        android:textColor="#A9C4B0"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.08" />
+
+    <TextView
+        android:id="@+id/tv_next_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="SIRADAKİ VAKİT"
+        android:textColor="#80A9C4B0"
+        android:textSize="9sp"
+        android:letterSpacing="0.1" />
+
+    <TextView
+        android:id="@+id/tv_prayer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Öğle"
+        android:textColor="#F3EEE0"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <Chronometer
+        android:id="@+id/widget_chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:countDown="true"
+        android:textColor="#B8934A"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_prayer_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Ezan: 13:06"
+        android:textColor="#A9C4B0"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/tv_kerahat_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/widget_kerahat_badge_bg"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="2dp"
+        android:text="Kerahat"
+        android:textColor="#C27A3E"
+        android:textSize="9sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+</LinearLayout>

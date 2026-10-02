@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/daily_content_repository.dart';
 import '../../data/models/hadith_model.dart';
 import '../../data/models/verse_model.dart';
+import '../../../widgets_bridge/home_widget_service.dart';
 
 class DailyContentState {
   final DateTime selectedDate;
@@ -68,6 +69,10 @@ class DailyContentNotifier extends Notifier<DailyContentState> {
         verse: AsyncValue.data(verse),
         hadith: AsyncValue.data(hadith),
       );
+
+      if (state.isToday) {
+        HomeWidgetService.updateDailyContent(verse: verse, hadith: hadith);
+      }
     } catch (e, st) {
       state = state.copyWith(
         verse: AsyncValue.error(e, st),

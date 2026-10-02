@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_medium_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg_forest"
+    android:orientation="vertical"
+    android:padding="14dp">
+
+    <!-- Üst Başlık & Tarih & Kerahat Rozeti -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_medium_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="İstanbul"
+                android:textColor="#F3EEE0"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_medium_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="2 Ekim Cuma"
+                android:textColor="#A9C4B0"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_medium_kerahat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/widget_kerahat_badge_bg"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp"
+            android:text="Kerahat Vakti"
+            android:textColor="#C27A3E"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!-- 6 Vakit Yatay Sütunları -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- 1. İmsak -->
+        <LinearLayout
+            android:id="@+id/col_imsak"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/lbl_imsak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="İmsak"
+                android:textColor="#A9C4B0"
+                android:textSize="11sp" />
+            <TextView
+                android:id="@+id/val_imsak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="05:30"
+                android:textColor="#F3EEE0"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <View
+                android:id="@+id/bar_imsak"
+                android:layout_width="16dp"
+                android:layout_height="2.5dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/widget_brass_bar"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <!-- 2. Güneş -->
+        <LinearLayout
+            android:id="@+id/col_gunes"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/lbl_gunes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Güneş"
+                android:textColor="#A9C4B0"
+                android:textSize="11sp" />
+            <TextView
+                android:id="@+id/val_gunes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="06:55"
+                android:textColor="#F3EEE0"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <View
+                android:id="@+id/bar_gunes"
+                android:layout_width="16dp"
+                android:layout_height="2.5dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/widget_brass_bar"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <!-- 3. Öğle -->
+        <LinearLayout
+            android:id="@+id/col_ogle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/lbl_ogle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Öğle"
+                android:textColor="#A9C4B0"
+                android:textSize="11sp" />
+            <TextView
+                android:id="@+id/val_ogle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="12:58"
+                android:textColor="#F3EEE0"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <View
+                android:id="@+id/bar_ogle"
+                android:layout_width="16dp"
+                android:layout_height="2.5dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/widget_brass_bar"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <!-- 4. İkindi -->
+        <LinearLayout
+            android:id="@+id/col_ikindi"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/lbl_ikindi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="İkindi"
+                android:textColor="#A9C4B0"
+                android:textSize="11sp" />
+            <TextView
+                android:id="@+id/val_ikindi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="16:14"
+                android:textColor="#F3EEE0"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <View
+                android:id="@+id/bar_ikindi"
+                android:layout_width="16dp"
+                android:layout_height="2.5dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/widget_brass_bar"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <!-- 5. Akşam -->
+        <LinearLayout
+            android:id="@+id/col_aksam"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/lbl_aksam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Akşam"
+                android:textColor="#A9C4B0"
+                android:textSize="11sp" />
+            <TextView
+                android:id="@+id/val_aksam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="18:52"
+                android:textColor="#F3EEE0"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <View
+                android:id="@+id/bar_aksam"
+                android:layout_width="16dp"
+                android:layout_height="2.5dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/widget_brass_bar"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <!-- 6. Yatsı -->
+        <LinearLayout
+            android:id="@+id/col_yatsi"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/lbl_yatsi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yatsı"
+                android:textColor="#A9C4B0"
+                android:textSize="11sp" />
+            <TextView
+                android:id="@+id/val_yatsi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="20:11"
+                android:textColor="#F3EEE0"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+            <View
+                android:id="@+id/bar_yatsi"
+                android:layout_width="16dp"
+                android:layout_height="2.5dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/widget_brass_bar"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

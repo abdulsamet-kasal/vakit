@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_hadith_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg_parchment"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Üst Başlık & Kaynak -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="GÜNÜN HADİSİ"
+            android:textColor="#B8934A"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1" />
+
+        <TextView
+            android:id="@+id/tv_hadith_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Buhârî, Bed’ü’l-vahy, 1"
+            android:textColor="#4A5C52"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <!-- Hadis Kısa Metni -->
+    <TextView
+        android:id="@+id/tv_hadith_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:text="“Ameller niyetlere göredir; herkes için ancak niyet ettiği şey vardır.”"
+        android:textColor="#14201A"
+        android:textSize="13sp"
+        android:lineSpacingExtra="3dp" />
+
+    <!-- Ravi & Marka Alt Satır -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp">
+
+        <TextView
+            android:id="@+id/tv_hadith_narrator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="Hz. Ömer (r.a.)"
+            android:textColor="#7A8E82"
+            android:textSize="10sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Vakit"
+            android:textColor="#804A5C52"
+            android:textSize="9sp" />
+    </RelativeLayout>
+
+</LinearLayout>

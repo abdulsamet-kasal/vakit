@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/config/env_config.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
+import 'features/widgets_bridge/home_widget_service.dart';
 import 'routing/app_router.dart';
 
 Future<void> main() async {
@@ -28,6 +29,9 @@ Future<void> main() async {
       debugPrint('Supabase başlatılamadı ($e). Çevrimdışı modda devam ediliyor.');
     }
   }
+
+  // Ana ekran widget köprüsünü başlat
+  await HomeWidgetService.initialize();
 
   runApp(
     const ProviderScope(

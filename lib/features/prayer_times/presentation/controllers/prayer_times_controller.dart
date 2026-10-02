@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/utils/date_time_utils.dart';
+import '../../../widgets_bridge/home_widget_service.dart';
 import '../../data/location_service.dart';
 import '../../data/prayer_calculator.dart';
 import '../../domain/city_model.dart';
@@ -108,6 +109,9 @@ class PrayerTimesNotifier extends Notifier<PrayerTimesState> {
     // Kayıtlı şehri arka planda yükle
     _loadSavedCity();
 
+    // Widget senkronizasyonunu ilk açılışta tetikle
+    Future.microtask(() => HomeWidgetService.syncAllWidgets(city: initialCity));
+
     ref.onDispose(() {
       _tickerTimer?.cancel();
     });
@@ -207,6 +211,9 @@ class PrayerTimesNotifier extends Notifier<PrayerTimesState> {
         await prefs.setDouble(_prefCityLngKey, city.longitude);
       } catch (_) {}
     }
+
+    // Şehir değişiminde widget'ları anında güncelle
+    HomeWidgetService.syncAllWidgets(city: city);
   }
 
   void changeDate(DateTime date) {

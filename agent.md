@@ -72,6 +72,23 @@ Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, m
 
 ---
 
+### ✅ Aşama 5: Ana Ekran Widget'ları (Android RemoteViews, 5 Widget Tipi & Veri Köprüsü)
+- [x] `home_widget` kütüphanesi ile Flutter ve yerel Android katmanı arasında çift yönlü veri köprüsü kuruldu (`HomeWidgetService`).
+- [x] 7 günlük namaz vakitleri, kerahat aralıkları ve günün âyet/hadis verisi tek seferde JSON formatında `shared_preferences` içine aktarılacak şekilde modellendi.
+- [x] 5 farklı yerel Android Widget'ı geliştirildi:
+  1. **Small (2x2):** Sonraki vakit adı, ezan saati, canlı geri sayım (`ChronometerCountDown`), kerahat rozeti.
+  2. **Medium (4x2):** Günün 6 vakti, vakit saatleri, aktif vaktin altında mat pirinç çizgi göstergesi ve kerahat durumu.
+  3. **Strip (4x1):** Yatay kompakt şerit, sonraki vakit ve canlı geri sayım sayacı.
+  4. **Verse (4x2):** Mushaf kartı dokulu günün âyeti ve sure/ayet no kaynağı.
+  5. **Hadith (4x2):** Mushaf kartı dokulu günün hadisi, ravi ve tam kaynak bilgisi.
+- [x] `VakitWidgetHelper.kt`: JSON ayrıştırma, canlı Chronometer taban zamanı hesaplama, kerahat mantığı ve widget yenileme.
+- [x] `VakitAlarmReceiver.kt`: Namaz vakitlerinde, kerahat giriş/çıkışlarında ve gece yarısı geçişlerinde widget'ları pil dostu uyandıran hassas alarm tetikleyicisi (`AlarmManager.setExactAndAllowWhileIdle`).
+- [x] `BootReceiver.kt`: Cihaz yeniden başladığında (`BOOT_COMPLETED`), saat dilimi değiştiğinde veya zaman ayarlandığında widget'ları ve alarmları anında tazeleyen alıcı.
+- [x] Deep link yönlendirmeleri (`vakit://vakitler`, `vakit://ayet`, `vakit://hadis`, `vakit://kible`) ile widget tıklamalarında ilgili ekrana anında geçiş.
+- [x] `compileDebugKotlin` ve `flutter build apk --debug` ile Android derlemesi %100 doğrulandı.
+
+---
+
 ### ⏳ Sıradaki Aşamalar
-- **Aşama 5:** Ana ekran widget'ları (Android RemoteViews + Chronometer, 2x2, 4x2, Ayet/Hadis 4x2, 7 günlük veri köprüsü).
-- **Aşama 6:** Cilalama, hata durumları, uygulama ikonu ve açılış ekranı, APK derlemesi ve GitHub Release yayını.
+- **Aşama 6:** Cilalama: boş/hata durumları, izin akışları, erişilebilirlik (büyük yazı desteği, kontrast), uygulama ikonu ve açılış ekranı (yeşil + mihrap motifi), release APK ve GitHub yayını.
+

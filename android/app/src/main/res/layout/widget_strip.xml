@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_strip_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg_forest"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="8dp">
+
+    <!-- Sol Bilgi: Şehir & Sıradaki Etiketi -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_strip_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="İstanbul"
+            android:textColor="#A9C4B0"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SIRADAKİ"
+            android:textColor="#80A9C4B0"
+            android:textSize="9sp"
+            android:letterSpacing="0.08" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="24dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="#20FFFFFF" />
+
+    <!-- Vakit Adı & Vakit Saati -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_strip_prayer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Öğle"
+            android:textColor="#F3EEE0"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_strip_prayer_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13:06"
+            android:textColor="#A9C4B0"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <!-- Geri Sayım Chronometer -->
+    <Chronometer
+        android:id="@+id/widget_strip_chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:countDown="true"
+        android:textColor="#B8934A"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <!-- Kerahat Rozeti -->
+    <TextView
+        android:id="@+id/tv_strip_kerahat_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/widget_kerahat_badge_bg"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="3dp"
+        android:text="Kerahat"
+        android:textColor="#C27A3E"
+        android:textSize="9sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+</LinearLayout>
