@@ -97,21 +97,12 @@ class QiblaNotifier extends Notifier<QiblaState> {
   }
 
   Future<void> _initCompass(double bearing) async {
+    // Arka planda GPS konumunu isteyebiliriz ama reddedilse bile pusulayı ASLA kilitlemiyoruz.
+    // Şehir koordinatları her zaman hazırdır.
     try {
       final perm = await Geolocator.checkPermission();
       if (perm == LocationPermission.denied) {
-        final req = await Geolocator.requestPermission();
-        if (req == LocationPermission.denied || req == LocationPermission.deniedForever) {
-          if (!_disposed) {
-            state = state.copyWith(isLoading: false, permissionDenied: true);
-          }
-          return;
-        }
-      } else if (perm == LocationPermission.deniedForever) {
-        if (!_disposed) {
-          state = state.copyWith(isLoading: false, permissionDenied: true);
-        }
-        return;
+        await Geolocator.requestPermission();
       }
     } catch (_) {}
 
@@ -123,75 +114,61 @@ class QiblaNotifier extends Notifier<QiblaState> {
     _sensorTimeoutTimer?.cancel();
     _firstHeadingReceived = false;
 
-    // 2.5 saniye içinde hiçbir sensör verisi gelmezse sensör yok moduna geç
-    _sensorTimeoutTimer = Timer(const Duration(milliseconds: 2500), () {
+    // 6 saniye içinde hiçbir sensör verisi gelmezse donanımsal sensör yok moduna geç
+    _sensorTimeoutTimer = Timer(const Duration(milliseconds: 6000), () {
       if (!_firstHeadingReceived && !_disposed) {
         state = state.copyWith(hasSensor: false, isLoading: false);
       }
     });
 
-    final stream = _compassService.compassStream;
-    if (stream == null) {
+    try {
+      _compassSubscription = _compassService.compassStream.listen(
+        (CompassHeading headingData) {
+          final rawHeading = headingData.heading;
+
+          _firstHeadingReceived = true;
+          _sensorTimeoutTimer?.cancel();
+
+          // 0..360 aralığına normalize et
+          final normalized = (rawHeading % 360.0 + 360.0) % 360.0;
+          final smoothed = MathUtils.filterHeading(state.heading, normalized);
+          final aligned = MathUtils.isQiblaAligned(smoothed, state.qiblaBearing);
+
+          if (aligned && !_wasAligned) {
+            HapticFeedback.mediumImpact();
+          }
+          _wasAligned = aligned;
+
+          final acc = headingData.accuracy;
+          final needsCalib = acc != null && acc > 25.0;
+
+          if (!_disposed) {
+            state = state.copyWith(
+              hasSensor: true,
+              isLoading: false,
+              permissionDenied: false,
+              heading: smoothed,
+              isAligned: aligned,
+              accuracy: acc,
+              needsCalibration: needsCalib,
+            );
+          }
+        },
+        onError: (_) {
+          if (!_disposed) {
+            state = state.copyWith(hasSensor: false, isLoading: false);
+          }
+        },
+      );
+    } catch (_) {
       if (!_disposed) {
         state = state.copyWith(hasSensor: false, isLoading: false);
       }
-      return;
     }
-
-    _compassSubscription = stream.listen(
-      (event) {
-        final rawHeading = event.heading;
-        if (rawHeading == null) {
-          if (!_firstHeadingReceived && !_disposed) {
-            state = state.copyWith(hasSensor: false, isLoading: false);
-          }
-          return;
-        }
-
-        _firstHeadingReceived = true;
-        _sensorTimeoutTimer?.cancel();
-
-        // 0..360 aralığına normalize et
-        final normalized = (rawHeading % 360.0 + 360.0) % 360.0;
-        final smoothed = MathUtils.filterHeading(state.heading, normalized);
-        final aligned = MathUtils.isQiblaAligned(smoothed, state.qiblaBearing);
-
-        if (aligned && !_wasAligned) {
-          HapticFeedback.mediumImpact();
-        }
-        _wasAligned = aligned;
-
-        final acc = event.accuracy;
-        final needsCalib = acc != null && acc > 25.0;
-
-        if (!_disposed) {
-          state = state.copyWith(
-            hasSensor: true,
-            isLoading: false,
-            permissionDenied: false,
-            heading: smoothed,
-            isAligned: aligned,
-            accuracy: acc,
-            needsCalibration: needsCalib,
-          );
-        }
-      },
-      onError: (_) {
-        if (!_disposed) {
-          state = state.copyWith(hasSensor: false, isLoading: false);
-        }
-      },
-    );
   }
 
   Future<void> retryOrRequestPermission() async {
-    state = state.copyWith(isLoading: true, permissionDenied: false);
-    try {
-      final perm = await Geolocator.requestPermission();
-      if (perm == LocationPermission.deniedForever) {
-        await Geolocator.openAppSettings();
-      }
-    } catch (_) {}
+    state = state.copyWith(isLoading: true, permissionDenied: false, hasSensor: true);
     _startCompassListener(state.qiblaBearing);
   }
 }

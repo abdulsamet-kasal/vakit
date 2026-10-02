@@ -110,7 +110,28 @@ Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, m
 
 ---
 
+### ✅ Aşama 8: Kompakt Şerit & Tüm Vakitler Onarımı, Responsive Layout, Native Kotlin Pusula Motoru & v1.2.0 Sürümü
+- [x] **1. Kompakt Şerit ve Tüm Vakitler Widget Onarımı:**
+  - `VakitWidgetHelper.kt` içerisindeki gün seçimi `Calendar` üzerinden bugünün gerçek gününe (`DAY_OF_YEAR` & `YEAR`) göre akıllı eşleştirildi (`findTodayDayData`), geçmiş günün ilk indexte kalması sorunu giderildi.
+  - Günün tüm vakitleri geçtiğinde (Yatsı sonrası) sonraki vakit ertesi günün İmsak'ına akıllıca aktarıldı.
+  - SharedPreferences veri erişiminde çifte güvence (`HomeWidgetPreferences` ve `FlutterSharedPreferences`) sağlandı; `days_prayer_json` boşken veya gecikmeli gelirken widget'ların çökmesini ve donmasını önleyen varsayılan şık yedek durumlar eklendi.
+- [x] **2. Responsive Layout & Yeniden Boyutlandırma (Resize Handles):**
+  - Tüm Provider sınıflarına (`VakitSmallWidgetProvider`, `VakitMediumWidgetProvider`, `VakitStripWidgetProvider`, `VakitVerseWidgetProvider`, `VakitHadithWidgetProvider`) `onAppWidgetOptionsChanged` metodu eklenerek kullanıcı widget'ı büyütüp küçülttüğünde anında yeniden çizilmesi sağlandı.
+  - `widget_strip.xml` ve `widget_medium.xml` dikey ve yatay taşmalara karşı `singleLine="true"`, `ellipsize="end"`, kompakt padding ve esnek ağırlıklarla (`layout_weight="1"`) baştan tasarlandı; 1x1'den 5x2'ye kadar kırpılmadan esneyebilmesi sağlandı.
+  - `widget_*_info.xml` dosyalarındaki `minResizeWidth` ve `minResizeHeight` değerleri launcher uyumlu esnek değerlere (`35dp` - `70dp`) çekilerek tüm Android launcher'larda (OneUI, MIUI, Pixel, ColorOS) boyutlandırma tutamaçları eksiksiz aktif edildi.
+- [x] **3. Ultra Dayanıklı Native Kotlin Pusula Motoru:**
+  - `flutter_compass` eklentisinin Samsung Galaxy A, Xiaomi Redmi, Oppo gibi cihazlarda `Sensor.TYPE_ROTATION_VECTOR` kalibrasyon eksikliği nedeniyle `null` üretmesi ve pusulayı kilitlemesi sorunu tamamen aşıldı.
+  - Android tarafında `CompassStreamHandler.kt` yerel motoru geliştirildi: `Sensor.TYPE_ROTATION_VECTOR`, `Sensor.TYPE_ACCELEROMETER` ve `Sensor.TYPE_MAGNETIC_FIELD` sensörlerini donanım füzyonuyla dinler, `SensorManager.remapCoordinateSystem` ile ekran yönelimini (dikey/yatay) hesaba katar ve `com.vakit.vakit/compass` EventChannel üzerinden akış sağlar.
+  - `QiblaNotifier` konum izni reddedilse bile seçili şehrin koordinatlarıyla kıble açısını hesaplayıp pusulayı anında çalıştıracak şekilde engelsiz hale getirildi.
+- [x] **4. APK İsimlendirme & GitHub Release v1.2.0:**
+  - Versiyon `pubspec.yaml` üzerinde `1.2.0+3` olarak güncellendi.
+  - Release APK `Vakit-v1.2.0.apk` olarak adlandırıldı.
+  - GitHub deposunda `v1.2.0` release etiketiyle paylaşıldı.
+
+---
+
 ## 🏆 Sonuç
-Projenin tüm aşamaları (Aşama 0 - Aşama 7) %100 tamamlanmış, unit ve widget testleri başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş, kullanıcı testlerinden gelen 5 kritik istek eksiksiz hayata geçirilmiştir.
+Projenin tüm aşamaları (Aşama 0 - Aşama 8) %100 tamamlanmış, unit ve widget testleri başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş, kullanıcının fiziksel cihaz testleri sonrası bildirdiği tüm kritik widget ve kıble sorunları kökten çözülerek `v1.2.0` sürümü yayımlanmıştır.
+
 
 
