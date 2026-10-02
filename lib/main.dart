@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/config/env_config.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
@@ -15,6 +16,18 @@ Future<void> main() async {
 
   // Ortam değişkenlerini (.env) güvenli bir şekilde yükle (offline fallback destekli)
   await EnvConfig.init();
+
+  // Supabase Başlatma (Güvenli anon erişim, offline mod destekli)
+  if (EnvConfig.hasSupabaseConfig) {
+    try {
+      await Supabase.initialize(
+        url: EnvConfig.supabaseUrl,
+        publishableKey: EnvConfig.supabaseAnonKey,
+      );
+    } catch (e) {
+      debugPrint('Supabase başlatılamadı ($e). Çevrimdışı modda devam ediliyor.');
+    }
+  }
 
   runApp(
     const ProviderScope(

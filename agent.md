@@ -43,10 +43,19 @@ Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, m
 - [x] Unit testler (`prayer_calculation_test.dart`): İstanbul ve Ankara için Diyanet takvimiyle ±2 dk uyumu, kronolojik sıra, kerahat aralıkları ve 7 günlük veri hesabı %100 doğrulandı.
 - [x] `flutter analyze` 0 hata, testler başarıyla geçti.
 
+### ✅ Aşama 2: Supabase Kurulumu, SQL Migration'lar, Veri Katmanı & Ayarlar Ekranı
+- [x] Supabase veritabanında `daily_verses` ve `daily_hadiths` tabloları RLS (Row Level Security) açık ve `anon` okumaya izinli şekilde oluşturuldu (`20261002000000_create_daily_content.sql`).
+- [x] 30 otantik Âyet ve 30 muteber Hadis (Buhari, Müslim, Tirmizi vb. tam kaynaklı) hazırlanıp `assets/data/` içine gömüldü ve Supabase veritabanına seed edildi (`20261002000001_seed_daily_content.sql`).
+- [x] `DailyContentRepository` ile katı öncelik sırası uygulandı: `Yerel Önbellek → Supabase (Çevrimiçi) → Gömülü Varlık (assets/data/*.json)`.
+- [x] `EnvConfig` ve `main.dart` entegrasyonu ile `.env` boş olsa veya ağ kopuk olsa bile sıfır çökme garantisi sağlandı.
+- [x] `AppSettingsModel`, `SettingsRepository` (shared_preferences) ve `SettingsNotifier` modern Riverpod ile bağlandı.
+- [x] `SettingsScreen` arayüzü tamamlandı: Hesaplama yöntemi diyaloğu, ikindi mezhep seçimi, kerahat süreleri slider'ları, tema anahtarı, Supabase bağlantı rozeti.
+- [x] `daily_content_repository_test.dart` ile deterministik günlük seçim ve offline asset güvencesi test edildi.
+- [x] `flutter analyze` ve tüm testler (8 test) 0 hata ile geçti.
+
 ---
 
 ### ⏳ Sıradaki Aşamalar
-- **Aşama 2:** Supabase kurulumu: .env yapısı, SQL migration'ları (daily_verses, daily_hadiths), veri katmanı (önbellek → Supabase → asset), yerel ayarlar ekranı.
 - **Aşama 3:** Günün ayeti ve hadisi ekranları + paylaşım kartı + offline yedekleme.
 - **Aşama 4:** Kıble ekranı (flutter_compass, büyük daire formülü, düşük geçiren filtre, haptik titreşim).
 - **Aşama 5:** Ana ekran widget'ları (Android RemoteViews + Chronometer, 2x2, 4x2, Ayet/Hadis 4x2, 7 günlük veri köprüsü).

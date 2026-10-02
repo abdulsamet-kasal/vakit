@@ -1,1 +1,302 @@
-[]
+[
+  {
+    "id": 1,
+    "day_of_year": 1,
+    "arabic": "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ",
+    "text_tr": "Ameller niyetlere göredir; herkesin niyeti ne ise eline geçecek olan odur.",
+    "narrator": "Hz. Ömer (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Bed'ü'l-Vahy 1",
+    "short_text": "Ameller niyetlere göredir; herkes için ancak niyet ettiği şey vardır."
+  },
+  {
+    "id": 2,
+    "day_of_year": 2,
+    "arabic": "المُسْلِمُ مَنْ سَلِمَ المُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",
+    "text_tr": "Müslüman, dilinden ve elinden diğer Müslümanların güvende olduğu kimsedir.",
+    "narrator": "Abdullah b. Amr (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Îmân 4",
+    "short_text": "Müslüman, diğer Müslümanların elinden ve dilinden selamette olduğu kimsedir."
+  },
+  {
+    "id": 3,
+    "day_of_year": 3,
+    "arabic": "لا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
+    "text_tr": "Sizden biriniz, kendisi için istediğini din kardeşi için de istemedikçe gerçek manada iman etmiş olamaz.",
+    "narrator": "Enes b. Mâlik (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Îmân 7",
+    "short_text": "Kendisi için istediğini kardeşi için de istemedikçe kamil mümin olamaz."
+  },
+  {
+    "id": 4,
+    "day_of_year": 4,
+    "arabic": "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَاليَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
+    "text_tr": "Allah'a ve ahiret gününe inanan kimse ya hayır söylesin yahut sussun.",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Edeb 31",
+    "short_text": "Allah'a ve ahirete inanan ya hayır söylesin yahut sussun."
+  },
+  {
+    "id": 5,
+    "day_of_year": 5,
+    "arabic": "الطَّهُورُ شَطْرُ الإِيمَانِ",
+    "text_tr": "Temizlik imanın yarısıdır.",
+    "narrator": "Ebû Mâlik el-Eş'arî (r.a.)",
+    "source_book": "Müslim",
+    "source_no": "Tahâret 1",
+    "short_text": "Temizlik imanın yarısıdır."
+  },
+  {
+    "id": 6,
+    "day_of_year": 6,
+    "arabic": "الصَّلاةُ نُورٌ",
+    "text_tr": "Namaz bir nurdur; sadaka delildir; sabır ise aydınlıktır.",
+    "narrator": "Ebû Mâlik el-Eş'arî (r.a.)",
+    "source_book": "Müslim",
+    "source_no": "Tahâret 1",
+    "short_text": "Namaz nurdur, sabır ise ışıktır."
+  },
+  {
+    "id": 7,
+    "day_of_year": 7,
+    "arabic": "لا تَحَاسَدُوا، وَلا تَبَاغَضُوا، وَكُونُوا عِبَادَ اللَّهِ إِخْوَانًا",
+    "text_tr": "Birbirinize haset etmeyiniz, birbirinize buğzetmeyiniz; ey Allah'ın kulları, kardeş olunuz!",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Edeb 57",
+    "short_text": "Birbirinize haset etmeyin, kin beslemeyin; kardeş olun!"
+  },
+  {
+    "id": 8,
+    "day_of_year": 8,
+    "arabic": "اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ، وَأَتْبِعِ السَّيِّئَةَ الحَسَنَةَ تَمْحُهَا",
+    "text_tr": "Nerede olursan ol Allah'tan kork; kötülüğün peşinden hemen bir iyilik yap ki onu silsin.",
+    "narrator": "Ebû Zer (r.a.)",
+    "source_book": "Tirmizî",
+    "source_no": "Birr 55",
+    "short_text": "Nerede olursan ol Allah'tan sakın; kötülüğün ardına iyilik ekle."
+  },
+  {
+    "id": 9,
+    "day_of_year": 9,
+    "arabic": "خَيْرُكُمْ مَنْ تَعَلَّمَ القُرْآنَ وَعَلَّمَهُ",
+    "text_tr": "Sizin en hayırlınız Kur'an'ı öğrenen ve öğreteninizdir.",
+    "narrator": "Hz. Osman (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Fedâilü'l-Kur'ân 21",
+    "short_text": "En hayırlınız, Kur'an'ı öğrenen ve başkalarına öğreteninizdir."
+  },
+  {
+    "id": 10,
+    "day_of_year": 10,
+    "arabic": "كَلِمَتَانِ حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+    "text_tr": "Dile hafif, mizanda ağır, Rahmân'a sevgili iki kelime: Sübhânallâhi ve bi-hamdihî, Sübhânallâhi'l-azîm.",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Daavât 65",
+    "short_text": "Dile hafif, mizanda ağır iki zikir: Sübhanallahi ve bihamdihi, Sübhanallahil-azim."
+  },
+  {
+    "id": 11,
+    "day_of_year": 11,
+    "arabic": "الدِّينُ النَّصِيحَةُ",
+    "text_tr": "Din, samimiyettir (Allah'a, kitabına, peygamberine ve bütün müminlere karşı samimi ve dürüst olmaktır).",
+    "narrator": "Temîm ed-Dârî (r.a.)",
+    "source_book": "Müslim",
+    "source_no": "Îmân 95",
+    "short_text": "Din, samimiyettir ve içtenliktir."
+  },
+  {
+    "id": 12,
+    "day_of_year": 12,
+    "arabic": "اليَدُ العُلْيَا خَيْرٌ مِنَ اليَدِ السُّفْلَى",
+    "text_tr": "Veren el, alan elden daha hayırlıdır.",
+    "narrator": "Abdullah b. Ömer (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Zekât 18",
+    "short_text": "Veren el, alan elden hayırlıdır."
+  },
+  {
+    "id": 13,
+    "day_of_year": 13,
+    "arabic": "تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ",
+    "text_tr": "Kardeşinin yüzüne tebessüm etmen senin için bir sadakadır.",
+    "narrator": "Ebû Zer (r.a.)",
+    "source_book": "Tirmizî",
+    "source_no": "Birr 36",
+    "short_text": "Kardeşinin yüzüne tebessüm etmen bir sadakadır."
+  },
+  {
+    "id": 14,
+    "day_of_year": 14,
+    "arabic": "يَسِّرُوا وَلا تُعَسِّرُوا، وَبَشِّرُوا وَلا تُنَفِّرُوا",
+    "text_tr": "Kolaylaştırınız, zorlaştırmayınız; müjdeleyiniz, nefret ettirmeyiniz.",
+    "narrator": "Enes b. Mâlik (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "İlim 11",
+    "short_text": "Kolaylaştırın, zorlaştırmayın; müjdeleyin, nefret ettirmeyin."
+  },
+  {
+    "id": 15,
+    "day_of_year": 15,
+    "arabic": "مَنْ صَلَّى عَلَيَّ صَلاةً صَلَّى اللَّهُ عَلَيْهِ بِهَا عَشْرًا",
+    "text_tr": "Kim bana bir salavat getirirse, Allah Teâlâ buna karşılık ona on rahmet bahşeder.",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Müslim",
+    "source_no": "Salât 70",
+    "short_text": "Kim bana bir salavat getirirse, Allah ona on kat rahmet eder."
+  },
+  {
+    "id": 16,
+    "day_of_year": 16,
+    "arabic": "أَحَبُّ الأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
+    "text_tr": "Allah katında amellerin en sevimlisi, az da olsa devamlı olanıdır.",
+    "narrator": "Hz. Âişe (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Rikâk 18",
+    "short_text": "Allah katında amellerin en sevimlisi, az da olsa sürekliliktir."
+  },
+  {
+    "id": 17,
+    "day_of_year": 17,
+    "arabic": "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ طَرِيقًا إِلَى الجَنَّةِ",
+    "text_tr": "Kim ilim öğrenmek için bir yola çıkarsa, Allah ona cennet yolunu kolaylaştırır.",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Müslim",
+    "source_no": "Zikir 38",
+    "short_text": "İlim peşinde koşan kimseye Allah cennet yolunu kolaylaştırır."
+  },
+  {
+    "id": 18,
+    "day_of_year": 18,
+    "arabic": "إِنَّ اللَّهَ رَفِيقٌ يُحِبُّ الرِّفْقَ فِي الأَمْرِ كُلِّهِ",
+    "text_tr": "Şüphesiz Allah yumuşak huyludur (Rıfk sahibidir) ve her işte nezaket ve zarafeti sever.",
+    "narrator": "Hz. Âişe (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Edeb 35",
+    "short_text": "Şüphesiz Allah her işte nezaket ve yumuşaklığı sever."
+  },
+  {
+    "id": 19,
+    "day_of_year": 19,
+    "arabic": "لا يُلْدَغُ المُؤْمِنُ مِنْ جُحْرٍ وَاحِدٍ مَرَّتَيْنِ",
+    "text_tr": "Mümin, bir delikten iki defa ısırılmaz (aynı hataya iki kez düşmez).",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Edeb 83",
+    "short_text": "Mümin, bir delikten iki defa ısırılmaz; feraset sahibidir."
+  },
+  {
+    "id": 20,
+    "day_of_year": 20,
+    "arabic": "مَنْ لا يَرْحَمُ النَّاسَ لا يَرْحَمُهُ اللَّهُ",
+    "text_tr": "İnsanlara merhamet etmeyene Allah da merhamet etmez.",
+    "narrator": "Cerîr b. Abdullah (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Edeb 18",
+    "short_text": "İnsanlara merhamet göstermeyene Allah merhamet etmez."
+  },
+  {
+    "id": 21,
+    "day_of_year": 21,
+    "arabic": "عَجَبًا لأَمْرِ المُؤْمِنِ إِنَّ أَمْرَهُ كُلَّهُ خَيْرٌ",
+    "text_tr": "Müminin durumuna hayret edilir! Her işi hayırdır; nimete şükreder hayır olur, sıkıntıya sabreder hayır olur.",
+    "narrator": "Süheyb (r.a.)",
+    "source_book": "Müslim",
+    "source_no": "Zühd 64",
+    "short_text": "Müminin her hali hayırdır: Sevinir şükreder, üzülür sabreder."
+  },
+  {
+    "id": 22,
+    "day_of_year": 22,
+    "arabic": "الصِّدْقُ يَهْدِي إِلَى البِرِّ وَإِنَّ البِرَّ يَهْدِي إِلَى الجَنَّةِ",
+    "text_tr": "Doğruluk iyiliğe, iyilik ise cennete götürür.",
+    "narrator": "Abdullah b. Mes'ûd (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Edeb 69",
+    "short_text": "Doğruluk insanı iyiliğe, iyilik ise cennete ulaştırır."
+  },
+  {
+    "id": 23,
+    "day_of_year": 23,
+    "arabic": "مَنْ حَسُنَ إِسْلامُ المَرْءِ تَرْكُهُ مَا لا يَعْنِيهِ",
+    "text_tr": "Kendisini ilgilendirmeyen mâlâyâni şeyleri terk etmesi, kişinin iyi bir Müslüman oluşundandır.",
+    "narrator": "Ali b. Hüseyin (r.a.)",
+    "source_book": "Tirmizî",
+    "source_no": "Zühd 11",
+    "short_text": "Kendisini ilgilendirmeyen boş şeyleri terk etmek, kişinin olgunluğundandır."
+  },
+  {
+    "id": 24,
+    "day_of_year": 24,
+    "arabic": "لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الغَضَبِ",
+    "text_tr": "Gerçek pehlivan güreşte rakibini yenen değil, öfkelendiği an nefsine hakim olan kimsedir.",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Edeb 76",
+    "short_text": "Gerçek güçlü, öfkelendiği anda iradesine ve nefsine hâkim olandır."
+  },
+  {
+    "id": 25,
+    "day_of_year": 25,
+    "arabic": "أَفْشُوا السَّلامَ بَيْنَكُمْ",
+    "text_tr": "İman etmedikçe cennete giremezsiniz; birbirinizi sevmedikçe de kamil iman etmiş olamazsınız. Aranızda selamı yayınız!",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Müslim",
+    "source_no": "Îmân 93",
+    "short_text": "Birbirinizi sevmedikçe iman etmiş olmazsınız. Aranızda selâmı yayınız."
+  },
+  {
+    "id": 26,
+    "day_of_year": 26,
+    "arabic": "حَقُّ المُسْلِمِ عَلَى المُسْلِمِ خَمْسٌ: رَدُّ السَّلامِ، وَعِيَادَةُ المَرِيضِ",
+    "text_tr": "Müslümanın Müslüman üzerindeki hakkı beştir: Selama karşılık vermek, hastayı ziyaret etmek, cenazeye katılmak, davete icabet etmek ve aksırana 'yerhamükellah' demek.",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Cenâiz 2",
+    "short_text": "Müslümanın kardeşi üzerinde beş hakkı vardır: Selam, ziyaret, cenaze, davet, dua."
+  },
+  {
+    "id": 27,
+    "day_of_year": 27,
+    "arabic": "مَنْ كَانَتْ لَهُ مَظْلَمَةٌ لأَخِيهِ فَلْيَتَحَلَّلْهُ مِنْهُ اليَوْمَ",
+    "text_tr": "Kimin üzerinde kardeşine ait bir hak varsa, altın ve gümüşün bulunmayacağı hesap günü gelmeden önce helalleşsin.",
+    "narrator": "Ebû Hüreyre (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Mezâlim 10",
+    "short_text": "Üzerinde kul hakkı bulunan kimse, hesap günü gelmeden önce dünyada helalleşsin."
+  },
+  {
+    "id": 28,
+    "day_of_year": 28,
+    "arabic": "إِنَّ الصَّدَقَةَ لَتُطْفِئُ غَضَبَ الرَّبِّ",
+    "text_tr": "Gizlice verilen sadaka, Rabb'in gazabını dindirir ve kötü bir ölüme engel olur.",
+    "narrator": "Muâz b. Cebel (r.a.)",
+    "source_book": "Tirmizî",
+    "source_no": "Zekât 28",
+    "short_text": "Gizli sadaka Rabb'in gazabını dindirir ve kötülüklere kalkan olur."
+  },
+  {
+    "id": 29,
+    "day_of_year": 29,
+    "arabic": "الدُّعَاءُ هُوَ العِبَادَةُ",
+    "text_tr": "Dua, ibadetin ta kendisidir.",
+    "narrator": "Nu'mân b. Beşîr (r.a.)",
+    "source_book": "Ebû Dâvûd",
+    "source_no": "Vitr 23",
+    "short_text": "Dua ibadetin özü ve ta kendisidir."
+  },
+  {
+    "id": 30,
+    "day_of_year": 30,
+    "arabic": "كُلُّ مَعْرُوفٍ صَدَقَةٌ",
+    "text_tr": "Yapılan her meşru iyilik bir sadakadır.",
+    "narrator": "Câbir b. Abdullah (r.a.)",
+    "source_book": "Buhârî",
+    "source_no": "Edeb 33",
+    "short_text": "Her güzel ve meşru iyilik bir sadakadır."
+  }
+]
