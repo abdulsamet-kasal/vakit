@@ -9,7 +9,7 @@ import '../../data/compass_service.dart';
 class QiblaState {
   final bool hasSensor;
   final bool isLoading;
-  final bool permissionDenied;
+  final bool isLiveTracking;
   final double heading;
   final double qiblaBearing;
   final double distanceKm;
@@ -20,7 +20,7 @@ class QiblaState {
   const QiblaState({
     required this.hasSensor,
     this.isLoading = false,
-    this.permissionDenied = false,
+    this.isLiveTracking = false,
     required this.heading,
     required this.qiblaBearing,
     required this.distanceKm,
@@ -38,7 +38,7 @@ class QiblaState {
   QiblaState copyWith({
     bool? hasSensor,
     bool? isLoading,
-    bool? permissionDenied,
+    bool? isLiveTracking,
     double? heading,
     double? qiblaBearing,
     double? distanceKm,
@@ -49,7 +49,7 @@ class QiblaState {
     return QiblaState(
       hasSensor: hasSensor ?? this.hasSensor,
       isLoading: isLoading ?? this.isLoading,
-      permissionDenied: permissionDenied ?? this.permissionDenied,
+      isLiveTracking: isLiveTracking ?? this.isLiveTracking,
       heading: heading ?? this.heading,
       qiblaBearing: qiblaBearing ?? this.qiblaBearing,
       distanceKm: distanceKm ?? this.distanceKm,
@@ -63,7 +63,7 @@ class QiblaState {
 class QiblaNotifier extends Notifier<QiblaState> {
   final _compassService = CompassService();
   StreamSubscription? _compassSubscription;
-  Timer? _sensorTimeoutTimer;
+  Timer? _calibrationPromptTimer;
   bool _wasAligned = false;
   bool _firstHeadingReceived = false;
   bool _disposed = false;
@@ -80,15 +80,15 @@ class QiblaNotifier extends Notifier<QiblaState> {
     ref.onDispose(() {
       _disposed = true;
       _compassSubscription?.cancel();
-      _sensorTimeoutTimer?.cancel();
+      _calibrationPromptTimer?.cancel();
     });
 
     _initCompass(bearing);
 
     return QiblaState(
       hasSensor: true,
-      isLoading: true,
-      permissionDenied: false,
+      isLoading: false,
+      isLiveTracking: false,
       heading: 0.0,
       qiblaBearing: bearing,
       distanceKm: distance,
@@ -97,8 +97,6 @@ class QiblaNotifier extends Notifier<QiblaState> {
   }
 
   Future<void> _initCompass(double bearing) async {
-    // Arka planda GPS konumunu isteyebiliriz ama reddedilse bile pusulayı ASLA kilitlemiyoruz.
-    // Şehir koordinatları her zaman hazırdır.
     try {
       final perm = await Geolocator.checkPermission();
       if (perm == LocationPermission.denied) {
@@ -111,13 +109,13 @@ class QiblaNotifier extends Notifier<QiblaState> {
 
   void _startCompassListener(double qiblaBearing) {
     _compassSubscription?.cancel();
-    _sensorTimeoutTimer?.cancel();
+    _calibrationPromptTimer?.cancel();
     _firstHeadingReceived = false;
 
-    // 6 saniye içinde hiçbir sensör verisi gelmezse donanımsal sensör yok moduna geç
-    _sensorTimeoutTimer = Timer(const Duration(milliseconds: 6000), () {
+    // 4 saniye içinde veri gelmezse kullanıcıya 8 çizme kalibrasyon rehberi göster
+    _calibrationPromptTimer = Timer(const Duration(milliseconds: 4000), () {
       if (!_firstHeadingReceived && !_disposed) {
-        state = state.copyWith(hasSensor: false, isLoading: false);
+        state = state.copyWith(needsCalibration: true);
       }
     });
 
@@ -127,7 +125,7 @@ class QiblaNotifier extends Notifier<QiblaState> {
           final rawHeading = headingData.heading;
 
           _firstHeadingReceived = true;
-          _sensorTimeoutTimer?.cancel();
+          _calibrationPromptTimer?.cancel();
 
           // 0..360 aralığına normalize et
           final normalized = (rawHeading % 360.0 + 360.0) % 360.0;
@@ -146,7 +144,7 @@ class QiblaNotifier extends Notifier<QiblaState> {
             state = state.copyWith(
               hasSensor: true,
               isLoading: false,
-              permissionDenied: false,
+              isLiveTracking: true,
               heading: smoothed,
               isAligned: aligned,
               accuracy: acc,
@@ -156,19 +154,28 @@ class QiblaNotifier extends Notifier<QiblaState> {
         },
         onError: (_) {
           if (!_disposed) {
-            state = state.copyWith(hasSensor: false, isLoading: false);
+            state = state.copyWith(isLiveTracking: false, needsCalibration: true);
           }
         },
       );
     } catch (_) {
       if (!_disposed) {
-        state = state.copyWith(hasSensor: false, isLoading: false);
+        state = state.copyWith(isLiveTracking: false, needsCalibration: true);
       }
     }
   }
 
-  Future<void> retryOrRequestPermission() async {
-    state = state.copyWith(isLoading: true, permissionDenied: false, hasSensor: true);
+  void updateManualHeading(double degrees) {
+    final normalized = (degrees % 360.0 + 360.0) % 360.0;
+    final aligned = MathUtils.isQiblaAligned(normalized, state.qiblaBearing);
+    state = state.copyWith(
+      heading: normalized,
+      isAligned: aligned,
+    );
+  }
+
+  Future<void> retrySensors() async {
+    state = state.copyWith(isLoading: true);
     _startCompassListener(state.qiblaBearing);
   }
 }

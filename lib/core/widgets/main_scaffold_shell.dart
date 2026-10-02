@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../constants/app_colors.dart';
-import '../constants/app_typography.dart';
 
-/// Alt sekmelerle donatılmış ana iskelet (Navigation Shell).
-/// Kullanıcı girişi gerektirmeyen, doğrudan erişilebilir 5 temel bölüm.
+/// Alt sekmelerle donatılmış modern mimari ana iskelet (Navigation Shell).
 class MainScaffoldShell extends StatelessWidget {
   final Widget child;
 
@@ -51,46 +49,58 @@ class MainScaffoldShell extends StatelessWidget {
       body: child,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: isDark ? AppColors.darkSurface : AppColors.parchment,
+          color: isDark ? AppColors.darkSurface : Colors.white,
           border: Border(
             top: BorderSide(
-              color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.15),
+              color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.1),
               width: 0.8,
             ),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.04),
+              blurRadius: 16,
+              offset: const Offset(0, -4),
+            ),
+          ],
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _NavBarItem(
                   icon: Icons.access_time_rounded,
+                  activeIcon: Icons.access_time_filled_rounded,
                   label: 'Vakitler',
                   isSelected: selectedIndex == 0,
                   onTap: () => _onItemTapped(0, context),
                 ),
                 _NavBarItem(
                   icon: Icons.explore_outlined,
+                  activeIcon: Icons.explore_rounded,
                   label: 'Kıble',
                   isSelected: selectedIndex == 1,
                   onTap: () => _onItemTapped(1, context),
                 ),
                 _NavBarItem(
                   icon: Icons.menu_book_rounded,
+                  activeIcon: Icons.menu_book_rounded,
                   label: 'Âyet',
                   isSelected: selectedIndex == 2,
                   onTap: () => _onItemTapped(2, context),
                 ),
                 _NavBarItem(
-                  icon: Icons.auto_stories_rounded,
+                  icon: Icons.auto_stories_outlined,
+                  activeIcon: Icons.auto_stories_rounded,
                   label: 'Hadis',
                   isSelected: selectedIndex == 3,
                   onTap: () => _onItemTapped(3, context),
                 ),
                 _NavBarItem(
                   icon: Icons.tune_rounded,
+                  activeIcon: Icons.tune_rounded,
                   label: 'Ayarlar',
                   isSelected: selectedIndex == 4,
                   onTap: () => _onItemTapped(4, context),
@@ -106,12 +116,14 @@ class MainScaffoldShell extends StatelessWidget {
 
 class _NavBarItem extends StatelessWidget {
   final IconData icon;
+  final IconData activeIcon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
 
   const _NavBarItem({
     required this.icon,
+    required this.activeIcon,
     required this.label,
     required this.isSelected,
     required this.onTap,
@@ -120,30 +132,37 @@ class _NavBarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final activeColor = AppColors.brassGold;
+    final activeColor = isDark ? const Color(0xFFF3D079) : const Color(0xFF9E7728);
     final inactiveColor = isDark ? AppColors.darkMuted : AppColors.inkMuted;
 
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? (isDark ? AppColors.brassGold.withValues(alpha: 0.12) : const Color(0xFFB8934A).withValues(alpha: 0.1))
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              icon,
+              isSelected ? activeIcon : icon,
               size: 22,
               color: isSelected ? activeColor : inactiveColor,
             ),
             const SizedBox(height: 3),
             Text(
               label,
-              style: AppTypography.labelSmall(
+              style: TextStyle(
                 color: isSelected ? activeColor : inactiveColor,
-              ).copyWith(
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 fontSize: 10,
+                letterSpacing: 0.2,
               ),
             ),
           ],

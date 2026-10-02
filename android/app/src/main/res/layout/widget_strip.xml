@@ -38,13 +38,14 @@
             android:textSize="9sp" />
     </LinearLayout>
 
-    <!-- Dikey İnce Ayırıcı -->
-    <View
+    <!-- Dikey İnce Ayırıcı (RemoteViews uyumlu ImageView) -->
+    <ImageView
         android:layout_width="1dp"
         android:layout_height="22dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="#20FFFFFF" />
+        android:src="@drawable/widget_divider_line"
+        android:contentDescription="ayırıcı" />
 
     <!-- Vakit Adı & Vakit Saati -->
     <LinearLayout

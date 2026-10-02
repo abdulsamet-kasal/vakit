@@ -9,33 +9,33 @@ import android.os.Build
 import android.view.Surface
 import android.view.WindowManager
 import io.flutter.plugin.common.EventChannel
-import kotlin.math.roundToInt
 
 /**
- * Android için ultra dayanıklı yerel pusula sensör akışı sağlayıcısı.
+ * Android için çok katmanlı, donanım bağımsız pusula sensör motoru.
  *
- * 1. Öncelikli olarak `Sensor.TYPE_ROTATION_VECTOR` dener (en hassas ve jiroskop destekli füzyon).
- * 2. Cihazda Rotation Vector yoksa veya veri üretmiyorsa, `Sensor.TYPE_ACCELEROMETER` + `Sensor.TYPE_MAGNETIC_FIELD`
- *    ikilisini kullanarak `SensorManager.getRotationMatrix` üzerinden azimut hesaplar.
- * 3. Ekranın yatay/dikey dönüş açısını (Display Rotation) hesaba katarak koordinatları otomatik yeniden haritalar (`remapCoordinateSystem`).
- * Bu sayede Xiaomi, Samsung Galaxy A serisi, Oppo, Tecno gibi donanım çeşitliliği olan tüm cihazlarda %100 çalışır.
+ * 1. Katman: `Sensor.TYPE_ROTATION_VECTOR` (Jiroskoplu cihazlarda en pürüzsüz füzyon).
+ * 2. Katman: `Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR` (Jiroskopsuz Samsung Galaxy A / Xiaomi Redmi serisi).
+ * 3. Katman: `Sensor.TYPE_ORIENTATION` (Tüm Android sürümlerinde doğrudan donanımsal azimut).
+ * 4. Katman: `Sensor.TYPE_ACCELEROMETER` + `Sensor.TYPE_MAGNETIC_FIELD` (Klasik matris füzyonu).
  */
+@Suppress("DEPRECATION")
 class CompassStreamHandler(private val context: Context) : EventChannel.StreamHandler, SensorEventListener {
 
     private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
     private var eventSink: EventChannel.EventSink? = null
 
-    // Sensörler
+    // Sensör referansları
     private var rotationVectorSensor: Sensor? = null
+    private var geomagneticVectorSensor: Sensor? = null
+    private var legacyOrientationSensor: Sensor? = null
     private var accelerometerSensor: Sensor? = null
     private var magneticSensor: Sensor? = null
 
-    // Matris ve yön hesaplama tamponları
+    // Matris tamponları
     private val rotationMatrix = FloatArray(9)
     private val remappedMatrix = FloatArray(9)
     private val orientationAngles = FloatArray(3)
 
-    // Fallback için accelerometer ve magnetic verileri
     private val gravityValues = FloatArray(3)
     private val geomagneticValues = FloatArray(3)
     private var hasGravity = false
@@ -52,29 +52,31 @@ class CompassStreamHandler(private val context: Context) : EventChannel.StreamHa
         }
 
         rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        geomagneticVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR)
+        legacyOrientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         magneticSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
-        var registeredAny = false
+        var registeredCount = 0
 
-        // Rotation vector varsa kaydet
         rotationVectorSensor?.let {
-            val registered = sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
-            if (registered) registeredAny = true
+            if (sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)) registeredCount++
         }
-
-        // Accelerometer ve manyetometreyi de her ihtimale karşı fallback ve doğruluk için kaydet
+        geomagneticVectorSensor?.let {
+            if (sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)) registeredCount++
+        }
+        legacyOrientationSensor?.let {
+            if (sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)) registeredCount++
+        }
         accelerometerSensor?.let {
-            val registered = sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
-            if (registered) registeredAny = true
+            if (sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)) registeredCount++
         }
         magneticSensor?.let {
-            val registered = sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
-            if (registered) registeredAny = true
+            if (sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)) registeredCount++
         }
 
-        if (!registeredAny) {
-            events?.error("NO_SENSORS_AVAILABLE", "Cihazda gerekli pusula sensörleri bulunamadı", null)
+        if (registeredCount == 0) {
+            events?.error("NO_SENSORS", "Cihazda pusula sensörü bulunamadı", null)
         }
     }
 
@@ -89,12 +91,28 @@ class CompassStreamHandler(private val context: Context) : EventChannel.StreamHa
         val sink = eventSink ?: return
 
         var computedHeading: Double? = null
-        var accuracy = event.accuracy
+        val accuracy = event.accuracy
 
         when (event.sensor.type) {
-            Sensor.TYPE_ROTATION_VECTOR -> {
+            Sensor.TYPE_ROTATION_VECTOR, Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR -> {
                 SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values)
                 computedHeading = calculateHeadingFromMatrix(rotationMatrix)
+            }
+            Sensor.TYPE_ORIENTATION -> {
+                // event.values[0] doğrudan manyetik kuzeye göre azimut açısıdır (0..360)
+                var rawAzimuth = event.values[0].toDouble()
+                val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
+                val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    try { context.display?.rotation ?: Surface.ROTATION_0 } catch (_: Exception) { Surface.ROTATION_0 }
+                } else {
+                    windowManager?.defaultDisplay?.rotation ?: Surface.ROTATION_0
+                }
+                when (rotation) {
+                    Surface.ROTATION_90 -> rawAzimuth += 90.0
+                    Surface.ROTATION_180 -> rawAzimuth += 180.0
+                    Surface.ROTATION_270 -> rawAzimuth += 270.0
+                }
+                computedHeading = (rawAzimuth + 360.0) % 360.0
             }
             Sensor.TYPE_ACCELEROMETER -> {
                 System.arraycopy(event.values, 0, gravityValues, 0, 3)
@@ -118,8 +136,8 @@ class CompassStreamHandler(private val context: Context) : EventChannel.StreamHa
 
         if (computedHeading != null && !computedHeading.isNaN()) {
             val now = System.currentTimeMillis()
-            // ~30 FPS frekans kısıtlaması (33 ms) ve gereksiz IPC trafiğini önleme
-            if (now - lastEmitTime >= 33 || kotlin.math.abs(computedHeading - lastHeadingDegrees) > 0.5) {
+            // 30 FPS hızında akıcı bildirim (33 ms)
+            if (now - lastEmitTime >= 33 || kotlin.math.abs(computedHeading - lastHeadingDegrees) > 0.4) {
                 lastHeadingDegrees = computedHeading
                 lastEmitTime = now
 
@@ -131,9 +149,7 @@ class CompassStreamHandler(private val context: Context) : EventChannel.StreamHa
         }
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        // İsteğe bağlı kalibrasyon durumu güncellenebilir
-    }
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
     private fun calculateHeadingFromMatrix(rMatrix: FloatArray): Double {
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
@@ -144,7 +160,6 @@ class CompassStreamHandler(private val context: Context) : EventChannel.StreamHa
                 Surface.ROTATION_0
             }
         } else {
-            @Suppress("DEPRECATION")
             windowManager?.defaultDisplay?.rotation ?: Surface.ROTATION_0
         }
 
@@ -177,7 +192,6 @@ class CompassStreamHandler(private val context: Context) : EventChannel.StreamHa
         val azimuthRad = orientationAngles[0]
         var azimuthDeg = Math.toDegrees(azimuthRad.toDouble())
 
-        // 0..360 aralığına getir
         azimuthDeg = (azimuthDeg + 360.0) % 360.0
         return azimuthDeg
     }

@@ -7,11 +7,21 @@ import '../../../prayer_times/presentation/controllers/prayer_times_controller.d
 import '../controllers/qibla_controller.dart';
 import '../widgets/qibla_compass_dial.dart';
 
-/// Kıble Bulucu tam ekranı.
-/// Düşük geçiren filtreli pusula kadranı, Kâbe yön işareti, hizalanma titreşimi,
-/// sensörsüz cihazlar için statik yön rehberi ve izin akışları.
+/// Ultra modern, minimalist ve insan işi lüks Kıble Bulucu ekranı.
 class QiblaScreen extends ConsumerWidget {
   const QiblaScreen({super.key});
+
+  String _cardinalDirectionName(double deg) {
+    final d = (deg % 360 + 360) % 360;
+    if (d >= 337.5 || d < 22.5) return 'KUZEY';
+    if (d >= 22.5 && d < 67.5) return 'KUZEYDOĞU';
+    if (d >= 67.5 && d < 112.5) return 'DOĞU';
+    if (d >= 112.5 && d < 157.5) return 'GÜNEYDOĞU';
+    if (d >= 157.5 && d < 202.5) return 'GÜNEY';
+    if (d >= 202.5 && d < 247.5) return 'GÜNEYBATI';
+    if (d >= 247.5 && d < 292.5) return 'BATI';
+    return 'KUZEYBATI';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,85 +30,142 @@ class QiblaScreen extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final qiblaDegreesRounded = qiblaState.qiblaBearing.round();
+    final headingRounded = qiblaState.heading.round();
     final distanceRounded = qiblaState.distanceKm.round();
+    final currentDirectionName = _cardinalDirectionName(qiblaState.heading);
 
     return Scaffold(
+      backgroundColor: isDark ? AppColors.darkBg : AppColors.parchment,
       appBar: AppBar(
-        title: const Text('Kıble Yönü'),
+        title: const Text('Kıble Pusulası'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh_rounded),
+            tooltip: 'Pusulayı Sıfırla',
+            onPressed: () => ref.read(qiblaProvider.notifier).retrySensors(),
+          ),
+        ],
       ),
       body: IslamicPatternBackground(
         child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 12),
-              // Şehir ve Kâbe Mesafesi
-              Text(
-                '${prayerState.selectedCity.displayName} • Kâbe\'ye Mesafe: $distanceRounded km',
-                style: AppTypography.bodyMedium(
-                  color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
-                ).copyWith(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-
-              // Kıble Açısı Rozeti
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                decoration: BoxDecoration(
-                  color: (isDark ? AppColors.sageGreen : AppColors.mossGreen)
-                      .withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: (isDark ? AppColors.sageGreen : AppColors.mossGreen)
-                        .withValues(alpha: 0.25),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              children: [
+                // 1. Üst Konum & Kâbe Mesafesi Hapı (Modern Pill Bar)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkSurface : Colors.white.withValues(alpha: 0.8),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.12),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.location_on_outlined,
+                        size: 16,
+                        color: isDark ? AppColors.sageGreen : AppColors.mossGreen,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        prayerState.selectedCity.displayName,
+                        style: AppTypography.bodyMedium(
+                          color: isDark ? AppColors.darkText : AppColors.ink,
+                        ).copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          '•',
+                          style: TextStyle(
+                            color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        'Kâbe: $distanceRounded km',
+                        style: AppTypography.bodySmall(
+                          color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Text(
-                  'Kıble Açısı: $qiblaDegreesRounded°',
-                  style: AppTypography.labelLarge(
-                    color: isDark ? AppColors.sageGreen : AppColors.forestGreen,
-                    isBold: true,
-                  ),
-                ),
-              ),
-              const Spacer(),
 
-              // Durumlar: İzin Gerekli | Yükleniyor | Canlı Pusula | Sensörsüz Statik Rehber
-              if (qiblaState.permissionDenied) ...[
-                _buildPermissionCard(context, ref, isDark),
-              ] else if (qiblaState.isLoading) ...[
-                _buildLoadingState(isDark),
-              ] else if (qiblaState.hasSensor) ...[
+                const SizedBox(height: 18),
+
+                // 2. Anlık Yön ve Kıble Hedef Açısı Kartları (Devasa & Net Tipografi)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Anlık Yön
+                    _buildStatCard(
+                      label: 'MEVCUT YÖN',
+                      value: '$headingRounded°',
+                      subtext: currentDirectionName,
+                      isDark: isDark,
+                      isPrimary: false,
+                    ),
+                    Container(
+                      width: 1,
+                      height: 48,
+                      color: (isDark ? Colors.white : AppColors.ink).withValues(alpha: 0.08),
+                    ),
+                    // Hedef Kıble Açısı
+                    _buildStatCard(
+                      label: 'KIBLE AÇISI',
+                      value: '$qiblaDegreesRounded°',
+                      subtext: 'KÂBE HEDEFİ',
+                      isDark: isDark,
+                      isPrimary: true,
+                    ),
+                  ],
+                ),
+
+                const Spacer(),
+
+                // 3. Ultra Modern Saatçilik Pusula Kadranı
                 Center(
                   child: QiblaCompassDial(
                     heading: qiblaState.heading,
                     qiblaBearing: qiblaState.qiblaBearing,
                     isAligned: qiblaState.isAligned,
-                    size: 290,
+                    size: 295,
                   ),
                 ),
-              ] else ...[
-                _buildNoSensorFallback(context, ref, qiblaDegreesRounded, isDark),
-              ],
 
-              const Spacer(),
+                const Spacer(),
 
-              // Hizalanma Durumu Etiketi (Yalnızca aktif sensör varken)
-              if (qiblaState.hasSensor && !qiblaState.isLoading && !qiblaState.permissionDenied) ...[
+                // 4. Hizalanma Durumu veya Canlı Kalibrasyon Rehberi
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
                   decoration: BoxDecoration(
                     color: qiblaState.isAligned
                         ? AppColors.brassGold
                         : (isDark
                             ? AppColors.darkSurfaceElevated
-                            : AppColors.paleSage.withValues(alpha: 0.6)),
-                    borderRadius: BorderRadius.circular(16),
+                            : Colors.white.withValues(alpha: 0.9)),
+                    borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: qiblaState.isAligned
-                          ? AppColors.brassGlow
-                          : (isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.2)),
+                          ? const Color(0xFFF3D079)
+                          : (isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.15)),
+                      width: qiblaState.isAligned ? 1.5 : 1.0,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: qiblaState.isAligned
+                            ? AppColors.brassGold.withValues(alpha: 0.3)
+                            : Colors.black.withValues(alpha: 0.04),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -106,11 +173,11 @@ class QiblaScreen extends ConsumerWidget {
                       Icon(
                         qiblaState.isAligned
                             ? Icons.check_circle_rounded
-                            : Icons.explore_outlined,
+                            : Icons.navigation_rounded,
                         size: 20,
                         color: qiblaState.isAligned
                             ? AppColors.darkBg
-                            : (isDark ? AppColors.sageGreen : AppColors.forestGreen),
+                            : (isDark ? AppColors.sageGreen : AppColors.mossGreen),
                       ),
                       const SizedBox(width: 10),
                       Text(
@@ -127,174 +194,80 @@ class QiblaScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-              ],
 
-              // Kalibrasyon Uyarısı (Sensör doğruluğu düşükse)
-              if (qiblaState.needsCalibration) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.info_outline, size: 16, color: AppColors.clayAmber),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Pusula doğruluğu düşük. Lütfen cihazınızı havada 8 çizerek kalibre ediniz.',
-                          textAlign: TextAlign.center,
-                          style: AppTypography.bodySmall(color: AppColors.clayAmber),
+                const SizedBox(height: 14),
+
+                // Kalibrasyon Rehberi (8 Çizme İpucu)
+                if (qiblaState.needsCalibration)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.clayAmber.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.sync_rounded, size: 14, color: AppColors.clayAmber),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Pusulayı kalibre etmek için cihazı havada 8 çizecek şekilde çevirin',
+                          style: AppTypography.bodySmall(
+                            color: isDark ? const Color(0xFFE8A87C) : AppColors.clayAmber,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
               ],
-
-              const SizedBox(height: 24),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildLoadingState(bool isDark) {
+  Widget _buildStatCard({
+    required String label,
+    required String value,
+    required String subtext,
+    required bool isDark,
+    required bool isPrimary,
+  }) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        const CircularProgressIndicator(color: AppColors.brassGold),
-        const SizedBox(height: 16),
         Text(
-          'Pusula sensörü başlatılıyor...',
-          style: AppTypography.bodyMedium(
+          label,
+          style: AppTypography.labelSmall(
             color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+          ).copyWith(letterSpacing: 1.2, fontWeight: FontWeight.w700),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: TextStyle(
+            fontFamily: 'Newsreader',
+            fontSize: 34,
+            fontWeight: FontWeight.w700,
+            color: isPrimary
+                ? (isDark ? AppColors.brassGold : const Color(0xFF9E7728))
+                : (isDark ? AppColors.darkText : AppColors.ink),
+            fontFeatures: const [FontFeature.tabularFigures()],
+          ),
+        ),
+        Text(
+          subtext,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.8,
+            color: isPrimary
+                ? (isDark ? AppColors.sageGreen : AppColors.forestGreen)
+                : (isDark ? AppColors.darkMuted : AppColors.inkMuted),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildPermissionCard(BuildContext context, WidgetRef ref, bool isDark) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.parchmentWarm.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.15),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.location_disabled_rounded,
-            size: 44,
-            color: AppColors.clayAmber,
-          ),
-          const SizedBox(height: 14),
-          Text(
-            'Konum İzni Gerekli',
-            textAlign: TextAlign.center,
-            style: AppTypography.headlineMedium(
-              color: isDark ? AppColors.darkText : AppColors.ink,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            'Android işletim sistemi manyetik pusula sensörünü çalıştırabilmek için konum erişimine ihtiyaç duyar.',
-            textAlign: TextAlign.center,
-            style: AppTypography.bodyMedium(
-              color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
-            ),
-          ),
-          const SizedBox(height: 18),
-          ElevatedButton.icon(
-            onPressed: () {
-              ref.read(qiblaProvider.notifier).retryOrRequestPermission();
-            },
-            icon: const Icon(Icons.check_circle_outline, size: 18),
-            label: const Text('İzin Ver ve Başlat'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.forestGreen,
-              foregroundColor: AppColors.parchment,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNoSensorFallback(
-    BuildContext context,
-    WidgetRef ref,
-    int qiblaDegrees,
-    bool isDark,
-  ) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.parchmentWarm.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.15),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Statik Kadran Önizlemesi
-          Center(
-            child: QiblaCompassDial(
-              heading: 0.0,
-              qiblaBearing: qiblaDegrees.toDouble(),
-              isAligned: false,
-              size: 200,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Manyetik Pusula Sensörü Algılanamadı',
-            textAlign: TextAlign.center,
-            style: AppTypography.headlineMedium(
-              color: isDark ? AppColors.darkText : AppColors.ink,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Cihazınızda donanımsal manyetik pusula bulunmuyor veya kalibrasyon gerekiyor. Bulunduğunuz konum için Kâbe yönü Kuzey\'den saat yönünde $qiblaDegrees° derecedir.',
-            textAlign: TextAlign.center,
-            style: AppTypography.bodySmall(
-              color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
-            ),
-          ),
-          const SizedBox(height: 16),
-          OutlinedButton.icon(
-            onPressed: () {
-              ref.read(qiblaProvider.notifier).retryOrRequestPermission();
-            },
-            icon: const Icon(Icons.refresh, size: 18),
-            label: const Text('Sensörü Tekrar Dene'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: isDark ? AppColors.sageGreen : AppColors.forestGreen,
-              side: BorderSide(
-                color: isDark ? AppColors.sageGreen : AppColors.forestGreen,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
