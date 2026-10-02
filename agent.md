@@ -61,9 +61,17 @@ Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, m
 - [x] Her iki ekranda da önceki/sonraki güne kaydırma (< Önceki Gün | Bugün | Sonraki Gün >) eklendi.
 - [x] `flutter analyze` 0 hata, testler sorunsuz çalıştı.
 
+### ✅ Aşama 4: Kıble Bulucu Ekranı, Küresel Matematik & Düşük Geçiren Filtre
+- [x] `MathUtils`: Büyük daire (great-circle) forward azimuth Kıble açısı formülü ve Haversine Kâbe mesafesi formülü uygulandı.
+- [x] 0°/360° dairesel sınır geçişini mükemmel idare eden dairesel Düşük Geçiren Filtre (`filterHeading`) geliştirildi; sensör titremesi ve sıçramalar engellendi.
+- [x] `CompassService` ve `QiblaNotifier` ile anlık yön takibi ve Kıbleye hizalanma anında tek seferlik haptik geri bildirim (`HapticFeedback.mediumImpact()`) entegre edildi.
+- [x] `QiblaCompassDial`: İslami geometrik motifli pusula kadranı, Türkçe ana yönler (K, D, G, B), zarif Kâbe ibresi ve hizalanma anında parlayan mat pirinç altın hare (`brassGlow`) animasyonu çizildi.
+- [x] `QiblaScreen`: Tam ekran sade arayüz, Kâbe'ye km mesafesi, Kıble yön açısı, kalibrasyon uyarısı (8 çizme rehberi) ve sensörsüz cihazlar için anlaşılır bilgilendirici boş durum ekranı yapıldı.
+- [x] `qibla_math_test.dart`: İstanbul ve Ankara açı/mesafe doğrulamaları, dairesel filtre testi ve tolerans kontrolleri %100 geçti (12 test).
+- [x] `flutter analyze` 0 hata ile temizlendi.
+
 ---
 
 ### ⏳ Sıradaki Aşamalar
-- **Aşama 4:** Kıble ekranı (flutter_compass, büyük daire formülü, düşük geçiren filtre, haptik titreşim).
 - **Aşama 5:** Ana ekran widget'ları (Android RemoteViews + Chronometer, 2x2, 4x2, Ayet/Hadis 4x2, 7 günlük veri köprüsü).
 - **Aşama 6:** Cilalama, hata durumları, uygulama ikonu ve açılış ekranı, APK derlemesi ve GitHub Release yayını.
