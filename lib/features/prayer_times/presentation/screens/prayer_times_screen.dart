@@ -124,7 +124,7 @@ class PrayerTimesScreen extends ConsumerWidget {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  state.selectedCity.name,
+                  state.selectedCity.displayName,
                   style: AppTypography.headlineMedium(
                     color: isDark ? AppColors.darkText : AppColors.ink,
                   ).copyWith(fontWeight: FontWeight.w600),

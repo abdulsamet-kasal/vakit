@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <uses-feature android:name="android.hardware.sensor.compass" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="false" />
+
     <application
         android:label="Vakit"
         android:name="${applicationName}"
@@ -49,6 +52,7 @@
         <!-- 1. Small Widget (2x2) -->
         <receiver
             android:name=".VakitSmallWidgetProvider"
+            android:label="@string/widget_small_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -61,6 +65,7 @@
         <!-- 2. Medium Widget (4x2) -->
         <receiver
             android:name=".VakitMediumWidgetProvider"
+            android:label="@string/widget_medium_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -73,6 +78,7 @@
         <!-- 3. Strip Widget (4x1) -->
         <receiver
             android:name=".VakitStripWidgetProvider"
+            android:label="@string/widget_strip_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -85,6 +91,7 @@
         <!-- 4. Verse Widget (4x2) -->
         <receiver
             android:name=".VakitVerseWidgetProvider"
+            android:label="@string/widget_verse_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -97,6 +104,7 @@
         <!-- 5. Hadith Widget (4x2) -->
         <receiver
             android:name=".VakitHadithWidgetProvider"
+            android:label="@string/widget_hadith_label"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

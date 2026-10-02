@@ -100,6 +100,17 @@ Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, m
 
 ---
 
+### ✅ Aşama 7: Kullanıcı Testi Sonrası İyileştirmeler (Widget Boyutlandırma, Önizleme Kapakları, Kıble & Deep Link Onarımı, 972 İlçe Desteği)
+- [x] **1. Widget Boyutlandırma (Resize):** Tüm 5 widget XML sağlayıcısına (`widget_*_info.xml`) `android:resizeMode="horizontal|vertical"`, `targetCellWidth`, `targetCellHeight`, `minResizeWidth`, `minResizeHeight` ve `maxResizeWidth/Height` kuralları eklenerek kullanıcının widget'ları ana ekranda serbestçe yeniden boyutlandırabilmesi sağlandı.
+- [x] **2. Widget Seçici Kapak Önizlemeleri & Açıklamalar:** 5 farklı widget için özel vektörel önizleme görselleri (`preview_widget_small.xml`, `preview_widget_medium.xml`, `preview_widget_strip.xml`, `preview_widget_verse.xml`, `preview_widget_hadith.xml`) çizildi. `AndroidManifest.xml` üzerinde her alıcıya ayırt edici `android:label` ve `appwidget-provider` XML'lerine `android:description` ile `android:previewLayout` bağlandı.
+- [x] **3. Kıble Uygulaması Onarımı:** `QiblaNotifier` içerisine Android manyetik sensörleri için konum izni kontrolü (`Geolocator.checkPermission/requestPermission`) eklendi. Sensör verisi gelmediğinde donup kalmayı önleyen 2.5 saniyelik zaman aşımı denetimi kuruldu. Negatif azimut açıları normalize edildi (`0..360`). Sensörsüz cihazlar için sabit yön ve Kâbe açısını görsel olarak gösteren statik rehber ve "Tekrar Dene" butonu geliştirildi.
+- [x] **4. Widget Deep Link & Açılış Yönlendirmesi Onarımı:** Widget tıklamalarındaki `PendingIntent` çakışması çözüldü; her widget için benzersiz `requestCode` (101-105) ve `FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_SINGLE_TOP` bayrakları tanımlandı. `MainActivity.kt` içerisine `onNewIntent` ve `setIntent(intent)` eklendi. Flutter tarafında ilk açılışta `checkInitialLaunch` navigatör bağlandıktan sonraya alındı ve `appRouter` içerisine `vakit://` yönlendirme kuralı entegre edildi.
+- [x] **5. Türkiye'nin 81 İli ve 972 İlçesini Kapsayan Seçim:** `DistrictData` modeliyle Türkiye'nin tüm 81 il ve 972 ilçesi çevrimdışı veritabanı olarak entegre edildi. `CitySelectorSheet` arayüzü hem doğrudan arama (örn: "Kadıköy", "Alanya", "Çankaya") hem de il seçilince o ilin ilçelerine akıcı geçiş yapacak şekilde yenilendi. Seçilen ilçe `SharedPreferences` ve `CityModel.displayName` içine kalıcı kaydedilerek widget'lara ve ana ekrana yansıtıldı.
+- [x] **Testler:** 19 unit ve widget testi 0 hata ile geçti (`flutter test`). `flutter analyze` 0 hata ile temizlendi. Hem debug hem release APK hatasız derlendi.
+
+---
+
 ## 🏆 Sonuç
-Projenin tüm aşamaları (Aşama 0 - Aşama 6) %100 tamamlanmış, unit ve widget testleri başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş ve Release APK yayımlanmıştır.
+Projenin tüm aşamaları (Aşama 0 - Aşama 7) %100 tamamlanmış, unit ve widget testleri başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş, kullanıcı testlerinden gelen 5 kritik istek eksiksiz hayata geçirilmiştir.
+
 

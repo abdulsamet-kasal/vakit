@@ -40,11 +40,25 @@ Future<void> main() async {
   );
 }
 
-class VakitApp extends ConsumerWidget {
+class VakitApp extends ConsumerStatefulWidget {
   const VakitApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<VakitApp> createState() => _VakitAppState();
+}
+
+class _VakitAppState extends ConsumerState<VakitApp> {
+  @override
+  void initState() {
+    super.initState();
+    // İlk çizim tamamlandıktan sonra widget tıklaması ile açılışı kontrol et
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      HomeWidgetService.checkInitialLaunch();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(

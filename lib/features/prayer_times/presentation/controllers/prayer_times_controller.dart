@@ -83,6 +83,7 @@ class PrayerTimesNotifier extends Notifier<PrayerTimesState> {
   static const _prefCityNameKey = 'selected_city_name';
   static const _prefCityLatKey = 'selected_city_lat';
   static const _prefCityLngKey = 'selected_city_lng';
+  static const _prefCityDistrictKey = 'selected_city_district';
 
   @override
   PrayerTimesState build() {
@@ -171,6 +172,7 @@ class PrayerTimesNotifier extends Notifier<PrayerTimesState> {
       final cityName = prefs.getString(_prefCityNameKey);
       final lat = prefs.getDouble(_prefCityLatKey);
       final lng = prefs.getDouble(_prefCityLngKey);
+      final district = prefs.getString(_prefCityDistrictKey);
 
       if (cityName != null && lat != null && lng != null) {
         final savedCity = CityModel(
@@ -178,6 +180,7 @@ class PrayerTimesNotifier extends Notifier<PrayerTimesState> {
           name: cityName,
           latitude: lat,
           longitude: lng,
+          district: district,
         );
         changeCity(savedCity, saveToPrefs: false);
       }
@@ -209,6 +212,11 @@ class PrayerTimesNotifier extends Notifier<PrayerTimesState> {
         await prefs.setString(_prefCityNameKey, city.name);
         await prefs.setDouble(_prefCityLatKey, city.latitude);
         await prefs.setDouble(_prefCityLngKey, city.longitude);
+        if (city.district != null && city.district!.isNotEmpty) {
+          await prefs.setString(_prefCityDistrictKey, city.district!);
+        } else {
+          await prefs.remove(_prefCityDistrictKey);
+        }
       } catch (_) {}
     }
 

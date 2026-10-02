@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="150dp"
+    android:viewportWidth="300"
+    android:viewportHeight="150">
+    <!-- Arka Plan: Sıcak Parşömen (#F3EEE0) -->
+    <path
+        android:fillColor="#F3EEE0"
+        android:pathData="M 16,4 C 9.4,4 4,9.4 4,16 L 4,134 C 4,140.6 9.4,146 16,146 L 284,146 C 290.6,146 296,140.6 296,134 L 296,16 C 296,9.4 290.6,4 284,4 Z" />
+    <!-- İnce Pirinç Kılcal Kenarlık -->
+    <path
+        android:strokeColor="#55B8934A"
+        android:strokeWidth="1.5"
+        android:pathData="M 16,4 C 9.4,4 4,9.4 4,16 L 4,134 C 4,140.6 9.4,146 16,146 L 284,146 C 290.6,146 296,140.6 296,134 L 296,16 C 296,9.4 290.6,4 284,4 Z" />
+    <!-- Sol Üst: GÜNÜN HADİSİ Başlığı -->
+    <path
+        android:fillColor="#B8934A"
+        android:pathData="M 24,20 L 96,20 L 96,28 L 24,28 Z" />
+    <!-- Sağ Üst: Ravi (Hz. Ömer r.a.) -->
+    <path
+        android:fillColor="#4A5C52"
+        android:pathData="M 190,20 L 276,20 L 276,28 L 190,28 Z" />
+    <!-- Hadis Metni Satırları (Mürekkep Dokusu) -->
+    <path
+        android:fillColor="#14201A"
+        android:pathData="M 24,46 L 276,46 L 276,56 L 24,56 Z" />
+    <path
+        android:fillColor="#14201A"
+        android:pathData="M 24,64 L 260,64 L 260,74 L 24,74 Z" />
+    <!-- Sol Alt: Hadis Kaynağı (Buhârî...) -->
+    <path
+        android:fillColor="#4A5C52"
+        android:pathData="M 24,96 L 150,96 L 150,104 L 24,104 Z" />
+    <!-- Sağ Alt: Marka İmzası -->
+    <path
+        android:fillColor="#554A5C52"
+        android:pathData="M 250,122 L 276,122 L 276,130 L 250,130 Z" />
+</vector>

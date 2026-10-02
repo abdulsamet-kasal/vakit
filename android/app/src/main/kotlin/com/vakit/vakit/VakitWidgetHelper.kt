@@ -30,6 +30,20 @@ object VakitWidgetHelper {
         }
     }
 
+    fun getLaunchPendingIntent(context: Context, uriStr: String, requestCode: Int): PendingIntent {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            action = HomeWidgetLaunchIntent.HOME_WIDGET_LAUNCH_ACTION
+            data = Uri.parse(uriStr)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+        return PendingIntent.getActivity(context, requestCode, intent, flags)
+    }
+
     data class PrayerEvent(
         val name: String,
         val epochMs: Long,
@@ -140,11 +154,7 @@ object VakitWidgetHelper {
         )
 
         // Tıklayınca Vakitler ekranına git
-        val pendingIntent = HomeWidgetLaunchIntent.getActivity(
-            context,
-            MainActivity::class.java,
-            Uri.parse("vakit://vakitler")
-        )
+        val pendingIntent = getLaunchPendingIntent(context, "vakit://vakitler", 101)
         views.setOnClickPendingIntent(R.id.widget_small_root, pendingIntent)
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -209,11 +219,7 @@ object VakitWidgetHelper {
             )
         }
 
-        val pendingIntent = HomeWidgetLaunchIntent.getActivity(
-            context,
-            MainActivity::class.java,
-            Uri.parse("vakit://vakitler")
-        )
+        val pendingIntent = getLaunchPendingIntent(context, "vakit://vakitler", 102)
         views.setOnClickPendingIntent(R.id.widget_medium_root, pendingIntent)
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -258,11 +264,7 @@ object VakitWidgetHelper {
             if (isKerahat) View.VISIBLE else View.GONE
         )
 
-        val pendingIntent = HomeWidgetLaunchIntent.getActivity(
-            context,
-            MainActivity::class.java,
-            Uri.parse("vakit://vakitler")
-        )
+        val pendingIntent = getLaunchPendingIntent(context, "vakit://vakitler", 103)
         views.setOnClickPendingIntent(R.id.widget_strip_root, pendingIntent)
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -284,11 +286,7 @@ object VakitWidgetHelper {
         views.setTextViewText(R.id.tv_verse_text, verseText)
         views.setTextViewText(R.id.tv_verse_source, verseSource)
 
-        val pendingIntent = HomeWidgetLaunchIntent.getActivity(
-            context,
-            MainActivity::class.java,
-            Uri.parse("vakit://ayet")
-        )
+        val pendingIntent = getLaunchPendingIntent(context, "vakit://ayet", 104)
         views.setOnClickPendingIntent(R.id.widget_verse_root, pendingIntent)
 
         appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -312,11 +310,7 @@ object VakitWidgetHelper {
         views.setTextViewText(R.id.tv_hadith_source, hadithSource)
         views.setTextViewText(R.id.tv_hadith_narrator, hadithNarrator)
 
-        val pendingIntent = HomeWidgetLaunchIntent.getActivity(
-            context,
-            MainActivity::class.java,
-            Uri.parse("vakit://hadis")
-        )
+        val pendingIntent = getLaunchPendingIntent(context, "vakit://hadis", 105)
         views.setOnClickPendingIntent(R.id.widget_hadith_root, pendingIntent)
 
         appWidgetManager.updateAppWidget(appWidgetId, views)

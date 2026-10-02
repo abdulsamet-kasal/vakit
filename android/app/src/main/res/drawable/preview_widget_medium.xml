@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="150dp"
+    android:viewportWidth="300"
+    android:viewportHeight="150">
+    <!-- Arka Plan: Orman Yeşili -->
+    <path
+        android:fillColor="#0F3D2E"
+        android:pathData="M 16,4 C 9.4,4 4,9.4 4,16 L 4,134 C 4,140.6 9.4,146 16,146 L 284,146 C 290.6,146 296,140.6 296,134 L 296,16 C 296,9.4 290.6,4 284,4 Z" />
+    <!-- İnce Pirinç Kılcal Kenarlık -->
+    <path
+        android:strokeColor="#33B8934A"
+        android:strokeWidth="1.5"
+        android:pathData="M 16,4 C 9.4,4 4,9.4 4,16 L 4,134 C 4,140.6 9.4,146 16,146 L 284,146 C 290.6,146 296,140.6 296,134 L 296,16 C 296,9.4 290.6,4 284,4 Z" />
+    <!-- Üst Başlık: İstanbul & Tarih -->
+    <path
+        android:fillColor="#F3EEE0"
+        android:pathData="M 24,20 L 74,20 L 74,28 L 24,28 Z" />
+    <path
+        android:fillColor="#A9C4B0"
+        android:pathData="M 84,22 L 150,22 L 150,27 L 84,27 Z" />
+    <!-- Sağ Kerahat Rozeti -->
+    <path
+        android:fillColor="#C27A3E"
+        android:pathData="M 230,18 L 276,18 L 276,28 L 230,28 Z" />
+    <!-- 6 Vakit Kolonları -->
+    <!-- 1. İmsak (28-60) -->
+    <path android:fillColor="#A9C4B0" android:pathData="M 28,54 L 56,54 L 56,62 L 28,62 Z" />
+    <path android:fillColor="#F3EEE0" android:pathData="M 24,70 L 60,70 L 60,86 L 24,86 Z" />
+    <!-- 2. Güneş (72-104) -->
+    <path android:fillColor="#A9C4B0" android:pathData="M 72,54 L 100,54 L 100,62 L 72,62 Z" />
+    <path android:fillColor="#F3EEE0" android:pathData="M 68,70 L 104,70 L 104,86 L 68,86 Z" />
+    <!-- 3. Öğle (116-148, Aktif Vakit) -->
+    <path android:fillColor="#B8934A" android:pathData="M 118,54 L 146,54 L 146,62 L 118,62 Z" />
+    <path android:fillColor="#F3EEE0" android:pathData="M 112,70 L 152,70 L 152,86 L 112,86 Z" />
+    <!-- Pirinç Aktif Çizgisi -->
+    <path android:fillColor="#B8934A" android:pathData="M 120,96 L 144,96 L 144,100 L 120,100 Z" />
+    <!-- 4. İkindi (160-192) -->
+    <path android:fillColor="#A9C4B0" android:pathData="M 160,54 L 188,54 L 188,62 L 160,62 Z" />
+    <path android:fillColor="#F3EEE0" android:pathData="M 156,70 L 192,70 L 192,86 L 156,86 Z" />
+    <!-- 5. Akşam (204-236) -->
+    <path android:fillColor="#A9C4B0" android:pathData="M 204,54 L 232,54 L 232,62 L 204,62 Z" />
+    <path android:fillColor="#F3EEE0" android:pathData="M 200,70 L 236,70 L 236,86 L 200,86 Z" />
+    <!-- 6. Yatsı (248-280) -->
+    <path android:fillColor="#A9C4B0" android:pathData="M 248,54 L 276,54 L 276,62 L 248,62 Z" />
+    <path android:fillColor="#F3EEE0" android:pathData="M 244,70 L 280,70 L 280,86 L 244,86 Z" />
+</vector>

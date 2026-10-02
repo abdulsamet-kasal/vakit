@@ -15,7 +15,34 @@ class CityModel {
     this.district,
   });
 
-  String get displayName => district != null ? '$name, $district' : name;
+  String get displayName => (district != null && district!.isNotEmpty && district != 'Merkez')
+      ? '$name, $district'
+      : name;
+
+  CityModel copyWith({
+    int? id,
+    String? name,
+    double? latitude,
+    double? longitude,
+    String? district,
+  }) {
+    return CityModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      district: district ?? this.district,
+    );
+  }
+
+  static CityModel? findByName(String name) {
+    for (final city in turkishCities) {
+      if (city.name.toLowerCase() == name.toLowerCase()) {
+        return city;
+      }
+    }
+    return null;
+  }
 
   static const CityModel defaultCity = CityModel(
     id: 34,

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vakit</string>
+
+    <!-- Widget İsimleri (Widget Seçici Menüsünde Görünür) -->
+    <string name="widget_small_label">Vakit - Sonraki Vakit</string>
+    <string name="widget_medium_label">Vakit - Tüm Vakitler</string>
+    <string name="widget_strip_label">Vakit - Kompakt Şerit</string>
+    <string name="widget_verse_label">Vakit - Günün Âyeti</string>
+    <string name="widget_hadith_label">Vakit - Günün Hadisi</string>
+
+    <!-- Widget Açıklamaları (Android 12+ Widget Seçicide Görünür) -->
+    <string name="widget_small_description">Sıradaki vakit, ezan saati ve canlı geri sayım sayacı.</string>
+    <string name="widget_medium_description">Günün 6 namaz vakti ve anlık aktif vakit alt göstergesi.</string>
+    <string name="widget_strip_description">Yatay ince şerit üzerinde sonraki vakit ve canlı sayaç.</string>
+    <string name="widget_verse_description">Mushaf kartı dokusuyla günün âyet-i kerimesi ve suresi.</string>
+    <string name="widget_hadith_description">Mushaf kartı dokusuyla günün hadis-i şerifi ve kaynağı.</string>
+</resources>
