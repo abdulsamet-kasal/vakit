@@ -2,6 +2,8 @@
 
 Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, mimari kararlarını, tamamlanan hedefleri ve release durumunu takip eder.
 
+> 🗺️ **ÖNEMLİ:** Uygulamanın güncel ve eksiksiz özellik haritası (ekranlar, rotalar, provider'lar, veri katmanı, widget sistemi, yerel depolama anahtarları, Supabase şeması) [GRAPH.md](GRAPH.md) dosyasındadır. **Her yeni geliştirme oturumu önce GRAPH.md'yi okumalıdır.** Bu dosya gelişim günlüğü olarak kalır; mimari gerçekler GRAPH.md'de yaşar.
+
 ---
 
 ## 📌 Proje Özeti
@@ -150,8 +152,20 @@ Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, m
 
 ---
 
+### ✅ Aşama 10: Kıble Ekranı Kökten Onarımı — Saniyelik Rebuild Fırtınası (v1.4.0)
+- [x] **1. Kritik Hata Teşhisi:** `QiblaNotifier.build()` içerisinden `prayerTimesProvider`'ın **tamamı** watch ediliyordu; bu provider'ın state'i 1 saniyelik canlı sayaç nedeniyle saniyede bir değiştiği için kıble kontrolcüsü **saniyede bir yeniden kuruluyor**, sensör akışı iptal edilip yeniden dinleniyor ve heading **her saniye 0°'a sıfırlanıyordu**. Pusula bu yüzden Kuzey'e kilitleniyor ve "kıble çalışmıyor" hatasını üretiyordu.
+- [x] **2. Kalıcı Düzeltme (`select`):** `qiblaProvider` artık yalnızca `selectedCity`'yi `ref.watch(prayerTimesProvider.select(...))` ile izliyor; rebuild yalnızca şehir değişince tetikleniyor. Sensör akışı yalnızca ilk kurulumda veya kıble açısı değiştiğinde baştan kuruluyor; izin akışı sürerken şehir değişirse çift kurulum engelleniyor.
+- [x] **3. Sensör Durumu Koruma:** Heading, accuracy, canlı takip ve kalibrasyon durumu Notifier alanlarında tutularak yeniden kurulumlarda bozulması engellendi; `retrySensors` ve `onError` akışları da bu alanlarla senkronize edildi.
+- [x] **4. Sensörsüz Cihaz Statik Rehberi (Eksik Tamamlama):** Aşama 7'de vaat edilen ama kodda hiç bulunmayan statik rehber eklendi: sensör verisi gelmediğinde Kâbe yönünü gösteren döndürülmüş ok, "Cihazı Kuzeye (K) tutun; Kâbe X° yönünde • Y km" metni ve "Tekrar Dene" butonu devreye giriyor.
+- [x] **5. `CompassService` Sağlamlaştırma:** Native kanal hatasında FlutterCompass yedek aboneliğinin tekrarlı hatalarda çoğaltılmasını engelleyen `??=` koruması eklendi.
+- [x] **6. Ekran Verimliliği:** `QiblaScreen` de şehri `select` ile izliyor; saniyelik sayaç güncellemeleri artık kıble ekranını gereksiz yeniden kurmuyor.
+- [x] **7. Doğrulama:** `flutter analyze` 0 hata, 19 unit/widget testi geçti.
+
+---
+
 ## 🏆 Sonuç
-Projenin tüm aşamaları (Aşama 0 - Aşama 9) %100 tamamlanmış, unit ve widget testleri başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş, kullanıcının fiziksel testleri doğrultusunda widget inflate ve pusula sensör sorunları kökten çözülmüş, tüm arayüze yapay zeka klişelerinden uzak lüks bir modernite kazandırılarak `v1.3.0` sürümü yayımlanmıştır.
+
+Projenin tüm aşamaları (Aşama 0 - Aşama 10) %100 tamamlanmış, unit ve widget testleri başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş, kullanıcının fiziksel testleri doğrultusunda widget inflate ve pusula sensör sorunları kökten çözülmüş, tüm arayüze yapay zeka klişelerinden uzak lüks bir modernite kazandırılmış, kıble ekranındaki saniyelik rebuild fırtınası kökten onarılarak `v1.4.0` sürümü yayımlanmıştır.
 
 
 

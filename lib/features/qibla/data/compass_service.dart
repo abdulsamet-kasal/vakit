@@ -47,12 +47,12 @@ class CompassService {
             },
             onError: (dynamic error) {
               debugPrint('Native compass channel error: $error. Falling back to FlutterCompass.');
-              pluginSub = _listenPlugin(controller);
+              pluginSub ??= _listenPlugin(controller);
             },
           );
         } catch (e) {
           debugPrint('Native compass setup exception: $e. Falling back.');
-          pluginSub = _listenPlugin(controller);
+          pluginSub ??= _listenPlugin(controller);
         }
       },
       onCancel: () {
