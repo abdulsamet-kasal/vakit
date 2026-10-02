@@ -53,10 +53,17 @@ Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, m
 - [x] `daily_content_repository_test.dart` ile deterministik günlük seçim ve offline asset güvencesi test edildi.
 - [x] `flutter analyze` ve tüm testler (8 test) 0 hata ile geçti.
 
+### ✅ Aşama 3: Günün Âyeti ve Hadisi Ekranları, Paylaşım Kartı & Çevrimdışı Güvence
+- [x] `DailyContentNotifier` modern Riverpod ile gün bazlı asenkron veri yükleme ve gün değiştirme mantığı kuruldu.
+- [x] `ShareCardExporter` ile `RepaintBoundary` üzerinden 3.0 pixelRatio yüksek çözünürlüklü PNG görsel kart oluşturma ve `share_plus` üzerinden paylaşma servisi yazıldı.
+- [x] `DailyVerseScreen`: Amiri hat tipografisi, bol satır aralığı, Türkçe meâl, ayet sonu rozeti (`AyahEndRosette`), kopyalama, metin paylaşımı ve görsel kart paylaşımı tamamlandı.
+- [x] `DailyHadithScreen`: Arapça metin, Türkçe hadis metni, ravi, tam kitap kaynağı, kopyalama, metin ve görsel kart paylaşımı tamamlandı.
+- [x] Her iki ekranda da önceki/sonraki güne kaydırma (< Önceki Gün | Bugün | Sonraki Gün >) eklendi.
+- [x] `flutter analyze` 0 hata, testler sorunsuz çalıştı.
+
 ---
 
 ### ⏳ Sıradaki Aşamalar
-- **Aşama 3:** Günün ayeti ve hadisi ekranları + paylaşım kartı + offline yedekleme.
 - **Aşama 4:** Kıble ekranı (flutter_compass, büyük daire formülü, düşük geçiren filtre, haptik titreşim).
 - **Aşama 5:** Ana ekran widget'ları (Android RemoteViews + Chronometer, 2x2, 4x2, Ayet/Hadis 4x2, 7 günlük veri köprüsü).
 - **Aşama 6:** Cilalama, hata durumları, uygulama ikonu ve açılış ekranı, APK derlemesi ve GitHub Release yayını.
