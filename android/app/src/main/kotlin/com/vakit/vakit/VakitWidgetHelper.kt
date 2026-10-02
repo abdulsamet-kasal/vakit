@@ -20,14 +20,30 @@ import java.util.Calendar
 
 object VakitWidgetHelper {
 
-    private const val PREFS_NAME = "FlutterSharedPreferences"
+    private const val PREFS_FLUTTER = "FlutterSharedPreferences"
+    private const val PREFS_HOME_WIDGET = "HomeWidgetPreferences"
 
     fun getPrefs(context: Context): SharedPreferences {
         return try {
             HomeWidgetPlugin.getData(context)
         } catch (_: Exception) {
-            context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            context.getSharedPreferences(PREFS_HOME_WIDGET, Context.MODE_PRIVATE)
         }
+    }
+
+    private fun getStringValue(context: Context, prefs: SharedPreferences, key: String, defaultVal: String): String {
+        val v1 = prefs.getString(key, null)
+        if (!v1.isNullOrEmpty()) return v1
+
+        val hwPrefs = context.getSharedPreferences(PREFS_HOME_WIDGET, Context.MODE_PRIVATE)
+        val v2 = hwPrefs.getString(key, null)
+        if (!v2.isNullOrEmpty()) return v2
+
+        val fltPrefs = context.getSharedPreferences(PREFS_FLUTTER, Context.MODE_PRIVATE)
+        val v3 = fltPrefs.getString("flutter.$key", null) ?: fltPrefs.getString(key, null)
+        if (!v3.isNullOrEmpty()) return v3
+
+        return defaultVal
     }
 
     fun getLaunchPendingIntent(context: Context, uriStr: String, requestCode: Int): PendingIntent {
@@ -60,8 +76,10 @@ object VakitWidgetHelper {
         val kerahatEveningEnd: Long,
     )
 
-    fun parsePrayerData(prefs: SharedPreferences): List<DayData> {
-        val jsonStr = prefs.getString("days_prayer_json", null) ?: return emptyList()
+    fun parsePrayerData(context: Context, prefs: SharedPreferences): List<DayData> {
+        val jsonStr = getStringValue(context, prefs, "days_prayer_json", "")
+        if (jsonStr.isEmpty()) return emptyList()
+
         val result = mutableListOf<DayData>()
         try {
             val array = JSONArray(jsonStr)
@@ -93,9 +111,22 @@ object VakitWidgetHelper {
                 )
             }
         } catch (_: Exception) {
-            // Json parse error fallback
+            // Json parse fallback
         }
         return result
+    }
+
+    fun findTodayDayData(days: List<DayData>): DayData? {
+        if (days.isEmpty()) return null
+        val calNow = Calendar.getInstance()
+        val match = days.firstOrNull { d ->
+            val imsakMs = d.events.firstOrNull()?.epochMs ?: 0L
+            if (imsakMs <= 0L) return@firstOrNull false
+            val calDay = Calendar.getInstance().apply { timeInMillis = imsakMs }
+            calNow.get(Calendar.YEAR) == calDay.get(Calendar.YEAR) &&
+                    calNow.get(Calendar.DAY_OF_YEAR) == calDay.get(Calendar.DAY_OF_YEAR)
+        }
+        return match ?: days.firstOrNull()
     }
 
     fun isKerahatActive(now: Long, dayData: DayData?): Boolean {
@@ -114,22 +145,17 @@ object VakitWidgetHelper {
         prefs: SharedPreferences
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_small)
-        val cityName = prefs.getString("city_name", "İstanbul") ?: "İstanbul"
-        val days = parsePrayerData(prefs)
+        val cityName = getStringValue(context, prefs, "city_name", "İstanbul")
+        val days = parsePrayerData(context, prefs)
         val now = System.currentTimeMillis()
 
         var nextEvent: PrayerEvent? = null
-        var isKerahat = false
+        val todayDay = findTodayDayData(days)
+        val isKerahat = isKerahatActive(now, todayDay)
 
         if (days.isNotEmpty()) {
             val allEvents = days.flatMap { it.events }.filter { it.epochMs > 0 }
             nextEvent = allEvents.firstOrNull { it.epochMs > now }
-            val currentDay = days.firstOrNull { day ->
-                val imsak = day.events.firstOrNull()?.epochMs ?: 0L
-                val yatsi = day.events.lastOrNull()?.epochMs ?: 0L
-                now in imsak..yatsi
-            } ?: days.firstOrNull()
-            isKerahat = isKerahatActive(now, currentDay)
         }
 
         views.setTextViewText(R.id.tv_city, cityName)
@@ -167,13 +193,19 @@ object VakitWidgetHelper {
         prefs: SharedPreferences
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_medium)
-        val cityName = prefs.getString("city_name", "İstanbul") ?: "İstanbul"
-        val days = parsePrayerData(prefs)
+        val cityName = getStringValue(context, prefs, "city_name", "İstanbul")
+        val days = parsePrayerData(context, prefs)
         val now = System.currentTimeMillis()
 
         views.setTextViewText(R.id.tv_medium_city, cityName)
 
-        val day = days.firstOrNull()
+        val day = findTodayDayData(days)
+        val bars = listOf(
+            R.id.bar_imsak, R.id.bar_gunes, R.id.bar_ogle,
+            R.id.bar_ikindi, R.id.bar_aksam, R.id.bar_yatsi
+        )
+        bars.forEach { views.setViewVisibility(it, View.INVISIBLE) }
+
         if (day != null) {
             views.setTextViewText(R.id.tv_medium_date, day.dateStr)
 
@@ -192,12 +224,6 @@ object VakitWidgetHelper {
             views.setTextViewText(R.id.val_yatsi, yatsi?.timeStr ?: "--:--")
 
             // Aktif vakti bul ve altındaki pirinç çubuğu göster
-            val bars = listOf(
-                R.id.bar_imsak, R.id.bar_gunes, R.id.bar_ogle,
-                R.id.bar_ikindi, R.id.bar_aksam, R.id.bar_yatsi
-            )
-            bars.forEach { views.setViewVisibility(it, View.INVISIBLE) }
-
             val activeIndex = when {
                 imsak != null && now < imsak.epochMs -> -1
                 gunes != null && now < gunes.epochMs -> 0
@@ -217,6 +243,15 @@ object VakitWidgetHelper {
                 R.id.tv_medium_kerahat,
                 if (isKerahat) View.VISIBLE else View.GONE
             )
+        } else {
+            views.setTextViewText(R.id.tv_medium_date, "Bugün")
+            views.setTextViewText(R.id.val_imsak, "--:--")
+            views.setTextViewText(R.id.val_gunes, "--:--")
+            views.setTextViewText(R.id.val_ogle, "--:--")
+            views.setTextViewText(R.id.val_ikindi, "--:--")
+            views.setTextViewText(R.id.val_aksam, "--:--")
+            views.setTextViewText(R.id.val_yatsi, "--:--")
+            views.setViewVisibility(R.id.tv_medium_kerahat, View.GONE)
         }
 
         val pendingIntent = getLaunchPendingIntent(context, "vakit://vakitler", 102)
@@ -232,20 +267,19 @@ object VakitWidgetHelper {
         prefs: SharedPreferences
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_strip)
-        val cityName = prefs.getString("city_name", "İstanbul") ?: "İstanbul"
-        val days = parsePrayerData(prefs)
+        val cityName = getStringValue(context, prefs, "city_name", "İstanbul")
+        val days = parsePrayerData(context, prefs)
         val now = System.currentTimeMillis()
 
         views.setTextViewText(R.id.tv_strip_city, cityName)
 
         var nextEvent: PrayerEvent? = null
-        var isKerahat = false
+        val todayDay = findTodayDayData(days)
+        val isKerahat = isKerahatActive(now, todayDay)
 
         if (days.isNotEmpty()) {
             val allEvents = days.flatMap { it.events }.filter { it.epochMs > 0 }
             nextEvent = allEvents.firstOrNull { it.epochMs > now }
-            val currentDay = days.firstOrNull()
-            isKerahat = isKerahatActive(now, currentDay)
         }
 
         if (nextEvent != null) {
@@ -257,6 +291,9 @@ object VakitWidgetHelper {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 views.setChronometerCountDown(R.id.widget_strip_chronometer, true)
             }
+        } else {
+            views.setTextViewText(R.id.tv_strip_prayer_name, "Vakit")
+            views.setTextViewText(R.id.tv_strip_prayer_time, "--:--")
         }
 
         views.setViewVisibility(
@@ -277,11 +314,13 @@ object VakitWidgetHelper {
         prefs: SharedPreferences
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_verse)
-        val verseText = prefs.getString(
+        val verseText = getStringValue(
+            context,
+            prefs,
             "today_verse_short",
             "“Beni anın ki ben de sizi anayım; bana şükredin, nankörlük etmeyin.”"
         )
-        val verseSource = prefs.getString("today_verse_source", "Bakara, 152")
+        val verseSource = getStringValue(context, prefs, "today_verse_source", "Bakara, 152")
 
         views.setTextViewText(R.id.tv_verse_text, verseText)
         views.setTextViewText(R.id.tv_verse_source, verseSource)
@@ -299,12 +338,14 @@ object VakitWidgetHelper {
         prefs: SharedPreferences
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_hadith)
-        val hadithText = prefs.getString(
+        val hadithText = getStringValue(
+            context,
+            prefs,
             "today_hadith_short",
             "“Ameller niyetlere göredir; herkes için ancak niyet ettiği şey vardır.”"
         )
-        val hadithSource = prefs.getString("today_hadith_source", "Buhârî, Bed’ü’l-vahy, 1")
-        val hadithNarrator = prefs.getString("today_hadith_narrator", "Hz. Ömer (r.a.)")
+        val hadithSource = getStringValue(context, prefs, "today_hadith_source", "Buhârî, Bed’ü’l-vahy, 1")
+        val hadithNarrator = getStringValue(context, prefs, "today_hadith_narrator", "Hz. Ömer (r.a.)")
 
         views.setTextViewText(R.id.tv_hadith_text, hadithText)
         views.setTextViewText(R.id.tv_hadith_source, hadithSource)
@@ -317,7 +358,7 @@ object VakitWidgetHelper {
     }
 
     fun scheduleNextAlarm(context: Context, prefs: SharedPreferences) {
-        val days = parsePrayerData(prefs)
+        val days = parsePrayerData(context, prefs)
         val now = System.currentTimeMillis()
 
         val triggerTimes = mutableListOf<Long>()
@@ -401,10 +442,14 @@ object VakitWidgetHelper {
         // 5. Hadith
         val hadithComponent = ComponentName(context, VakitHadithWidgetProvider::class.java)
         val hadithIds = appWidgetManager.getAppWidgetIds(hadithComponent)
-        for (id in hadithIds) {
+        for (id in resizeHadithIds(appWidgetManager, hadithComponent)) {
             updateHadithWidget(context, appWidgetManager, id, prefs)
         }
 
         scheduleNextAlarm(context, prefs)
+    }
+
+    private fun resizeHadithIds(manager: AppWidgetManager, comp: ComponentName): IntArray {
+        return manager.getAppWidgetIds(comp)
     }
 }

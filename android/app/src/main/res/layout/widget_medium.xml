@@ -5,7 +5,10 @@
     android:layout_height="match_parent"
     android:background="@drawable/widget_bg_forest"
     android:orientation="vertical"
-    android:padding="14dp">
+    android:paddingLeft="12dp"
+    android:paddingTop="10dp"
+    android:paddingRight="12dp"
+    android:paddingBottom="10dp">
 
     <!-- Üst Başlık & Tarih & Kerahat Rozeti -->
     <RelativeLayout
@@ -15,14 +18,17 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/tv_medium_kerahat"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_medium_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="İstanbul"
                 android:textColor="#F3EEE0"
                 android:textSize="13sp"
@@ -32,8 +38,10 @@
                 android:id="@+id/tv_medium_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="2 Ekim Cuma"
+                android:layout_marginLeft="6dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Bugün"
                 android:textColor="#A9C4B0"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -42,13 +50,16 @@
             android:id="@+id/tv_medium_kerahat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:background="@drawable/widget_kerahat_badge_bg"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="3dp"
+            android:paddingLeft="6dp"
+            android:paddingTop="2dp"
+            android:paddingRight="6dp"
+            android:paddingBottom="2dp"
+            android:singleLine="true"
             android:text="Kerahat Vakti"
             android:textColor="#C27A3E"
-            android:textSize="10sp"
+            android:textSize="9sp"
             android:textStyle="bold"
             android:visibility="gone" />
     </RelativeLayout>
@@ -57,10 +68,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <!-- 1. İmsak -->
         <LinearLayout
@@ -70,27 +81,32 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/lbl_imsak"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="İmsak"
                 android:textColor="#A9C4B0"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
             <TextView
                 android:id="@+id/val_imsak"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="05:30"
+                android:layout_marginTop="2dp"
+                android:singleLine="true"
+                android:text="--:--"
                 android:textColor="#F3EEE0"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
+
             <View
                 android:id="@+id/bar_imsak"
-                android:layout_width="16dp"
+                android:layout_width="14dp"
                 android:layout_height="2.5dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/widget_brass_bar"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -103,27 +119,32 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/lbl_gunes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="Güneş"
                 android:textColor="#A9C4B0"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
             <TextView
                 android:id="@+id/val_gunes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="06:55"
+                android:layout_marginTop="2dp"
+                android:singleLine="true"
+                android:text="--:--"
                 android:textColor="#F3EEE0"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
+
             <View
                 android:id="@+id/bar_gunes"
-                android:layout_width="16dp"
+                android:layout_width="14dp"
                 android:layout_height="2.5dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/widget_brass_bar"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -136,27 +157,32 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/lbl_ogle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="Öğle"
                 android:textColor="#A9C4B0"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
             <TextView
                 android:id="@+id/val_ogle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="12:58"
+                android:layout_marginTop="2dp"
+                android:singleLine="true"
+                android:text="--:--"
                 android:textColor="#F3EEE0"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
+
             <View
                 android:id="@+id/bar_ogle"
-                android:layout_width="16dp"
+                android:layout_width="14dp"
                 android:layout_height="2.5dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/widget_brass_bar"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -169,27 +195,32 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/lbl_ikindi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="İkindi"
                 android:textColor="#A9C4B0"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
             <TextView
                 android:id="@+id/val_ikindi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="16:14"
+                android:layout_marginTop="2dp"
+                android:singleLine="true"
+                android:text="--:--"
                 android:textColor="#F3EEE0"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
+
             <View
                 android:id="@+id/bar_ikindi"
-                android:layout_width="16dp"
+                android:layout_width="14dp"
                 android:layout_height="2.5dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/widget_brass_bar"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -202,27 +233,32 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/lbl_aksam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="Akşam"
                 android:textColor="#A9C4B0"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
             <TextView
                 android:id="@+id/val_aksam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="18:52"
+                android:layout_marginTop="2dp"
+                android:singleLine="true"
+                android:text="--:--"
                 android:textColor="#F3EEE0"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
+
             <View
                 android:id="@+id/bar_aksam"
-                android:layout_width="16dp"
+                android:layout_width="14dp"
                 android:layout_height="2.5dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/widget_brass_bar"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -235,27 +271,32 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/lbl_yatsi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="Yatsı"
                 android:textColor="#A9C4B0"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
             <TextView
                 android:id="@+id/val_yatsi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="20:11"
+                android:layout_marginTop="2dp"
+                android:singleLine="true"
+                android:text="--:--"
                 android:textColor="#F3EEE0"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
+
             <View
                 android:id="@+id/bar_yatsi"
-                android:layout_width="16dp"
+                android:layout_width="14dp"
                 android:layout_height="2.5dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/widget_brass_bar"
                 android:visibility="invisible" />
         </LinearLayout>

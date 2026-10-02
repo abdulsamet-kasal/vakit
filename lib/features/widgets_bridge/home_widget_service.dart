@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../routing/app_router.dart';
 import '../daily_content/data/daily_content_repository.dart';
 import '../daily_content/data/models/hadith_model.dart';
@@ -128,8 +129,16 @@ class HomeWidgetService {
         };
       }).toList();
 
+      final jsonStr = jsonEncode(daysPayload);
       await HomeWidget.saveWidgetData<String>('city_name', city.displayName);
-      await HomeWidget.saveWidgetData<String>('days_prayer_json', jsonEncode(daysPayload));
+      await HomeWidget.saveWidgetData<String>('days_prayer_json', jsonStr);
+
+      // SharedPreferences yedek depolaması (doğrudan FlutterSharedPreferences fallback için)
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('days_prayer_json', jsonStr);
+        await prefs.setString('city_name', city.displayName);
+      } catch (_) {}
 
       // Âyet ve hadis sağlanmadıysa bugünün içeriğini getir
       var activeVerse = verse;
