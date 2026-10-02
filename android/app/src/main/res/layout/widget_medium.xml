@@ -102,13 +102,14 @@
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
-            <View
+            <ImageView
                 android:id="@+id/bar_imsak"
                 android:layout_width="14dp"
-                android:layout_height="2.5dp"
+                android:layout_height="3dp"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/widget_brass_bar"
-                android:visibility="invisible" />
+                android:src="@drawable/widget_brass_bar"
+                android:visibility="invisible"
+                android:contentDescription="imsak aktif" />
         </LinearLayout>
 
         <!-- 2. Güneş -->
@@ -140,13 +141,14 @@
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
-            <View
+            <ImageView
                 android:id="@+id/bar_gunes"
                 android:layout_width="14dp"
-                android:layout_height="2.5dp"
+                android:layout_height="3dp"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/widget_brass_bar"
-                android:visibility="invisible" />
+                android:src="@drawable/widget_brass_bar"
+                android:visibility="invisible"
+                android:contentDescription="gunes aktif" />
         </LinearLayout>
 
         <!-- 3. Öğle -->
@@ -178,13 +180,14 @@
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
-            <View
+            <ImageView
                 android:id="@+id/bar_ogle"
                 android:layout_width="14dp"
-                android:layout_height="2.5dp"
+                android:layout_height="3dp"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/widget_brass_bar"
-                android:visibility="invisible" />
+                android:src="@drawable/widget_brass_bar"
+                android:visibility="invisible"
+                android:contentDescription="ogle aktif" />
         </LinearLayout>
 
         <!-- 4. İkindi -->
@@ -216,13 +219,14 @@
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
-            <View
+            <ImageView
                 android:id="@+id/bar_ikindi"
                 android:layout_width="14dp"
-                android:layout_height="2.5dp"
+                android:layout_height="3dp"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/widget_brass_bar"
-                android:visibility="invisible" />
+                android:src="@drawable/widget_brass_bar"
+                android:visibility="invisible"
+                android:contentDescription="ikindi aktif" />
         </LinearLayout>
 
         <!-- 5. Akşam -->
@@ -254,13 +258,14 @@
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
-            <View
+            <ImageView
                 android:id="@+id/bar_aksam"
                 android:layout_width="14dp"
-                android:layout_height="2.5dp"
+                android:layout_height="3dp"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/widget_brass_bar"
-                android:visibility="invisible" />
+                android:src="@drawable/widget_brass_bar"
+                android:visibility="invisible"
+                android:contentDescription="aksam aktif" />
         </LinearLayout>
 
         <!-- 6. Yatsı -->
@@ -292,13 +297,14 @@
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
-            <View
+            <ImageView
                 android:id="@+id/bar_yatsi"
                 android:layout_width="14dp"
-                android:layout_height="2.5dp"
+                android:layout_height="3dp"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/widget_brass_bar"
-                android:visibility="invisible" />
+                android:src="@drawable/widget_brass_bar"
+                android:visibility="invisible"
+                android:contentDescription="yatsi aktif" />
         </LinearLayout>
 
     </LinearLayout>
