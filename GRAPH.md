@@ -44,13 +44,14 @@
 
 ```mermaid
 graph TD
-    A[Vakit v1.3.0] --> B[Vakitler / Ana Ekran]
+    A[Vakit v1.5.0] --> B[Vakitler / Ana Ekran]
     A --> C[Kıble Pusulası]
     A --> D[Günün Âyeti]
     A --> E[Günün Hadisi]
     A --> F[Ayarlar]
     A --> G[Android Widget Sistemi]
     A --> H[Çekirdek Çizim Sistemi]
+    A --> I[Ezan Bildirimleri]
 
     B --> B1[Mihrap geri sayım kartı • 1 sn canlı sayaç]
     B --> B2[Güneş Yayı + 3 kerahat dilimi]
@@ -92,6 +93,11 @@ graph TD
     H --> H2[IslamicPatternPainter • girih doku]
     H --> H3[MushafCard • AyahEndRosette]
     H --> H4[KerahatBadge • SunArcPainter]
+
+    I --> I1[Ezan + ön hatırlatma • sessiz mod]
+    I --> I2[7 günlük olay kuyruğu • notif_events_json]
+    I --> I3[NotificationAlarmReceiver • sonraki alarma geçiş]
+    I --> I4[BootReceiver ile alarm tazeleme]
 ```
 
 ---
@@ -133,7 +139,7 @@ Cold-start açılışı `HomeWidgetService.checkInitialLaunch()` (post-frame cal
 | `prayerTimesProvider` | `NotifierProvider<PrayerTimesNotifier, PrayerTimesState>` | seçili tarih/şehir, 6 vakit, yarınki vakitler, 1 sn'lik sayaç, aktif kerahat, güneş ilerlemesi | Vakit ekranının kalbi; şehir/tarih değişimi, GPS tespiti, widget senkron tetikleyicisi |
 | `qiblaProvider` | `NotifierProvider<QiblaNotifier, QiblaState>` | heading, kıble açısı, km mesafe, hizalanma, sensör durumu, kalibrasyon ihtiyacı | Kıble kontrolcüsü. **Kritik:** `prayerTimesProvider`'ı tamamıyla değil, yalnızca `selectedCity` üzerinden `select` ile izler — 1 sn'lik canlı sayaç kıbleyi yeniden kurmaz (v1.4.0 düzeltmesi) |
 | `dailyContentProvider` | `NotifierProvider<DailyContentNotifier, DailyContentState>` | seçili tarih + `AsyncValue<VerseModel>` + `AsyncValue<HadithModel>` | Günün âyet/hadis yükleme, gün gezinme, bugünkü içerikse widget güncelleme |
-| `settingsProvider` | `NotifierProvider<SettingsNotifier, AppSettingsModel>` | hesaplama yöntemi, mezheb, kerahat süreleri, tema | Ayar kalıcılığı (SharedPreferences) + değişimde vakitleri yeniden hesaplar |
+| `settingsProvider` | `NotifierProvider<SettingsNotifier, AppSettingsModel>` | hesaplama yöntemi, mezheb, kerahat süreleri, tema, **ezan bildirimi ayarları** | Ayar kalıcılığı (SharedPreferences) + değişimde vakitleri yeniden hesaplar + `_resyncNotificationAlarms` ile bildirim planını tazeler |
 | `themeModeProvider` | `NotifierProvider<ThemeModeNotifier, ThemeMode>` | `ThemeMode` | Uygulama temasını yükler/kaydeder/uygular |
 
 ---
@@ -271,14 +277,16 @@ graph LR
 | `VakitAlarmReceiver` | [VakitAlarmReceiver.kt](android/app/src/main/kotlin/com/vakit/vakit/VakitAlarmReceiver.kt) | Vakit/kerahat/gece yarısı geçişlerinde `setExactAndAllowWhileIdle` ile pil dostu uyanma + tüm widget'ları yenileme |
 | `BootReceiver` | [BootReceiver.kt](android/app/src/main/kotlin/com/vakit/vakit/BootReceiver.kt) | `BOOT_COMPLETED`, `MY_PACKAGE_REPLACED`, `TIME_SET`, `TIMEZONE_CHANGED` → widget + alarm tazeleme |
 | `VakitWidgetHelper` | [VakitWidgetHelper.kt](android/app/src/main/kotlin/com/vakit/vakit/VakitWidgetHelper.kt) | 3 katmanlı prefs okuma (`HomeWidgetPreferences` → `HomeWidgetPlugin` → `FlutterSharedPreferences`), `findTodayDayData` (gerçek gün eşleşmesi), Chronometer taban zamanı, kerahat mantığı, boş JSON'da şık yedek durumlar |
-| `MainActivity` | [MainActivity.kt](android/app/src/main/kotlin/com/vakit/vakit/MainActivity.kt) | Pusula `EventChannel` kaydı + `onNewIntent`/`setIntent` deep-link aktarımı |
+| `NotificationAlarmReceiver` | [NotificationAlarmReceiver.kt](android/app/src/main/kotlin/com/vakit/vakit/NotificationAlarmReceiver.kt) | `notif_events_json` içindeki vakti gelen olayı bildirir (`vakit_adhan` / `vakit_pre_alert` kanalları, requestCode 2001) ve sonraki olaya alarm kurar |
+| `MainActivity` | [MainActivity.kt](android/app/src/main/kotlin/com/vakit/vakit/MainActivity.kt) | Pusula `EventChannel` kaydı + `onNewIntent`/`setIntent` deep-link aktarımı + bildirim kanalları + `POST_NOTIFICATIONS` izin isteği (kod 5001) + `com.vakit.vakit/notifications` MethodChannel (`scheduleNotifications`) |
 
 ### 10.3 Manifest İzinleri ve Kabiliyetler
 
-- İzinler: `INTERNET`, `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, `RECEIVE_BOOT_COMPLETED`, `SCHEDULE_EXACT_ALARM`, `USE_EXACT_ALARM`.
+- İzinler: `INTERNET`, `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, `RECEIVE_BOOT_COMPLETED`, `SCHEDULE_EXACT_ALARM`, `POST_NOTIFICATIONS`.
+- `USE_EXACT_ALARM` **kaldırıldı** (Play politikası); exact alarm yerine `canScheduleExactAlarms()` kontrolü + `setAndAllowWhileIdle` yedeği uygulandı.
 - `uses-feature` (gerekli değil): `sensor.compass`, `sensor.accelerometer`.
 - Deep-link şeması: `vakit://` (`VIEW` + `es.antonborri.home_widget.action.LAUNCH`).
-- 5 widget receiver + `VakitAlarmReceiver` + `BootReceiver` kayıtlı.
+- 5 widget receiver + `VakitAlarmReceiver` + `NotificationAlarmReceiver` + `BootReceiver` kayıtlı.
 
 ---
 
@@ -311,6 +319,8 @@ graph LR
 | `cached_verse_v2_N` / `cached_hadith_v2_N` | DailyContentRepository | Günün içerik önbelleği (N = 1–30) |
 | `days_prayer_json` / `city_name` | HomeWidgetService | Widget 7 günlük JSON + şehir (hem HomeWidget hem Flutter prefs kopyası) |
 | `today_verse_short` / `today_verse_source` / `today_hadith_short` / `today_hadith_source` / `today_hadith_narrator` | HomeWidgetService | İçerik widget verileri (HomeWidgetPreferences) |
+| `adhan_notification_enabled` / `pre_alert_enabled` / `pre_alert_minutes` / `adhan_silent_mode` | SettingsRepository | Ezan bildirimi ayarları (varsayılan: açık / kapalı / 15 dk / sessiz) |
+| `notif_events_json` | NotificationSchedulerService → NotificationAlarmReceiver | 7 günlük bildirim olayları + sonraki alarm zamanı (HomeWidgetPreferences) |
 
 ---
 
@@ -329,9 +339,10 @@ graph LR
 | [qibla_math_test.dart](test/features/qibla/qibla_math_test.dart) | Kıble açısı/mesafe doğrulamaları, dairesel filtre, hizalanma toleransı |
 | [daily_content_repository_test.dart](test/features/daily_content/daily_content_repository_test.dart) | Deterministik günlük seçim, offline asset güvencesi |
 | [district_test.dart](test/features/prayer_times/district_test.dart) | 81 il / 972 ilçe veri bütünlüğü |
+| [diyanet_turkey_wide_test.dart](test/features/prayer_times/diyanet_turkey_wide_test.dart) | 7 il için AlAdhan `method=13` (Diyanet) referanslı ±2 dk uyum + İstanbul-Hakkâri akşam farkı; çevrimdışı |
 | [widget_test.dart](test/widget_test.dart) | Tema köprüsü |
 
-> 19 test, `flutter analyze` 0 hata ile v1.3.0'da doğrulandı (agent.md).
+> 27 test, `flutter analyze` 0 hata ile v1.5.0'da doğrulandı (agent.md).
 
 ---
 
@@ -373,6 +384,7 @@ graph TB
 | `SUPABASE_URL` | `.env` | Supabase proje adresi (şablonda boş: `.env.example`) |
 | `SUPABASE_ANON_KEY` | `.env` | Public anon anahtar |
 | Yükleme stratejisi | [env_config.dart](lib/core/config/env_config.dart) | `.env` yoksa/boşsa `hasSupabaseConfig = false` → tamamen çevrimdışı mod, **çökme yok** |
+| Build varlığı | `assets/env/env.properties` | `pubspec.yaml`'a `assets/env/` eklenerek `.env` olmadan da release derlemesi çalışır; gerçek `.env` gitignore'dadır |
 
 ---
 
@@ -382,7 +394,8 @@ graph TB
 2. **30 içerik döngüsü:** Âyet/hadis havuzu 30'ar adet; yılın 331+ günü içerik tekrar eder. Havuz büyütülürse `totalSeedCount` ve seed SQL + asset JSON birlikte güncellenmeli.
 3. **Anon anahtar APK içinde:** `.env` asset olarak paketleniyor (bkz. §7 uyarısı) — salt-okunur RLS ile güvence altında.
 4. **İlçe koordinatları yok:** İlçe seçimi isim düzeyinde; vakit hesabı il merkezi koordinatlarıyla yapılır.
-5. **Bildirim yok:** Namaz vakti bildirimi yok; widget alarmları yalnızca widget'ı yeniler.
+5. **Bildirim yalnızca Android:** Ezan bildirimi `AlarmManager` + `home_widget` veri köprüsüne dayanır; iOS tarafı (WidgetKit/UserNotifications) yazılmadı.
+6. **Bildirim havuzu 7 gün:** Olay kuyruğu 7 günlük üretilir; uygulama 7 günden uzun süre açılmazsa `syncAllWidgets` tekrar planlayana kadar sessiz kalır (açılışta otomatik tazelenir).
 
 ---
 
@@ -393,7 +406,8 @@ graph TB
 | v1.0.0 | Temel özellikler, widget'lar, tasarım sistemi, release |
 | v1.2.0 | Widget boyutlandırma + gün seçimi düzeltmeleri, 972 ilçe, native Kotlin pusula motoru |
 | v1.3.0 | RemoteViews `<View>` onarımı, 4 katmanlı sensör füzyonu, lüks pusula kadranı, modern ana ekran |
-| v1.4.0 (mevcut) | Kıble ekranı kökten onarımı: saniyelik rebuild fırtınası (`select` düzeltmesi), sensör akışı kararlılığı, sensörsüz cihaz statik rehberi |
+| v1.4.0 | Kıble ekranı kökten onarımı: saniyelik rebuild fırtınası (`select` düzeltmesi), sensör akışı kararlılığı, sensörsüz cihaz statik rehberi |
+| v1.5.0 (mevcut) | Ezan bildirimleri (7 günlük olay kuyruğu + native alarm), âyet/hadis kaynaklı doğrulama (30/30), Diyanet 7 il testi, alarm izinleri Play politikasına uygun hale getirildi, `.env` build güvencesi, LICENSE + README, masaüstü/web klasörleri kaldırıldı |
 
 ---
 

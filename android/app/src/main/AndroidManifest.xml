@@ -2,8 +2,17 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!--
+      Kesin alarm (exact alarm): Uygulama alarm/saat uygulaması olmadığı için USE_EXACT_ALARM
+      kullanılamaz (Play politikası). SCHEDULE_EXACT_ALARM Android 14+ (API 34) itibarıyla
+      varsayılan olarak reddedilir; kullanıcı Ayarlar > Uygulamalar > Vakit > Alarmlar ve
+      hatırlatıcılar bölümünden verebilir. İzin yoksa VakitWidgetHelper otomatik olarak
+      setAndAllowWhileIdle() ile yaklaşık tetiklemeye düşer; widget birkaç dakika gecikebilir.
+    -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
+    <!-- POST_NOTIFICATIONS: Android 13+ bildirim izni (ezan bildirimi için) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -120,6 +129,15 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.vakit.vakit.ACTION_WIDGET_ALARM" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Ezan bildirimi ve vakit-öncesi hatırlatma alarmları -->
+        <receiver
+            android:name=".NotificationAlarmReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.vakit.vakit.ACTION_NOTIFICATION_ALARM" />
             </intent-filter>
         </receiver>
 

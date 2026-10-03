@@ -9,6 +9,7 @@ import '../daily_content/data/models/hadith_model.dart';
 import '../daily_content/data/models/verse_model.dart';
 import '../prayer_times/data/prayer_calculator.dart';
 import '../prayer_times/domain/city_model.dart';
+import '../settings/notification/notification_scheduler_service.dart';
 
 /// Ana ekran widget'ları (Android AppWidget / iOS WidgetKit) ile veri köprüsü.
 class HomeWidgetService {
@@ -79,6 +80,9 @@ class HomeWidgetService {
     HadithModel? hadith,
   }) async {
     try {
+      // Ezan bildirimi alarmlarını da güncel şehir/verilerle yeniden zamanla.
+      // Hata bildirim özelliğini bozmamalı; kendi try bloğunda yönetiliyor.
+      await NotificationSchedulerService.instance.scheduleFromCity(city);
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
       final days = PrayerCalculator.calculateRange(

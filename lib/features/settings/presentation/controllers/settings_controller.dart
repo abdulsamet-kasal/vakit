@@ -5,6 +5,7 @@ import '../../../../core/theme/theme_provider.dart';
 import '../../../prayer_times/presentation/controllers/prayer_times_controller.dart';
 import '../../data/settings_repository.dart';
 import '../../domain/settings_model.dart';
+import '../../notification/notification_scheduler_service.dart';
 
 class SettingsNotifier extends Notifier<AppSettingsModel> {
   final _repo = SettingsRepository();
@@ -57,6 +58,45 @@ class SettingsNotifier extends Notifier<AppSettingsModel> {
     state = state.copyWith(themeMode: mode);
     await _repo.saveSettings(state);
     ref.read(themeModeProvider.notifier).setThemeMode(mode);
+  }
+
+  // --- Ezan bildirimi ayarları ---
+
+  Future<void> setAdhanNotification(bool enabled) async {
+    state = state.copyWith(adhanNotificationEnabled: enabled);
+    await _repo.saveSettings(state);
+    await _resyncNotificationAlarms();
+  }
+
+  Future<void> setPreAlert(bool enabled) async {
+    state = state.copyWith(preAlertEnabled: enabled);
+    await _repo.saveSettings(state);
+    await _resyncNotificationAlarms();
+  }
+
+  Future<void> setPreAlertMinutes(int minutes) async {
+    state = state.copyWith(preAlertMinutes: minutes);
+    await _repo.saveSettings(state);
+    await _resyncNotificationAlarms();
+  }
+
+  Future<void> setAdhanSilentMode(bool silent) async {
+    state = state.copyWith(adhanSilentMode: silent);
+    await _repo.saveSettings(state);
+    await _resyncNotificationAlarms();
+  }
+
+  /// Bildirim ayarları değişince widget köprüsündeki bildirim alarmlarını
+  /// yeniden zamanla (hemen ve gelecek 7 gün için).
+  Future<void> _resyncNotificationAlarms() async {
+    try {
+      final prayerState = ref.read(prayerTimesProvider);
+      // ignore: avoid_dynamic_calls
+      final svc = NotificationSchedulerService.instance;
+      await svc.scheduleFromCity(prayerState.selectedCity, settings: state);
+    } catch (e) {
+      debugPrint('Bildirim alarmları yeniden zamanlanamadı: $e');
+    }
   }
 
   void _recalculateTimes() {
