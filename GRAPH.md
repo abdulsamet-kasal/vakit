@@ -98,6 +98,8 @@ graph TD
     I --> I2[7 günlük olay kuyruğu • notif_events_json]
     I --> I3[NotificationAlarmReceiver • sonraki alarma geçiş]
     I --> I4[BootReceiver ile alarm tazeleme]
+    I --> I5[Bildirim sesi seçimi • titreşim anahtarı]
+    I --> I6[Kalıcı namaz çubuğu • PrayerBarNotification]
 ```
 
 ---
@@ -277,8 +279,9 @@ graph LR
 | `VakitAlarmReceiver` | [VakitAlarmReceiver.kt](android/app/src/main/kotlin/com/vakit/vakit/VakitAlarmReceiver.kt) | Vakit/kerahat/gece yarısı geçişlerinde `setExactAndAllowWhileIdle` ile pil dostu uyanma + tüm widget'ları yenileme |
 | `BootReceiver` | [BootReceiver.kt](android/app/src/main/kotlin/com/vakit/vakit/BootReceiver.kt) | `BOOT_COMPLETED`, `MY_PACKAGE_REPLACED`, `TIME_SET`, `TIMEZONE_CHANGED` → widget + alarm tazeleme |
 | `VakitWidgetHelper` | [VakitWidgetHelper.kt](android/app/src/main/kotlin/com/vakit/vakit/VakitWidgetHelper.kt) | 3 katmanlı prefs okuma (`HomeWidgetPreferences` → `HomeWidgetPlugin` → `FlutterSharedPreferences`), `findTodayDayData` (gerçek gün eşleşmesi), Chronometer taban zamanı, kerahat mantığı, boş JSON'da şık yedek durumlar |
-| `NotificationAlarmReceiver` | [NotificationAlarmReceiver.kt](android/app/src/main/kotlin/com/vakit/vakit/NotificationAlarmReceiver.kt) | `notif_events_json` içindeki vakti gelen olayı bildirir (`vakit_adhan` / `vakit_pre_alert` kanalları, requestCode 2001) ve sonraki olaya alarm kurar |
-| `MainActivity` | [MainActivity.kt](android/app/src/main/kotlin/com/vakit/vakit/MainActivity.kt) | Pusula `EventChannel` kaydı + `onNewIntent`/`setIntent` deep-link aktarımı + bildirim kanalları + `POST_NOTIFICATIONS` izin isteği (kod 5001) + `com.vakit.vakit/notifications` MethodChannel (`scheduleNotifications`) |
+| `NotificationAlarmReceiver` | [NotificationAlarmReceiver.kt](android/app/src/main/kotlin/com/vakit/vakit/NotificationAlarmReceiver.kt) | `notif_events_json` içindeki vakti gelen olayı bildirir (`vakit_adhan` / `vakit_pre_alert` kanalları, requestCode 2001) ve sonraki olaya alarm kurar; kanala kullanıcının ses/titreşim tercihini (`notif_sound_json`) uygular; `showTestNotification` ile ayar denemesi sunar |
+| `PrayerBarNotification` | [PrayerBarNotification.kt](android/app/src/main/kotlin/com/vakit/vakit/PrayerBarNotification.kt) | Bildirim çubuğunda ongoing "Bugün • şehir / 6 vakit / Sonraki vakit / kerahat" bildirimi (`vakit_prayer_bar`, IMPORTANCE_LOW); açma-kapama `prayer_bar_enabled` |
+| `MainActivity` | [MainActivity.kt](android/app/src/main/kotlin/com/vakit/vakit/MainActivity.kt) | Pusula `EventChannel` kaydı + `onNewIntent`/`setIntent` deep-link aktarımı + bildirim kanalları + `POST_NOTIFICATIONS` izin isteği (kod 5001) + `com.vakit.vakit/notifications` MethodChannel (`scheduleNotifications`, `updatePrayerBar`, `sendTestNotification`, `pickNotificationSound` → sistem zil seçicisi) |
 
 ### 10.3 Manifest İzinleri ve Kabiliyetler
 
@@ -320,7 +323,9 @@ graph LR
 | `days_prayer_json` / `city_name` | HomeWidgetService | Widget 7 günlük JSON + şehir (hem HomeWidget hem Flutter prefs kopyası) |
 | `today_verse_short` / `today_verse_source` / `today_hadith_short` / `today_hadith_source` / `today_hadith_narrator` | HomeWidgetService | İçerik widget verileri (HomeWidgetPreferences) |
 | `adhan_notification_enabled` / `pre_alert_enabled` / `pre_alert_minutes` / `adhan_silent_mode` | SettingsRepository | Ezan bildirimi ayarları (varsayılan: açık / kapalı / 15 dk / sessiz) |
+| `notification_sound_uri` / `notification_vibration` / `prayer_bar_notification_enabled` | SettingsRepository | Bildirim sesi (content URI; yoksa sistem varsayılanı), titreşim, kalıcı namaz çubuğu (varsayılan: true/true/true) |
 | `notif_events_json` | NotificationSchedulerService → NotificationAlarmReceiver | 7 günlük bildirim olayları + sonraki alarm zamanı (HomeWidgetPreferences) |
+| `notif_sound_json` / `prayer_bar_enabled` | NotificationSchedulerService → Kotlin | Ses/ titreşim/ sessizlik yapılandırması ve çubuk açma-kapama (Kotlin'in okuyabildiği HomeWidget anahtarları) |
 
 ---
 
@@ -340,9 +345,10 @@ graph LR
 | [daily_content_repository_test.dart](test/features/daily_content/daily_content_repository_test.dart) | Deterministik günlük seçim, offline asset güvencesi |
 | [district_test.dart](test/features/prayer_times/district_test.dart) | 81 il / 972 ilçe veri bütünlüğü |
 | [diyanet_turkey_wide_test.dart](test/features/prayer_times/diyanet_turkey_wide_test.dart) | 7 il için AlAdhan `method=13` (Diyanet) referanslı ±2 dk uyum + İstanbul-Hakkâri akşam farkı; çevrimdışı |
+| [notification_settings_test.dart](test/features/settings/notification_settings_test.dart) | Bildirim sesi/titreşim/çubuk varsayılanları, etiketlendirme, `copyWith` ve SharedPreferences kalıcılığı |
 | [widget_test.dart](test/widget_test.dart) | Tema köprüsü |
 
-> 27 test, `flutter analyze` 0 hata ile v1.5.0'da doğrulandı (agent.md).
+> 33 test, `flutter analyze` 0 hata ile v1.6.0'da doğrulandı (agent.md).
 
 ---
 
@@ -396,6 +402,7 @@ graph TB
 4. **İlçe koordinatları yok:** İlçe seçimi isim düzeyinde; vakit hesabı il merkezi koordinatlarıyla yapılır.
 5. **Bildirim yalnızca Android:** Ezan bildirimi `AlarmManager` + `home_widget` veri köprüsüne dayanır; iOS tarafı (WidgetKit/UserNotifications) yazılmadı.
 6. **Bildirim havuzu 7 gün:** Olay kuyruğu 7 günlük üretilir; uygulama 7 günden uzun süre açılmazsa `syncAllWidgets` tekrar planlayana kadar sessiz kalır (açılışta otomatik tazelenir).
+7. **Kalıcı çubuk içeriği mutlak saattir:** "Sonraki vakit" satırı yalnızca yukarıdaki tetikleyicilerde tazelenir; geri sayım gösterilmez, böylece bayat bilgi oluşmaz.
 
 ---
 
@@ -407,7 +414,8 @@ graph TB
 | v1.2.0 | Widget boyutlandırma + gün seçimi düzeltmeleri, 972 ilçe, native Kotlin pusula motoru |
 | v1.3.0 | RemoteViews `<View>` onarımı, 4 katmanlı sensör füzyonu, lüks pusula kadranı, modern ana ekran |
 | v1.4.0 | Kıble ekranı kökten onarımı: saniyelik rebuild fırtınası (`select` düzeltmesi), sensör akışı kararlılığı, sensörsüz cihaz statik rehberi |
-| v1.5.0 (mevcut) | Ezan bildirimleri (7 günlük olay kuyruğu + native alarm), âyet/hadis kaynaklı doğrulama (30/30), Diyanet 7 il testi, alarm izinleri Play politikasına uygun hale getirildi, `.env` build güvencesi, LICENSE + README, masaüstü/web klasörleri kaldırıldı |
+| v1.5.0 | Ezan bildirimleri (7 günlük olay kuyruğu + native alarm), âyet/hadis kaynaklı doğrulama (30/30), Diyanet 7 il testi, alarm izinleri Play politikasına uygun hale getirildi, `.env` build güvencesi, LICENSE + README, masaüstü/web klasörleri kaldırıldı |
+| v1.6.0 (mevcut) | Bildirim sesi seçimi (sessiz/sistem/cihazdan), kalıcı namaz çubuğu bildirimi, titreşim anahtarı, test bildirimi, Dart↔Kotlin bildirim MethodChannel'ı devreye alındı |
 
 ---
 

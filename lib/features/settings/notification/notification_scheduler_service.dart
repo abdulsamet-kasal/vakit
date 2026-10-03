@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../prayer_times/data/prayer_calculator.dart';
 import '../../prayer_times/domain/city_model.dart';
 import '../domain/settings_model.dart';
+import 'native_notification_bridge.dart';
 
 /// Ezan bildirimi ve vakit öncesi hatırlatma zamanlayıcısı.
 ///
@@ -48,6 +49,18 @@ class NotificationSchedulerService {
           silent: s.adhanSilentMode,
         ).toJson()),
       );
+
+      // Kotlin tarafı için ses/titreşim ve kalıcı çubuk yapılandırması.
+      // (notif_flags_json yalnızca Flutter tarafında; Kotlin bunu okur.)
+      await HomeWidget.saveWidgetData<String>(
+        'notif_sound_json',
+        jsonEncode(<String, Object?>{
+          'uri': s.notificationSoundUri ?? '',
+          'silent': s.adhanSilentMode,
+          'vibration': s.notificationVibration,
+        }),
+      );
+      await HomeWidget.saveWidgetData<bool>('prayer_bar_enabled', s.prayerBarEnabled);
 
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
@@ -109,6 +122,10 @@ class NotificationSchedulerService {
 
       lastScheduledAt = DateTime.now();
       debugPrint('NotificationScheduler: ${events.length} olay yazıldı.');
+
+      // Alarm sayacını hemen tazeler ve kalıcı namaz çubuğunu günceller.
+      await NativeNotificationBridge.schedule();
+      await NativeNotificationBridge.updatePrayerBar();
     } catch (e) {
       debugPrint('NotificationScheduler hatası: $e');
     }
@@ -128,6 +145,9 @@ class _SimpleSettingsReader {
       preAlertEnabled: prefs.getBool('pre_alert_enabled') ?? false,
       preAlertMinutes: prefs.getInt('pre_alert_minutes') ?? 15,
       adhanSilentMode: prefs.getBool('adhan_silent_mode') ?? true,
+      notificationSoundUri: prefs.getString('notification_sound_uri'),
+      notificationVibration: prefs.getBool('notification_vibration') ?? true,
+      prayerBarEnabled: prefs.getBool('prayer_bar_notification_enabled') ?? true,
     );
   }
 }

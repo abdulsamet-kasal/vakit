@@ -18,6 +18,9 @@ class SettingsRepository {
   static const _keyPreAlertEnabled = 'pre_alert_enabled';
   static const _keyPreAlertMinutes = 'pre_alert_minutes';
   static const _keyAdhanSilent = 'adhan_silent_mode';
+  static const _keyNotificationSoundUri = 'notification_sound_uri';
+  static const _keyNotificationVibration = 'notification_vibration';
+  static const _keyPrayerBarEnabled = 'prayer_bar_notification_enabled';
 
   Future<AppSettingsModel> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
@@ -61,6 +64,9 @@ class SettingsRepository {
       preAlertEnabled: prefs.getBool(_keyPreAlertEnabled) ?? false,
       preAlertMinutes: prefs.getInt(_keyPreAlertMinutes) ?? 15,
       adhanSilentMode: prefs.getBool(_keyAdhanSilent) ?? true,
+      notificationSoundUri: prefs.getString(_keyNotificationSoundUri),
+      notificationVibration: prefs.getBool(_keyNotificationVibration) ?? true,
+      prayerBarEnabled: prefs.getBool(_keyPrayerBarEnabled) ?? true,
     );
   }
 
@@ -84,5 +90,13 @@ class SettingsRepository {
     await prefs.setBool(_keyPreAlertEnabled, settings.preAlertEnabled);
     await prefs.setInt(_keyPreAlertMinutes, settings.preAlertMinutes);
     await prefs.setBool(_keyAdhanSilent, settings.adhanSilentMode);
+    final soundUri = settings.notificationSoundUri;
+    if (soundUri == null || soundUri.isEmpty) {
+      await prefs.remove(_keyNotificationSoundUri);
+    } else {
+      await prefs.setString(_keyNotificationSoundUri, soundUri);
+    }
+    await prefs.setBool(_keyNotificationVibration, settings.notificationVibration);
+    await prefs.setBool(_keyPrayerBarEnabled, settings.prayerBarEnabled);
   }
 }

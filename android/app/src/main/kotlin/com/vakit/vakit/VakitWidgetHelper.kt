@@ -31,7 +31,7 @@ object VakitWidgetHelper {
         }
     }
 
-    private fun getStringValue(context: Context, prefs: SharedPreferences, key: String, defaultVal: String): String {
+    fun getStringValue(context: Context, prefs: SharedPreferences, key: String, defaultVal: String): String {
         val v1 = prefs.getString(key, null)
         if (!v1.isNullOrEmpty()) return v1
 

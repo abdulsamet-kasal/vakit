@@ -7,5 +7,7 @@ import android.content.Intent
 class VakitAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         VakitWidgetHelper.updateAllWidgets(context)
+        // Vakit/kerahat/gece yarısı geçişlerinde kalıcı çubuk da tazelenir
+        PrayerBarNotification.refresh(context)
     }
 }
