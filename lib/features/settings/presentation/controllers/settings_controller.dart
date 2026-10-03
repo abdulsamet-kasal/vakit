@@ -6,6 +6,7 @@ import '../../../prayer_times/presentation/controllers/prayer_times_controller.d
 import '../../data/settings_repository.dart';
 import '../../domain/settings_model.dart';
 import '../../notification/notification_scheduler_service.dart';
+import '../../notification/native_notification_bridge.dart';
 
 class SettingsNotifier extends Notifier<AppSettingsModel> {
   final _repo = SettingsRepository();
@@ -80,10 +81,52 @@ class SettingsNotifier extends Notifier<AppSettingsModel> {
     await _resyncNotificationAlarms();
   }
 
-  Future<void> setAdhanSilentMode(bool silent) async {
+  /// Bildirim sesini seçer.
+  /// [uri] null → sistem varsayılanı, boş dize → sessiz (sistemin zil
+  /// seçicisinden "Sessiz" seçilmesi), dolu → cihazdaki ses.
+  Future<void> setNotificationSound(String? uri) async {
+    final silent = uri != null && uri.isEmpty;
+    state = state.copyWith(
+      adhanSilentMode: silent,
+      notificationSoundUri: uri,
+      clearNotificationSoundUri: uri == null || uri.isEmpty,
+    );
+    await _repo.saveSettings(state);
+    await _resyncNotificationAlarms();
+  }
+
+  /// Sessiz (titreşim) moda geçer; ses seçimi korunur ama kullanılmaz.
+  Future<void> setNotificationSilent(bool silent) async {
     state = state.copyWith(adhanSilentMode: silent);
     await _repo.saveSettings(state);
     await _resyncNotificationAlarms();
+  }
+
+  Future<void> setNotificationVibration(bool enabled) async {
+    state = state.copyWith(notificationVibration: enabled);
+    await _repo.saveSettings(state);
+    await _resyncNotificationAlarms();
+  }
+
+  /// Bildirim çubuğundaki kalıcı vakit bildirimini açar/kapatır.
+  Future<void> setPrayerBarEnabled(bool enabled) async {
+    state = state.copyWith(prayerBarEnabled: enabled);
+    await _repo.saveSettings(state);
+    await _resyncNotificationAlarms();
+  }
+
+  /// Ayarlar ekranındaki "Test bildirimi" düğmesi.
+  Future<void> sendTestNotification() async {
+    await NativeNotificationBridge.sendTestNotification();
+  }
+
+  /// Sistem zil seçicisini açar; seçilen URI kaydedilir.
+  /// İptal edilirse hiçbir şey değişmez.
+  Future<void> pickNotificationSound() async {
+    final picked =
+        await NativeNotificationBridge.pickSound(currentUri: state.notificationSoundUri);
+    if (picked == null) return; // iptal
+    await setNotificationSound(picked.isEmpty ? '' : picked);
   }
 
   /// Bildirim ayarları değişince widget köprüsündeki bildirim alarmlarını
@@ -94,6 +137,8 @@ class SettingsNotifier extends Notifier<AppSettingsModel> {
       // ignore: avoid_dynamic_calls
       final svc = NotificationSchedulerService.instance;
       await svc.scheduleFromCity(prayerState.selectedCity, settings: state);
+      // Alarm sayacını ve kalıcı çubuğu da hemen tazeler
+      // (scheduleFromCity bunları kendi içinde tetikler).
     } catch (e) {
       debugPrint('Bildirim alarmları yeniden zamanlanamadı: $e');
     }

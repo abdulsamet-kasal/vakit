@@ -9,11 +9,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioAttributes
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import es.antonborri.home_widget.HomeWidgetPlugin
 import org.json.JSONArray
 import org.json.JSONObject
@@ -36,6 +35,19 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
         const val CHANNEL_ADHAN = "vakit_adhan"
         const val CHANNEL_PRE = "vakit_pre_alert"
         private const val REQUEST_CODE = 2001
+        private const val TEST_NOTIFICATION_ID = 4142
+        private val VIBRATION_PATTERN = longArrayOf(0, 220, 120, 220)
+    }
+
+    /** Bildirim sesi ve titreşimi tercihleri (Flutter tarafından yazılır). */
+    data class SoundConfig(
+        val uri: String,
+        val silent: Boolean,
+        val vibration: Boolean,
+    ) {
+        companion object {
+            val DEFAULT = SoundConfig(uri = "", silent = true, vibration = true)
+        }
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
@@ -53,12 +65,14 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
             .minByOrNull { it.optLong("epochMs") } ?: return
 
         val kind = due.optString("kind", "adhan")
-        val silent = due.optBoolean("silent", true)
+        val cfg = readSoundConfig(context)
+        // Olayın kendi sessizlik bayrağı + güncellenmiş kullanıcı tercihi
+        val silent = due.optBoolean("silent", true) || cfg.silent
         val title = due.optString("title", "Vakit")
         val body = due.optString("body", "")
         val channelId = if (kind == "pre") CHANNEL_PRE else CHANNEL_ADHAN
 
-        ensureChannels(context)
+        ensureChannels(context, cfg)
 
         // Android 13+ bildirim izni kontrolü
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -77,13 +91,14 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
             .setCategory(Notification.CATEGORY_ALARM)
             .setAutoCancel(true)
 
-        if (!silent) {
-            val sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-            builder.setSound(sound)
+        // Android 8.0 altı: ses ve titreşim bildirim üzerinde ayarlanır
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            val soundUri = if (silent) null else resolveSoundUri(cfg)
+            if (soundUri != null) builder.setSound(soundUri)
+            if (cfg.vibration) builder.setVibrate(VIBRATION_PATTERN)
         }
 
         val notification = builder.build()
-        applyVibrationIfAllowed(context, silent)
 
         try {
             val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -91,21 +106,75 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
         } catch (_: SecurityException) {
             // İzin yoksa sessizce geç
         }
+
+        // Kalıcı namaz çubuğundaki "sonraki vakit" satırı tazelenir
+        PrayerBarNotification.refresh(context)
     }
 
-    private fun applyVibrationIfAllowed(context: Context, silent: Boolean) {
-        if (!silent) return // sesli bildirimde ayrıca titreşim yok
-        try {
-            val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                val vm = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
-                vm?.defaultVibrator
-            } else {
-                @Suppress("DEPRECATION")
-                context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
-            }
-            val effect = VibrationEffect.createWaveform(longArrayOf(0, 220, 120, 220), -1)
-            vibrator?.vibrate(effect)
+    /** Ayarlardaki ses/ titreşim tercihlerini (Flutter'ın yazdığı JSON) okur. */
+    fun readSoundConfig(context: Context): SoundConfig {
+        val jsonStr = try {
+            HomeWidgetPlugin.getData(context).getString("notif_sound_json", null)
         } catch (_: Exception) {
+            null
+        } ?: return SoundConfig.DEFAULT
+
+        return try {
+            val obj = JSONObject(jsonStr)
+            SoundConfig(
+                uri = obj.optString("uri", ""),
+                silent = obj.optBoolean("silent", true),
+                vibration = obj.optBoolean("vibration", true),
+            )
+        } catch (_: Exception) {
+            SoundConfig.DEFAULT
+        }
+    }
+
+    /** Sessizse null, seçili ses varsa o URI, değilse sistem varsayılanı. */
+    private fun resolveSoundUri(cfg: SoundConfig): Uri? {
+        if (cfg.silent) return null
+        if (cfg.uri.isNotEmpty()) {
+            return try {
+                Uri.parse(cfg.uri)
+            } catch (_: Exception) {
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+            }
+        }
+        return RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+    }
+
+    /** Ayarlar ekranındaki "Test Bildirimi Gönder" düğmesi için. */
+    fun showTestNotification(context: Context) {
+        val cfg = readSoundConfig(context)
+        ensureChannels(context, cfg)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val granted = context.checkSelfPermission(
+                android.Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+            if (!granted) return
+        }
+
+        val builder = Notification.Builder(context, CHANNEL_ADHAN)
+            .setSmallIcon(context.applicationInfo.icon)
+            .setContentTitle("Test bildirimi")
+            .setContentText("Ezan bildirimi böyle görünür")
+            .setStyle(Notification.BigTextStyle().bigText("Ezan bildirimi böyle görünür. Ses ve titreşim ayarlarını deneyebilirsin."))
+            .setCategory(Notification.CATEGORY_ALARM)
+            .setAutoCancel(true)
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            val soundUri = if (cfg.silent) null else resolveSoundUri(cfg)
+            if (soundUri != null) builder.setSound(soundUri)
+            if (cfg.vibration) builder.setVibrate(VIBRATION_PATTERN)
+        }
+
+        try {
+            val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            nm.notify(TEST_NOTIFICATION_ID, builder.build())
+        } catch (_: SecurityException) {
+            // İzin yoksa sessizce geç
         }
     }
 
@@ -157,9 +226,20 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun ensureChannels(context: Context) {
+    /**
+     * Kanalları açar ve kullanıcının seçtiği ses/titreşim ayarını uygular.
+     * Kanal zaten varsa createNotificationChannel güncellemeyi uygular
+     * (ses ve titreşim programatik olarak değiştirilebilir).
+     */
+    fun ensureChannels(context: Context, cfg: SoundConfig) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager ?: return
+
+        val soundUri = if (cfg.silent) null else resolveSoundUri(cfg)
+        val audioAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
 
         val adhanChannel = NotificationChannel(
             CHANNEL_ADHAN,
@@ -167,7 +247,9 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
             NotificationManager.IMPORTANCE_HIGH,
         ).apply {
             description = "Namaz vakti girdiğinde gösterilen bildirimler"
-            enableVibration(true)
+            enableVibration(cfg.vibration)
+            if (cfg.vibration) vibrationPattern = VIBRATION_PATTERN
+            setSound(soundUri, audioAttributes)
         }
 
         val preChannel = NotificationChannel(
@@ -176,7 +258,9 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
             NotificationManager.IMPORTANCE_DEFAULT,
         ).apply {
             description = "Namaz vaktinden önce gösterilen hatırlatmalar"
-            enableVibration(true)
+            enableVibration(cfg.vibration)
+            if (cfg.vibration) vibrationPattern = VIBRATION_PATTERN
+            setSound(soundUri, audioAttributes)
         }
 
         nm.createNotificationChannel(adhanChannel)

@@ -10,6 +10,7 @@ import '../daily_content/data/models/verse_model.dart';
 import '../prayer_times/data/prayer_calculator.dart';
 import '../prayer_times/domain/city_model.dart';
 import '../settings/notification/notification_scheduler_service.dart';
+import '../settings/notification/native_notification_bridge.dart';
 
 /// Ana ekran widget'ları (Android AppWidget / iOS WidgetKit) ile veri köprüsü.
 class HomeWidgetService {
@@ -143,6 +144,10 @@ class HomeWidgetService {
         await prefs.setString('days_prayer_json', jsonStr);
         await prefs.setString('city_name', city.displayName);
       } catch (_) {}
+
+      // Kalıcı namaz çubuğu bildirimi yeni verilerle tazelensin
+      // (scheduleFromCity bunu gün verisinden önce çağırmış olabilir).
+      await NativeNotificationBridge.updatePrayerBar();
 
       // Âyet ve hadis sağlanmadıysa bugünün içeriğini getir
       var activeVerse = verse;

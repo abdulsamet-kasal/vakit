@@ -20,8 +20,18 @@ class AppSettingsModel {
   /// Vakit öncesi hatırlatma süresi (dakika).
   final int preAlertMinutes;
 
-  /// Bildirim sessiz mi (titreşim) yoksa cihaz sesiyle mi gelsin?
+  /// Bildirim sessiz mi (titreşim) yoksa sesle mi gelsin?
   final bool adhanSilentMode;
+
+  /// Cihazdan seçilen bildirim sesi (content URI). `null` = sistem varsayılanı.
+  /// Sessizlik [adhanSilentMode] üzerinden yönetilir; bu alan yalnızca sesli modda okunur.
+  final String? notificationSoundUri;
+
+  /// Bildirimde titreşim açık mı?
+  final bool notificationVibration;
+
+  /// Bildirim çubuğunda günün vakitleri kalıcı (ongoing) bildirim olarak görünsün mü?
+  final bool prayerBarEnabled;
 
   const AppSettingsModel({
     this.calculationMethod = CalculationMethod.turkey,
@@ -32,6 +42,9 @@ class AppSettingsModel {
     this.preAlertEnabled = false,
     this.preAlertMinutes = 15,
     this.adhanSilentMode = true,
+    this.notificationSoundUri,
+    this.notificationVibration = true,
+    this.prayerBarEnabled = true,
   });
 
   AppSettingsModel copyWith({
@@ -43,6 +56,10 @@ class AppSettingsModel {
     bool? preAlertEnabled,
     int? preAlertMinutes,
     bool? adhanSilentMode,
+    String? notificationSoundUri,
+    bool? notificationVibration,
+    bool? prayerBarEnabled,
+    bool clearNotificationSoundUri = false,
   }) {
     return AppSettingsModel(
       calculationMethod: calculationMethod ?? this.calculationMethod,
@@ -54,7 +71,21 @@ class AppSettingsModel {
       preAlertEnabled: preAlertEnabled ?? this.preAlertEnabled,
       preAlertMinutes: preAlertMinutes ?? this.preAlertMinutes,
       adhanSilentMode: adhanSilentMode ?? this.adhanSilentMode,
+      notificationSoundUri: clearNotificationSoundUri
+          ? null
+          : (notificationSoundUri ?? this.notificationSoundUri),
+      notificationVibration: notificationVibration ?? this.notificationVibration,
+      prayerBarEnabled: prayerBarEnabled ?? this.prayerBarEnabled,
     );
+  }
+
+  /// Bildirim sesi seçiminin kullanıcıya gösterilecek adı.
+  String get notificationSoundLabel {
+    if (adhanSilentMode) return 'Sessiz (titreşim)';
+    if (notificationSoundUri == null || notificationSoundUri!.isEmpty) {
+      return 'Sistem varsayılanı';
+    }
+    return 'Seçilen ses';
   }
 
   static String getCalculationMethodName(CalculationMethod method) {

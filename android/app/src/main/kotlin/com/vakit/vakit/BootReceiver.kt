@@ -14,6 +14,8 @@ class BootReceiver : BroadcastReceiver() {
                 VakitWidgetHelper.updateAllWidgets(context)
                 // Ezan bildirimi alarmlarını da yeniden kur (boot sonrası kaybolur)
                 NotificationAlarmReceiver().scheduleNext(context)
+                // Kalıcı namaz çubuğu bildirimi de tazelenir (boot sonrası kaybolur)
+                PrayerBarNotification.refresh(context)
             }
         }
     }

@@ -219,26 +219,107 @@ class SettingsScreen extends ConsumerWidget {
                     color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.1),
                     height: 1,
                   ),
-                  SwitchListTile(
-                    secondary: Icon(
-                      Icons.do_not_disturb_on_outlined,
+                  ListTile(
+                    leading: Icon(
+                      Icons.music_note_outlined,
                       color: AppColors.brassGold,
                     ),
                     title: Text(
-                      'Sessiz Bildirim (Titreşim)',
+                      'Bildirim Sesi',
                       style: AppTypography.bodyLarge(
                         color: isDark ? AppColors.darkText : AppColors.ink,
                       ),
                     ),
                     subtitle: Text(
-                      'Cami ve iş yerleri için: ses çalmadan yalnızca titreşim',
+                      settings.notificationSoundLabel,
                       style: AppTypography.bodySmall(
                         color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
                       ),
                     ),
-                    value: settings.adhanSilentMode,
+                    trailing: const Icon(Icons.chevron_right, size: 20),
+                    onTap: () => _showSoundPickerDialog(context, settings, notifier),
+                  ),
+                  Divider(
+                    color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.1),
+                    height: 1,
+                  ),
+                  SwitchListTile(
+                    secondary: Icon(
+                      Icons.vibration_outlined,
+                      color: AppColors.brassGold,
+                    ),
+                    title: Text(
+                      'Titreşim',
+                      style: AppTypography.bodyLarge(
+                        color: isDark ? AppColors.darkText : AppColors.ink,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Bildirim geldiğinde cihaz titresin',
+                      style: AppTypography.bodySmall(
+                        color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+                      ),
+                    ),
+                    value: settings.notificationVibration,
                     activeThumbColor: AppColors.brassGold,
-                    onChanged: (val) => notifier.setAdhanSilentMode(val),
+                    onChanged: (val) => notifier.setNotificationVibration(val),
+                  ),
+                  Divider(
+                    color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.1),
+                    height: 1,
+                  ),
+                  SwitchListTile(
+                    secondary: Icon(
+                      Icons.push_pin_outlined,
+                      color: AppColors.brassGold,
+                    ),
+                    title: Text(
+                      'Namaz Çubuğu',
+                      style: AppTypography.bodyLarge(
+                        color: isDark ? AppColors.darkText : AppColors.ink,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Bildirim çubuğunda günün vakitleri kalıcı görünsün',
+                      style: AppTypography.bodySmall(
+                        color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+                      ),
+                    ),
+                    value: settings.prayerBarEnabled,
+                    activeThumbColor: AppColors.brassGold,
+                    onChanged: (val) => notifier.setPrayerBarEnabled(val),
+                  ),
+                  Divider(
+                    color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.1),
+                    height: 1,
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.send_outlined,
+                      color: AppColors.brassGold,
+                    ),
+                    title: Text(
+                      'Test Bildirimi Gönder',
+                      style: AppTypography.bodyLarge(
+                        color: isDark ? AppColors.darkText : AppColors.ink,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Seçtiğin ses ve titreşimi denemek için',
+                      style: AppTypography.bodySmall(
+                        color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+                      ),
+                    ),
+                    onTap: () async {
+                      await notifier.sendTestNotification();
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Test bildirimi gönderildi'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -424,6 +505,74 @@ class SettingsScreen extends ConsumerWidget {
             divisions: (max - min) ~/ 5,
             activeColor: AppColors.clayAmber,
             onChanged: (val) => onChanged(val.round()),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSoundPickerDialog(
+    BuildContext context,
+    AppSettingsModel settings,
+    SettingsNotifier notifier,
+  ) {
+    final selected = settings.adhanSilentMode
+        ? 'silent'
+        : ((settings.notificationSoundUri == null ||
+                settings.notificationSoundUri!.isEmpty)
+            ? 'default'
+            : 'custom');
+
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text('Bildirim Sesi'),
+          children: [
+            SimpleDialogOption(
+              onPressed: () {
+                notifier.setNotificationSilent(true);
+                Navigator.of(context).pop();
+              },
+              child: _buildSoundOptionRow('Sessiz (titreşim)', selected == 'silent'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                notifier.setNotificationSound(null);
+                Navigator.of(context).pop();
+              },
+              child: _buildSoundOptionRow('Sistem varsayılanı', selected == 'default'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop();
+                notifier.pickNotificationSound();
+              },
+              child: _buildSoundOptionRow('Cihazdaki seslerden seç…', selected == 'custom'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildSoundOptionRow(String label, bool selected) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          if (selected)
+            const Icon(Icons.check, size: 18, color: AppColors.brassGold)
+          else
+            const SizedBox(width: 18),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+              ),
+            ),
           ),
         ],
       ),

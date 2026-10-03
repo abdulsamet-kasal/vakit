@@ -187,9 +187,20 @@ Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, m
 
 ---
 
+### ✅ Aşama 12: Bildirim Güçlendirme — Ses Seçimi, Kalıcı Namaz Çubuğu, Titreşim & Test Bildirimi (v1.6.0)
+- [x] **1. Bildirim Sesi Seçimi (3 seçenek):** Ayarlar → EZAN BİLDİRİMLERİ → **Bildirim Sesi**: `Sessiz (titreşim)` / `Sistem varsayılanı` / `Cihazdaki seslerden seç…`. Üçüncü seçenek sistem zil seçicisini (`RingtoneManager.ACTION_RINGTONE_PICKER`, bildirim tonu tipi) `MainActivity` üzerinden açar; seçilen content URI `notification_sound_uri` anahtarında saklanır ve vakti gelince kanala uygulanır. Android 8+ tarafında ses doğrudan `NotificationChannel.setSound(...)` ile yazılır (mevcut kanal anında güncellenir), Android 8 öncesi `builder.setSound` ile çalınır.
+- [x] **2. Kalıcı Namaz Çubuğu Bildirimi (`PrayerBarNotification.kt`):** Bildirim çubuğunda **ongoing** (kapatılamaz) bir satır: günün 6 vakti (`İmsak 04:16 • Güneş … • Yatsı …`), `Sonraki: Öğle 12:43` satırı ve aktifkerahat uyarısı; düşük öncelikli, sessiz, rozet yok, tıklanınca uygulama açılır. `prayer_bar_enabled` anahtarıyla açılıp kapanır; veri senkronu, uygulama açılışı, cihaz yeniden başlatma, vakit/kerahat alarmları ve her ezan bildiriminden sonra otomatik tazelenir.
+- [x] **3. Titreşim Anahtarı (`notification_vibration`):** Sesli bildirimde de titreşim ayrı ayrı açılıp kapatılabiliyor (önce yalnızca sessiz modda titreşim vardı). Android 8+ kanal üzerinden, öncesi `setVibrate` ile; eski elle `Vibrator` çağrısı kaldırıldı.
+- [x] **4. Test Bildirimi:** Ayarlardaki **Test Bildirimi Gönder** düğmesi, seçili ses/titreşim ayarıyla gerçek bildirim gösterir (`sendTestNotification`) ve SnackBar ile onaylar — cihazda ses/izin denemesi için.
+- [x] **5. Native Köprü Tamirâtı (`NativeNotificationBridge`):** `com.vakit.vakit/notifications` MethodChannel'ı Dart tarafından **hiç çağrılmıyordu** (yalnızca MainActivity'de tanımlıydı) — bu yüzden ayar değiştiğinde alarm yeniden kurulamıyordu. Artık `scheduleNotifications`, `updatePrayerBar`, `sendTestNotification` ve `pickNotificationSound` çağrıları var; `NotificationSchedulerService` her zamanlama sonrası bunları tetikler.
+- [x] **6. Veri Anahtarları:** Kotlin'in okuyabildiği `notif_sound_json` (`uri`/`silent`/`vibration`) ve `prayer_bar_enabled` HomeWidget anahtarları eklendi; yeni ayar anahtarları: `notification_sound_uri`, `notification_vibration`, `prayer_bar_notification_enabled`.
+- [x] **7. Doğrulama:** `flutter analyze` 0 hata, **33/33 test** (yeni: `notification_settings_test.dart` — ses/titreşim/çubuk varsayılanları ve kalıcılığı), debug ve release APK hatasız derlendi.
+
+---
+
 ## 🏆 Sonuç
 
-Projenin tüm aşamaları (Aşama 0 - Aşama 11) %100 tamamlanmış, unit ve widget testleri (27/27) başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş, kullanıcının fiziksel testleri doğrultusunda widget inflate ve pusula sensör sorunları kökten çözülmüş, âyet/hadis içeriği kaynaklarıyla birebir doğrulanmış, alarm/bildirim izinleri Play politikasına uygun hale getirilmiş, tüm arayüze yapay zeka klişelerinden uzak lüks bir modernite kazandırılmış, kıble ekranındaki saniyelik rebuild fırtınası kökten onarılmış ve ezan bildirimleri eklenerek `v1.5.0` sürümü yayımlanmıştır.
+Projenin tüm aşamaları (Aşama 0 - Aşama 12) %100 tamamlanmış, unit ve widget testleri (33/33) başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş, kullanıcının fiziksel testleri doğrultusunda widget inflate ve pusula sensör sorunları kökten çözülmüş, âyet/hadis içeriği kaynaklarıyla birebir doğrulanmış, alarm/bildirim izinleri Play politikasına uygun hale getirilmiş, tüm arayüze yapay zeka klişelerinden uzak lüks bir modernite kazandırılmış, kıble ekranındaki saniyelik rebuild fırtınası kökten onarılmış, ezan bildirimleri eklenerek `v1.5.0`, ardından bildirim sesi seçimi + kalıcı namaz çubuğu + titreşim/test bildirimi ile `v1.6.0` sürümleri yayımlanmıştır.
 
 
 
