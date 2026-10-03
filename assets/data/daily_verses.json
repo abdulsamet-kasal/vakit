@@ -4,7 +4,7 @@
     "day_of_year": 1,
     "surah_no": 1,
     "ayah_no": 2,
-    "arabic": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+    "arabic": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
     "meal_tr": "Hamd, âlemlerin Rabbi olan Allah'a mahsustur.",
     "source_name": "Fâtiha Sûresi, 2",
     "short_text": "Hamd, âlemlerin Rabbi olan Allah'a mahsustur."
@@ -24,7 +24,7 @@
     "day_of_year": 3,
     "surah_no": 2,
     "ayah_no": 186,
-    "arabic": "وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ ۖ أُجِيبُ دَعْوَةَ الدَّاعِ إِذَا دَعَانِ",
+    "arabic": "وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ ۖ أُجِيبُ دَعْوَةَ الدَّاعِ إِذَا دَعَانِ ۖ فَلْيَسْتَجِيبُوا لِي وَلْيُؤْمِنُوا بِي لَعَلَّهُمْ يَرْشُدُونَ",
     "meal_tr": "Kullarım sana beni sorduklarında bilsinler ki şüphesiz ben yakınım. Bana dua edenin duasına icabet ederim.",
     "source_name": "Bakara Sûresi, 186",
     "short_text": "Şüphesiz ben yakınım; bana dua edenin duasına karşılık veririm."
@@ -34,7 +34,7 @@
     "day_of_year": 4,
     "surah_no": 2,
     "ayah_no": 286,
-    "arabic": "لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا",
+    "arabic": "لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِنْ قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَنْتَ مَوْلَانَا فَانْصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ",
     "meal_tr": "Allah hiçbir kimseye gücünün yettiğinden fazlasını yüklemez.",
     "source_name": "Bakara Sûresi, 286",
     "short_text": "Allah hiçbir kimseye gücünün yettiğinden fazlasını yüklemez."
@@ -44,7 +44,7 @@
     "day_of_year": 5,
     "surah_no": 3,
     "ayah_no": 159,
-    "arabic": "فَإِذَا عَزَمْتَ فَتَوَكَّلْ عَلَى اللَّهِ ۚ إِنَّ اللَّهَ يُحِبُّ الْمُتَوَكِّلِينَ",
+    "arabic": "فَبِمَا رَحْمَةٍ مِنَ اللَّهِ لِنْتَ لَهُمْ ۖ وَلَوْ كُنْتَ فَظًّا غَلِيظَ الْقَلْبِ لَانْفَضُّوا مِنْ حَوْلِكَ ۖ فَاعْفُ عَنْهُمْ وَاسْتَغْفِرْ لَهُمْ وَشَاوِرْهُمْ فِي الْأَمْرِ ۖ فَإِذَا عَزَمْتَ فَتَوَكَّلْ عَلَى اللَّهِ ۚ إِنَّ اللَّهَ يُحِبُّ الْمُتَوَكِّلِينَ",
     "meal_tr": "Karar verip azmettiğin zaman da artık Allah'a tevekkül et. Şüphesiz Allah, kendisine güvenenleri sever.",
     "source_name": "Âl-i İmrân Sûresi, 159",
     "short_text": "Karar verdiğin zaman Allah'a güven; Allah güvenenleri sever."
@@ -54,7 +54,7 @@
     "day_of_year": 6,
     "surah_no": 3,
     "ayah_no": 173,
-    "arabic": "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+    "arabic": "الَّذِينَ قَالَ لَهُمُ النَّاسُ إِنَّ النَّاسَ قَدْ جَمَعُوا لَكُمْ فَاخْشَوْهُمْ فَزَادَهُمْ إِيمَانًا وَقَالُوا حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
     "meal_tr": "Allah bize yeter, O ne güzel vekildir!",
     "source_name": "Âl-i İmrân Sûresi, 173",
     "short_text": "Allah bize yeter, O ne güzel vekildir!"
@@ -74,7 +74,7 @@
     "day_of_year": 8,
     "surah_no": 9,
     "ayah_no": 129,
-    "arabic": "فَإِن تَوَلَّوْا فَقُلْ حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ ۖ عَلَيْهِ تَوَكَّلْتُ",
+    "arabic": "فَإِنْ تَوَلَّوْا فَقُلْ حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ ۖ عَلَيْهِ تَوَكَّلْتُ ۖ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
     "meal_tr": "Yüz çevirirlerse de ki: Allah bana yeter. O'ndan başka ilah yoktur. Ben yalnızca O'na güvendim.",
     "source_name": "Tevbe Sûresi, 129",
     "short_text": "De ki: Allah bana yeter, O'ndan başka ilah yoktur; yalnız O'na dayandım."
@@ -84,7 +84,7 @@
     "day_of_year": 9,
     "surah_no": 13,
     "ayah_no": 28,
-    "arabic": "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
+    "arabic": "الَّذِينَ آمَنُوا وَتَطْمَئِنُّ قُلُوبُهُمْ بِذِكْرِ اللَّهِ ۗ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
     "meal_tr": "Bilesiniz ki kalpler ancak Allah'ı anmakla huzur bulur.",
     "source_name": "Ra'd Sûresi, 28",
     "short_text": "Bilesiniz ki kalpler ancak Allah'ı anmakla huzur bulur."
@@ -94,7 +94,7 @@
     "day_of_year": 10,
     "surah_no": 14,
     "ayah_no": 7,
-    "arabic": "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ",
+    "arabic": "وَإِذْ تَأَذَّنَ رَبُّكُمْ لَئِنْ شَكَرْتُمْ لَأَزِيدَنَّكُمْ ۖ وَلَئِنْ كَفَرْتُمْ إِنَّ عَذَابِي لَشَدِيدٌ",
     "meal_tr": "Andolsun, eğer şükrederseniz elbette size olan nimetimi artırırım.",
     "source_name": "İbrâhîm Sûresi, 7",
     "short_text": "Andolsun, eğer şükrederseniz size olan nimetimi kesinlikle artırırım."
@@ -104,7 +104,7 @@
     "day_of_year": 11,
     "surah_no": 16,
     "ayah_no": 128,
-    "arabic": "إِنَّ اللَّهَ مَعَ الَّذِينَ اتَّقَوا وَّالَّذِينَ هُم مُّحْسِنُونَ",
+    "arabic": "إِنَّ اللَّهَ مَعَ الَّذِينَ اتَّقَوْا وَالَّذِينَ هُمْ مُحْسِنُونَ",
     "meal_tr": "Şüphesiz Allah, takva sahipleriyle ve iyilik yapanlarla beraberdir.",
     "source_name": "Nahl Sûresi, 128",
     "short_text": "Şüphesiz Allah, takva sahipleriyle ve iyilik yapanlarla beraberdir."
@@ -114,7 +114,7 @@
     "day_of_year": 12,
     "surah_no": 17,
     "ayah_no": 78,
-    "arabic": "إِنَّ قُرْآنَ الْفَجْرِ كَانَ مَشْهُودًا",
+    "arabic": "أَقِمِ الصَّلَاةَ لِدُلُوكِ الشَّمْسِ إِلَىٰ غَسَقِ اللَّيْلِ وَقُرْآنَ الْفَجْرِ ۖ إِنَّ قُرْآنَ الْفَجْرِ كَانَ مَشْهُودًا",
     "meal_tr": "Çünkü sabah namazı şahitlidir (melekler ona tanıklık eder).",
     "source_name": "İsrâ Sûresi, 78",
     "short_text": "Çünkü sabah namazı meleklerin şahit olduğu bir vakittir."
@@ -124,7 +124,7 @@
     "day_of_year": 13,
     "surah_no": 20,
     "ayah_no": 114,
-    "arabic": "وَقُل رَّبِّ زِدْنِي عِلْمًا",
+    "arabic": "فَتَعَالَى اللَّهُ الْمَلِكُ الْحَقُّ ۗ وَلَا تَعْجَلْ بِالْقُرْآنِ مِنْ قَبْلِ أَنْ يُقْضَىٰ إِلَيْكَ وَحْيُهُ ۖ وَقُلْ رَبِّ زِدْنِي عِلْمًا",
     "meal_tr": "Ve de ki: Rabbim, ilmimi artır!",
     "source_name": "Tâhâ Sûresi, 114",
     "short_text": "Rabbim, benim ilmimi artır!"
@@ -134,7 +134,7 @@
     "day_of_year": 14,
     "surah_no": 21,
     "ayah_no": 87,
-    "arabic": "لَّا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ",
+    "arabic": "وَذَا النُّونِ إِذْ ذَهَبَ مُغَاضِبًا فَظَنَّ أَنْ لَنْ نَقْدِرَ عَلَيْهِ فَنَادَىٰ فِي الظُّلُمَاتِ أَنْ لَا إِلَٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
     "meal_tr": "Senden başka hiçbir ilah yoktur. Seni tenzih ederim. Şüphesiz ben zalimlerden oldum.",
     "source_name": "Enbiyâ Sûresi, 87",
     "short_text": "Senden başka ilah yoktur. Seni tesbih ederim, ben haksızlık edenlerden oldum."
@@ -144,7 +144,7 @@
     "day_of_year": 15,
     "surah_no": 25,
     "ayah_no": 63,
-    "arabic": "وَعِبَادُ الرَّحْمَٰنِ الَّذِينَ يَمْشُونَ عَلَى الْأَرْضِ هَوْنًا",
+    "arabic": "وَعِبَادُ الرَّحْمَٰنِ الَّذِينَ يَمْشُونَ عَلَى الْأَرْضِ هَوْنًا وَإِذَا خَاطَبَهُمُ الْجَاهِلُونَ قَالُوا سَلَامًا",
     "meal_tr": "Rahmân'ın kulları, yeryüzünde vakar ve tevazu ile yürüyen kimselerdir.",
     "source_name": "Furkân Sûresi, 63",
     "short_text": "Rahmân'ın kulları, yeryüzünde tevazu ile yürüyen kimselerdir."
@@ -154,7 +154,7 @@
     "day_of_year": 16,
     "surah_no": 29,
     "ayah_no": 45,
-    "arabic": "إِنَّ الصَّلَاةَ تَنْهَىٰ عَنِ الْفَحْشَاءِ وَالْمُنكَرِ ۗ وَلَذِكْرُ اللَّهِ أَكْبَرُ",
+    "arabic": "اتْلُ مَا أُوحِيَ إِلَيْكَ مِنَ الْكِتَابِ وَأَقِمِ الصَّلَاةَ ۖ إِنَّ الصَّلَاةَ تَنْهَىٰ عَنِ الْفَحْشَاءِ وَالْمُنْكَرِ ۗ وَلَذِكْرُ اللَّهِ أَكْبَرُ ۗ وَاللَّهُ يَعْلَمُ مَا تَصْنَعُونَ",
     "meal_tr": "Şüphesiz namaz, insanı hayasızlıktan ve kötülükten alıkoyar. Allah'ı anmak ise en büyük ibadettir.",
     "source_name": "Ankebût Sûresi, 45",
     "short_text": "Şüphesiz namaz kötülükten alıkoyar. Allah'ı anmak en büyüktür."
@@ -164,7 +164,7 @@
     "day_of_year": 17,
     "surah_no": 33,
     "ayah_no": 41,
-    "arabic": "يَا أَيُّهَا الَّذِينَ آمَنُوا اذْكُرُوا اللَّهَ ذِكْرًا كَثِيرًا",
+    "arabic": "يَا أَيُّهَا الَّذِينَ آمَنُوا اذْكُرُوا اللَّهَ ذِكْرًا كَثِيرًا",
     "meal_tr": "Ey iman edenler! Allah'ı çokça zikredin.",
     "source_name": "Ahzâb Sûresi, 41",
     "short_text": "Ey iman edenler! Allah'ı çokça zikredin."
@@ -174,7 +174,7 @@
     "day_of_year": 18,
     "surah_no": 39,
     "ayah_no": 53,
-    "arabic": "قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنفُسِهِمْ لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ",
+    "arabic": "۞ قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنْفُسِهِمْ لَا تَقْنَطُوا مِنْ رَحْمَةِ اللَّهِ ۚ إِنَّ اللَّهَ يَغْفِرُ الذُّنُوبَ جَمِيعًا ۚ إِنَّهُ هُوَ الْغَفُورُ الرَّحِيمُ",
     "meal_tr": "De ki: Ey kendilerine kötülük edip aşırı giden kullarım! Allah'ın rahmetinden ümidinizi kesmeyin.",
     "source_name": "Zümer Sûresi, 53",
     "short_text": "Ey kullarım! Allah'ın rahmetinden ümit kesmeyin; Allah bütün günahları bağışlar."
@@ -184,7 +184,7 @@
     "day_of_year": 19,
     "surah_no": 40,
     "ayah_no": 60,
-    "arabic": "وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ",
+    "arabic": "وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ ۚ إِنَّ الَّذِينَ يَسْتَكْبِرُونَ عَنْ عِبَادَتِي سَيَدْخُلُونَ جَهَنَّمَ دَاخِرِينَ",
     "meal_tr": "Rabbiniz buyurdu ki: Bana dua edin, size cevap vereyim.",
     "source_name": "Mü'min Sûresi, 60",
     "short_text": "Rabbiniz buyurdu: Bana dua edin, duanıza icabet edeyim."
@@ -194,7 +194,7 @@
     "day_of_year": 20,
     "surah_no": 49,
     "ayah_no": 10,
-    "arabic": "إِنَّمَا الْمُؤْمِنُونَ إِخْوَةٌ فَأَصْلِحُوا بَيْنَ أَخَوَيْكُمْ",
+    "arabic": "إِنَّمَا الْمُؤْمِنُونَ إِخْوَةٌ فَأَصْلِحُوا بَيْنَ أَخَوَيْكُمْ ۚ وَاتَّقُوا اللَّهَ لَعَلَّكُمْ تُرْحَمُونَ",
     "meal_tr": "Müminler ancak kardeştirler. Öyleyse kardeşlerinizin arasını düzeltin.",
     "source_name": "Hucurât Sûresi, 10",
     "short_text": "Müminler ancak kardeştirler; kardeşlerinizin arasını düzeltin."
@@ -204,7 +204,7 @@
     "day_of_year": 21,
     "surah_no": 50,
     "ayah_no": 16,
-    "arabic": "وَنَحْنُ أَقْرَبُ إِلَيْهِ مِنْ حَبْلِ الْوَرِيدِ",
+    "arabic": "وَلَقَدْ خَلَقْنَا الْإِنْسَانَ وَنَعْلَمُ مَا تُوَسْوِسُ بِهِ نَفْسُهُ ۖ وَنَحْنُ أَقْرَبُ إِلَيْهِ مِنْ حَبْلِ الْوَرِيدِ",
     "meal_tr": "Biz insana şah damarından daha yakınız.",
     "source_name": "Kâf Sûresi, 16",
     "short_text": "Biz insana şah damarından daha yakınız."
@@ -214,7 +214,7 @@
     "day_of_year": 22,
     "surah_no": 55,
     "ayah_no": 60,
-    "arabic": "هَلْ جَزَاءُ الْإِحْسَانِ إِلَّا الْإِحْسَانُ",
+    "arabic": "هَلْ جَزَاءُ الْإِحْسَانِ إِلَّا الْإِحْسَانُ",
     "meal_tr": "İyiliğin karşılığı, iyilikten başka bir şey midir?",
     "source_name": "Rahmân Sûresi, 60",
     "short_text": "İyiliğin mükâfatı ancak iyilik değil midir?"
@@ -224,7 +224,7 @@
     "day_of_year": 23,
     "surah_no": 57,
     "ayah_no": 4,
-    "arabic": "وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ ۚ وَاللَّهُ بِمَا تَعْمَلُونَ بَصِيرٌ",
+    "arabic": "هُوَ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ فِي سِتَّةِ أَيَّامٍ ثُمَّ اسْتَوَىٰ عَلَى الْعَرْشِ ۚ يَعْلَمُ مَا يَلِجُ فِي الْأَرْضِ وَمَا يَخْرُجُ مِنْهَا وَمَا يَنْزِلُ مِنَ السَّمَاءِ وَمَا يَعْرُجُ فِيهَا ۖ وَهُوَ مَعَكُمْ أَيْنَ مَا كُنْتُمْ ۚ وَاللَّهُ بِمَا تَعْمَلُونَ بَصِيرٌ",
     "meal_tr": "Nerede olursanız olun O sizinle beraberdir. Allah yaptıklarınızı hakkıyla görendir.",
     "source_name": "Hadîd Sûresi, 4",
     "short_text": "Nerede olursanız olun O sizinle beraberdir."
@@ -234,7 +234,7 @@
     "day_of_year": 24,
     "surah_no": 65,
     "ayah_no": 3,
-    "arabic": "وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ",
+    "arabic": "وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ ۚ وَمَنْ يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ ۚ قَدْ جَعَلَ اللَّهُ لِكُلِّ شَيْءٍ قَدْرًا",
     "meal_tr": "Kim Allah'a tevekkül ederse, O kendisine yeter.",
     "source_name": "Talâk Sûresi, 3",
     "short_text": "Kim Allah'a güvenirse, Allah ona yeter."
@@ -244,7 +244,7 @@
     "day_of_year": 25,
     "surah_no": 93,
     "ayah_no": 3,
-    "arabic": "مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ",
+    "arabic": "مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ",
     "meal_tr": "Rabbin seni terk etmedi ve sana darılmadı.",
     "source_name": "Duhâ Sûresi, 3",
     "short_text": "Rabbin seni ne terk etti, ne de sana darıldı."
@@ -254,7 +254,7 @@
     "day_of_year": 26,
     "surah_no": 94,
     "ayah_no": 5,
-    "arabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+    "arabic": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
     "meal_tr": "Şüphesiz her zorlukla beraber bir kolaylık vardır.",
     "source_name": "İnşirâh Sûresi, 5",
     "short_text": "Kesinlikle her zorluğun yanında bir kolaylık vardır."
@@ -264,7 +264,7 @@
     "day_of_year": 27,
     "surah_no": 94,
     "ayah_no": 6,
-    "arabic": "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+    "arabic": "إِنَّ مَعَ الْعُسْرِ يُسْرًا",
     "meal_tr": "Evet, her zorlukla beraber muhakkak bir kolaylık vardır.",
     "source_name": "İnşirâh Sûresi, 6",
     "short_text": "Gerçekten de her zorlukla beraber bir kolaylık vardır."
@@ -274,9 +274,9 @@
     "day_of_year": 28,
     "surah_no": 103,
     "ayah_no": 1,
-    "arabic": "وَالْعَصْرِ ۝ إِنَّ الْإِنسَانَ لَفِي خُسْرٍ",
+    "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ وَالْعَصْرِ إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ",
     "meal_tr": "Asra yemin olsun ki, insan gerçekten ziyan içindedir.",
-    "source_name": "Asr Sûresi, 1-2",
+    "source_name": "Asr Sûresi, 1-3",
     "short_text": "Zamana yemin olsun ki, insan gerçekten hüsrandadır."
   },
   {
@@ -284,9 +284,9 @@
     "day_of_year": 29,
     "surah_no": 112,
     "ayah_no": 1,
-    "arabic": "قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ",
+    "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ قُلْ هُوَ اللَّهُ أَحَدٌ اللَّهُ الصَّمَدُ لَمْ يَلِدْ وَلَمْ يُولَدْ وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ",
     "meal_tr": "De ki: O Allah tektir. Allah Samed'dir (her şey O'na muhtaçtır, O hiçbir şeye muhtaç değildir).",
-    "source_name": "İhlâs Sûresi, 1-2",
+    "source_name": "İhlâs Sûresi, 1-4",
     "short_text": "De ki: O Allah tektir; Allah Samed'dir."
   },
   {
@@ -294,9 +294,9 @@
     "day_of_year": 30,
     "surah_no": 114,
     "ayah_no": 1,
-    "arabic": "قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ",
+    "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ قُلْ أَعُوذُ بِرَبِّ النَّاسِ مَلِكِ النَّاسِ إِلَٰهِ النَّاسِ مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ مِنَ الْجِنَّةِ وَالنَّاسِ",
     "meal_tr": "De ki: İnsanların Rabbine, insanların yegâne hükümdarına sığınırım.",
-    "source_name": "Nâs Sûresi, 1-2",
+    "source_name": "Nâs Sûresi, 1-6",
     "short_text": "De ki: İnsanların Rabbine ve hükümdarına sığınırım."
   }
 ]

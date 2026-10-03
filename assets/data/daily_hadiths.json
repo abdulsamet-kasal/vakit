@@ -52,32 +52,32 @@
   {
     "id": 6,
     "day_of_year": 6,
-    "arabic": "الصَّلاةُ نُورٌ",
-    "text_tr": "Namaz bir nurdur; sadaka delildir; sabır ise aydınlıktır.",
+    "arabic": "الصَّلَاةُ نُورٌ وَالصَّدَقَةُ بُرْهَانٌ وَالصَّبْرُ ضِيَاءٌ",
+    "text_tr": "Namaz bir nurdur; sadaka kanıttır; sabır ise aydınlıktır.",
     "narrator": "Ebû Mâlik el-Eş'arî (r.a.)",
     "source_book": "Müslim",
-    "source_no": "Tahâret 1",
-    "short_text": "Namaz nurdur, sabır ise ışıktır."
+    "source_no": "Müsâfirûn 265",
+    "short_text": "Namaz nurdur, sadaka delildir, sabır ise ışıktır."
   },
   {
     "id": 7,
     "day_of_year": 7,
-    "arabic": "لا تَحَاسَدُوا، وَلا تَبَاغَضُوا، وَكُونُوا عِبَادَ اللَّهِ إِخْوَانًا",
-    "text_tr": "Birbirinize haset etmeyiniz, birbirinize buğzetmeyiniz; ey Allah'ın kulları, kardeş olunuz!",
+    "arabic": "لَا تَحَاسَدُوا وَلَا تَنَاجَشُوا وَلَا تَبَاغَضُوا وَلَا تَدَابَرُوا وَكُونُوا عِبَادَ اللَّهِ إِخْوَانًا",
+    "text_tr": "Birbirinize haset etmeyin, birbirinizi arkadan aldatmayın, birbirinize buğzetmeyin, birbirinizden yüz çevirmeyin; ey Allah'ın kulları, kardeş olun!",
     "narrator": "Ebû Hüreyre (r.a.)",
     "source_book": "Buhârî",
     "source_no": "Edeb 57",
-    "short_text": "Birbirinize haset etmeyin, kin beslemeyin; kardeş olun!"
+    "short_text": "Haset etmeyin, buğzetmeyin, yüz çevirmeyin; kardeş olun!"
   },
   {
     "id": 8,
     "day_of_year": 8,
-    "arabic": "اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ، وَأَتْبِعِ السَّيِّئَةَ الحَسَنَةَ تَمْحُهَا",
-    "text_tr": "Nerede olursan ol Allah'tan kork; kötülüğün peşinden hemen bir iyilik yap ki onu silsin.",
+    "arabic": "اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ وَأَتْبِعِ السَّيِّئَةَ الْحَسَنَةَ تَمْحُهَا وَخَالِقِ النَّاسَ بِخُلُقٍ حَسَنٍ",
+    "text_tr": "Nerede olursan ol Allah'a karşı takvalı ol; bir kötülük yaparsan hemen ardından bir iyilik yap ki onu silsin; insanlarla güzel ahlakla geçin.",
     "narrator": "Ebû Zer (r.a.)",
     "source_book": "Tirmizî",
     "source_no": "Birr 55",
-    "short_text": "Nerede olursan ol Allah'tan sakın; kötülüğün ardına iyilik ekle."
+    "short_text": "Nerede olursan ol Allah'tan sakın; kötülüğün ardına iyilik ekle, güzel ahlaklı ol."
   },
   {
     "id": 9,
@@ -92,7 +92,7 @@
   {
     "id": 10,
     "day_of_year": 10,
-    "arabic": "كَلِمَتَانِ حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+    "arabic": "كَلِمَتَانِ حَبِيبَتَانِ إِلَى الرَّحْمَنِ خَفِيفَتَانِ عَلَى اللِّسَانِ ثَقِيلَتَانِ فِي الْمِيزَانِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
     "text_tr": "Dile hafif, mizanda ağır, Rahmân'a sevgili iki kelime: Sübhânallâhi ve bi-hamdihî, Sübhânallâhi'l-azîm.",
     "narrator": "Ebû Hüreyre (r.a.)",
     "source_book": "Buhârî",
@@ -224,7 +224,7 @@
     "day_of_year": 23,
     "arabic": "مَنْ حَسُنَ إِسْلامُ المَرْءِ تَرْكُهُ مَا لا يَعْنِيهِ",
     "text_tr": "Kendisini ilgilendirmeyen mâlâyâni şeyleri terk etmesi, kişinin iyi bir Müslüman oluşundandır.",
-    "narrator": "Ali b. Hüseyin (r.a.)",
+    "narrator": "Ebû Hüreyre (r.a.)",
     "source_book": "Tirmizî",
     "source_no": "Zühd 11",
     "short_text": "Kendisini ilgilendirmeyen boş şeyleri terk etmek, kişinin olgunluğundandır."
@@ -242,7 +242,7 @@
   {
     "id": 25,
     "day_of_year": 25,
-    "arabic": "أَفْشُوا السَّلامَ بَيْنَكُمْ",
+    "arabic": "لَا تَدْخُلُونَ الْجَنَّةَ حَتَّى تُؤْمِنُوا وَلَا تُؤْمِنُوا حَتَّى تَحَابُّوا أَوَلَا أَدُلُّكُمْ عَلَى شَيْءٍ إِذَا فَعَلْتُمُوهُ تَحَابَبْتُمْ: أَفْشُوا السَّلَامَ بَيْنَكُمْ",
     "text_tr": "İman etmedikçe cennete giremezsiniz; birbirinizi sevmedikçe de kamil iman etmiş olamazsınız. Aranızda selamı yayınız!",
     "narrator": "Ebû Hüreyre (r.a.)",
     "source_book": "Müslim",
@@ -252,7 +252,7 @@
   {
     "id": 26,
     "day_of_year": 26,
-    "arabic": "حَقُّ المُسْلِمِ عَلَى المُسْلِمِ خَمْسٌ: رَدُّ السَّلامِ، وَعِيَادَةُ المَرِيضِ",
+    "arabic": "حَقُّ الْمُسْلِمِ عَلَى الْمُسْلِمِ خَمْسٌ: رَدُّ السَّلَامِ وَعِيَادَةُ الْمَرِيضِ وَاتِّبَاعُ الْجَنَائِزِ وَإِجَابَةُ الدَّعْوَةِ وَتَشْمِيتُ الْعَاطِسِ",
     "text_tr": "Müslümanın Müslüman üzerindeki hakkı beştir: Selama karşılık vermek, hastayı ziyaret etmek, cenazeye katılmak, davete icabet etmek ve aksırana 'yerhamükellah' demek.",
     "narrator": "Ebû Hüreyre (r.a.)",
     "source_book": "Buhârî",
@@ -272,12 +272,12 @@
   {
     "id": 28,
     "day_of_year": 28,
-    "arabic": "إِنَّ الصَّدَقَةَ لَتُطْفِئُ غَضَبَ الرَّبِّ",
-    "text_tr": "Gizlice verilen sadaka, Rabb'in gazabını dindirir ve kötü bir ölüme engel olur.",
+    "arabic": "إِنَّ الصَّدَقَةَ لَتُطْفِئُ غَضَبَ الرَّبِّ وَتَدْفَعُ مِيتَةَ السُّوءِ",
+    "text_tr": "Sadaka, Rabbin gazabını dindirir ve kötü ölümü geri püskürtür.",
     "narrator": "Muâz b. Cebel (r.a.)",
     "source_book": "Tirmizî",
     "source_no": "Zekât 28",
-    "short_text": "Gizli sadaka Rabb'in gazabını dindirir ve kötülüklere kalkan olur."
+    "short_text": "Sadaka Rabbin gazabını dindirir ve kötülüklerden korur."
   },
   {
     "id": 29,

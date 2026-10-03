@@ -1,19 +1,37 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Ortam değişkenleri yönetim sınıfı.
-/// .env dosyası bulunamazsa veya anahtarlar boşsa uygulamanın çökmesini engeller;
-/// offline-first gömülü asset moduna sorunsuz geçiş sağlar.
+///
+/// Yükleme sırası:
+/// 1. `.env` (gitignore'da, geliştiricinin kendi anahtarları) — varsa bu kullanılır.
+/// 2. `assets/env/env.properties` (pubspec'te asset olarak tanımlı boş şablon) —
+///    taze klonda `.env` bulunmasa bile asset hatası vermeden uygulama açılır ve
+///    offline gömülü asset moduna geçilir.
+///
+/// Hiçbir anahtar bulunamazsa uygulama çökmez; offline-first gömülü veri modu ile devam eder.
 abstract final class EnvConfig {
   static bool _isLoaded = false;
 
   static Future<void> init() async {
+    // 1) Önce gerçek .env dene (geliştirici kendi anahtarlarını buraya koyar).
     try {
       await dotenv.load(fileName: '.env');
       _isLoaded = true;
+      return;
+    } catch (_) {
+      // .env yok veya okunamadı; asset şablonuna düş.
+    }
+
+    // 2) Asset içindeki şablon dosyayı yükle (anahtarlar boş olabilir).
+    try {
+      final raw = await rootBundle.loadString('assets/env/env.properties');
+      // flutter_dotenv v6'da loadFromString sync (void) döner.
+      dotenv.loadFromString(envString: raw, isOptional: true);
+      _isLoaded = true;
     } catch (e) {
-      // .env dosyası eksik veya okunamazsa çökme, offline devam et
-      debugPrint('Uyarı: .env dosyası yüklenemedi ($e). Offline/gömülü modda devam ediliyor.');
+      debugPrint('Uyarı: env dosyaları yüklenemedi ($e). Offline/gömülü modda devam ediliyor.');
       _isLoaded = false;
     }
   }

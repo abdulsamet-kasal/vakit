@@ -1,154 +1,144 @@
-# 🕌 Vakit • Namaz Vakti, Kıble & Günlük İslami İçerik Uygulaması
+# Vakit — Namaz Vakti, Kıble ve Günlük İslami İçerik
 
-**Vakit**, modern mobil teknolojilerle geleneksel İslami sanat estetiğini harmanlayan; kullanıcı girişi veya kişisel veri toplamayan, tamamen cihaz üstünde internetsiz namaz vakti ve kerahat hesabı yapan, açık mushaf sayfası zarafetinde günlük âyet/hadis sunan Türkçe bir mobil uygulamadır.
+Vakit, namaz vakitlerini ve kerahat zamanlarını tamamen cihaz üstünde internetsiz hesaplayan;
+günlük âyet ve hadis sunan; Kıble pusulası ve Android widget'ları içeren Türkçe bir mobil
+uygulamadır. Kullanıcı girişi yoktur, kişisel veri toplamaz.
 
----
+## Tasarım Dili
 
-## 🎨 Tasarım Dili ve Felsefesi
+Uygulama, cami avlusu huzurunu ve el yazması mushaf dokusunu yansıtan özgün bir palete sahiptir:
 
-Vakit, jenerik AI şablonlarından ve parlak neon renklerden uzak, cami avlusu huzurunu ve tarihi el yazması mushaf dokusunu yansıtan özgün bir tasarım paletine sahiptir:
+- **Derin Orman Yeşili (`#0F3D2E`):** cami mermerlerinin ve yeşil halıların sükûneti.
+- **Yosun Yeşili (`#2F6B4F`):** ikincil yüzeyler ve dengeli vurgular.
+- **Adaçayı (`#A9C4B0`):** narin çerçeveler ve açık yeşil dokunuşlar.
+- **El Yazması Parşömen (`#F3EEE0`):** göz yormayan sıcak arka plan dokusu.
+- **Mat Pirinç (`#B8934A`):** kandil ve rahle pirinçlerinden ilham alan altın vurgular.
+- **Kerahat Kili (`#C27A3E`):** kerahat vakti uyarıları için sakin, pişmiş toprak tonu.
 
-- **Derin Orman Yeşili (`#0F3D2E`):** Cami mermerlerinin ve yeşil halıların sükûneti.
-- **Yosun Yeşili (`#2F6B4F`):** İkincil yüzeyler ve dengeli vurgular.
-- **Adaçayı (`#A9C4B0`):** Narin çerçeveler ve açık yeşil dokunuşlar.
-- **El Yazması Parşömen (`#F3EEE0`):** Göz yormayan sıcak arka plan dokusu.
-- **Mat Pirinç (`#B8934A`):** Kandil ve rahle pirinçlerinden ilham alan altın vurgular.
-- **Kerahat Kili / Amberi (`#C27A3E`):** Kerahat vakti uyarıları için sakin, telaşsız pişmiş toprak tonu.
+İmza bileşenler:
 
-### İmza Şekiller ve Bileşenler
-- **Sivri/Ogee Mihrap Kemeri (`MihrapClipper`):** Ekranın merkezinde sonraki vakti ve canlı geri sayımı kuşatan klasik Osmanlı/Selçuklu mihrap motifi.
-- **Güneşin Gökyüzü Seyri Yayı (`SunArcPainter`):** İmsak, güneş, öğle, ikindi, akşam noktalarını ve 3 kerahat dilimini gökyüzü yayı üzerinde canlı hareket eden güneşle görselleştirir.
-- **Dikey Zaman Şeridi (`PrayerTimelineList`):** 6 vakti, vakit saatlerini ve aktif vaktin pirinç çizgi göstergesini soluk geçmiş vakitler hiyerarşisiyle sunar.
-- **Açık Mushaf Kartı (`MushafCard`):** El yazması mushaf dokusu, 4 köşeli tezhip rozetleri ve ayet sonu motifi (`AyahEndRosette`).
-- **Sekizgen Selçuklu Yıldızı & Girih Doku (`IslamicPatternPainter`):** Arka planlarda kılcal altın oranlı geometrik desenler.
+- **Sivri/Ogee Mihrap Kemeri (`MihrapClipper`):** sonraki vakti ve canlı geri sayımı kuşatan klasik mihrap motifi.
+- **Güneş Yayı (`SunArcPainter`):** vakit noktalarını ve kerahat dilimlerini gökyüzü yayı üzerinde görselleştirir.
+- **Dikey Zaman Şeridi (`PrayerTimelineList`):** altı vakti ve aktif vakti pirinç çizgi göstergesiyle sıralar.
+- **Açık Mushaf Kartı (`MushafCard`):** el yazması mushaf dokusu ve tezhip rozetleri.
+- **Selçuklu Yıldızı ve Girih Doku (`IslamicPatternPainter`):** arka plan geometrik desenleri.
 
----
-
-## 🏛️ Mimari (Feature-First)
-
-Uygulama, ölçeklenebilir ve sürdürülebilir **Feature-First** klasör hiyerarşisiyle tasarlanmıştır:
+## Mimari (Feature-First)
 
 ```text
 lib/
 ├── core/
-│   ├── config/          # Ortam değişkenleri (.env) ve runtime ayarları
+│   ├── config/          # Ortam değişkenleri (.env) ve kerahat ayarları
 │   ├── constants/       # AppColors, AppTypography
 │   ├── theme/           # Açık ve koyu tema tanımları, ThemeNotifier
 │   ├── utils/           # Tarih hesaplamaları, matematik utils, paylaşım kartı export
 │   └── widgets/         # Mihrap clipper, mushaf card, Selçuklu girih deseni
 ├── features/
-│   ├── prayer_times/    # Vakit hesabı (adhan), konum (GPS), 81 il, canlı controller
-│   ├── qibla/           # Büyük daire azimutu, Haversine mesafesi, dairesel düşük geçiren filtre
-│   ├── daily_content/   # 30 Âyet & 30 Hadis, Supabase ve offline asset veri katmanı
-│   ├── settings/        # Diyanet/ikindi yöntemleri, kerahat süreleri, yerel SharedPreferences
-│   └── widgets_bridge/  # Android RemoteViews ve 7 günlük veri senkronizasyon köprüsü
-├── routing/             # go_router rota yapılandırması ve widget deep-link'leri
-└── main.dart            # Uygulama giriş noktası ve servis başlatmaları
+│   ├── prayer_times/    # Vakit hesabı (adhan), konum (GPS), 81 il ve ilçeleri
+│   ├── qibla/           # Büyük daire azimutu, Haversine mesafesi, pusula filtresi
+│   ├── daily_content/   # Günlük âyet & hadis: Supabase ve offline asset veri katmanı
+│   ├── settings/        # Diyanet/ikindi yöntemleri, kerahat süreleri, tema
+│   └── widgets_bridge/  # Android RemoteViews ve 7 günlük veri senkronizasyonu
+├── routing/             # go_router yapılandırması ve widget deep-link'leri
+└── main.dart            # Uygulama giriş noktası
 ```
 
----
+## Bağımlılıklar ve Gerekçeleri
 
-## 📦 Bağımlılıklar ve Tercih Gerekçeleri
-
-Projeye gereksiz hiçbir paket eklenmemiştir. Her bir bağımlılığın varlık sebebi aşağıda açıklanmıştır:
-
-| Paket | Amaç ve Tercih Gerekçesi |
+| Paket | Amaç |
 |---|---|
-| `flutter_riverpod` | Uygulama genelinde reaktif, tip güvenli ve test edilebilir durum yönetimi (`NotifierProvider`). |
-| `go_router` | Deklaratif rota yönetimi, alt navigasyon çubuğu durumu koruma (`StatefulShellRoute`) ve widget tıklamalarından gelen deep-link (`vakit://...`) yönlendirmeleri. |
-| `adhan` | Namaz vakitlerini ve kerahat aralıklarını **tamamen cihaz üstünde, internetsiz** Diyanet İşleri Başkanlığı astronomik parametreleriyle hesaplamak için. |
-| `supabase_flutter` | Günün otantik âyet ve hadis içeriklerini kullanıcı girişi gerekmeksizin (`anon` key ile) buluttan okumak için. |
-| `flutter_dotenv` | Supabase URL ve Anon Key gibi yapılandırma değerlerini kaynak koda gömmeden `.env` dosyasından okumak için. |
-| `geolocator` | Cihazın anlık GPS konumunu alarak en yakın Türkiye ilini belirlemek için. |
-| `geocoding` | GPS enlem/boylamından il ve ilçe adını tersine çözümlemek için. |
-| `flutter_compass` | Cihazın manyetik manyetometre sensörünü dinleyerek canlı Kıble pusulası sunmak için. |
-| `shared_preferences` | Şehir seçimi, hesaplama metotları, kerahat süreleri ve tema ayarlarını cihazda güvenle saklamak için. |
-| `home_widget` | Flutter ile yerel Android AppWidget (RemoteViews) sistemi arasında çift yönlü veri akışı sağlamak için. |
-| `hijri` | Günün tarihini Miladi'nin yanı sıra Hicri takvim olarak (örn: Ramazan, Şevval) hatasız göstermek için. |
-| `intl` | Türkçe gün ve ay isimlerini (`initializeDateFormatting('tr_TR', null)`) doğru biçimlendirmek için. |
-| `google_fonts` | Mushaf sayfası için `Amiri`, başlık ve sayılar için `Newsreader`, okunabilir gövde metinleri için `Source Sans 3` yazı tiplerini sağlamak için. |
-| `share_plus` | Günün âyeti veya hadisini yüksek çözünürlüklü mushaf kartı görseli veya metin olarak sistem menüsüyle paylaşmak için. |
-| `path_provider` | Paylaşılacak geçici PNG kart görselinin dosya sisteminde güvenli saklanabilmesi için. |
+| `flutter_riverpod` | Tip güvenli, test edilebilir durum yönetimi. |
+| `go_router` | Deklaratif rota yönetimi ve widget deep-link (`vakit://...`) yönlendirmeleri. |
+| `adhan` | Namaz vakitlerini cihaz üstünde, internetsiz Diyanet uyumlu parametrelerle hesaplama. |
+| `supabase_flutter` | Günlük âyet/hadis içeriğini anon key ile okuma (giriş gerektirmez). |
+| `flutter_dotenv` | Supabase yapılandırmasını `.env` dosyasından okuma. |
+| `geolocator` | GPS konumunu alarak en yakın ili belirleme. |
+| `geocoding` | Enlem/boylamdan il ve ilçe adını çözümleme. |
+| `flutter_compass` | Manyetometre sensörüyle canlı Kıble pusulası. |
+| `shared_preferences` | Şehir, hesaplama yöntemi, tema gibi ayarları cihazda saklama. |
+| `home_widget` | Flutter ile Android AppWidget arasında veri akışı. |
+| `hijri` | Hicri takvim gösterimi. |
+| `intl` | Türkçe tarih biçimlendirme. |
+| `google_fonts` | Amiri, Newsreader ve Source Sans 3 yazı tipleri. |
+| `share_plus` | Ayet/hadis kartını paylaşma. |
+| `path_provider` | Paylaşım için geçici görsel saklama. |
 
----
+## İçerik ve Mealler
 
-## ⚡ Supabase Kurulumu ve Veritabanı Yapılandırması
+- **Arapça âyet metinleri** [Tanzil.net](https://tanzil.net)'in kamuya açık Kur'an metninden alınmış ve
+  [Quran.com](https://quran.com) ile harf harf karşılaştırılarak doğrulanmıştır.
+- **Türkçe mealler**, uygulama için yapılan sadeleştirilmiş çevirilerdir; Diyanet İşleri Başkanlığı'nın
+  yayımladığı Kur'an-ı Kerim Meali'nden kopyalanmamıştır (telif gereği gömülmez).
+- **Hadis Arapça metinleri ve kaynak numaraları** [Sunnah.com](https://sunnah.com) koleksiyonlarıyla
+  (Buhârî, Müslim) karşılaştırılarak doğrulanmıştır; kitap-kapak numarası kaynak olarak verilir.
 
-Uygulama, `.env` dosyası boş olsa veya internet bağlantısı bulunmasa dahi gömülü varlıklar (`assets/data/daily_verses.json` ve `daily_hadiths.json`) sayesinde **asla çökmez ve %100 çevrimdışı çalışmaya devam eder**.
+Hata bulursanız lütfen bir issue açın — dini metinlerin doğruluğu bu proje için en kritik konudur.
 
-Supabase bulut entegrasyonunu aktifleştirmek için:
+## Supabase Kurulumu (isteğe bağlı)
 
-### 1. Supabase Projesi Oluşturma
-1. [supabase.com](https://supabase.com) adresine gidin ve yeni bir proje oluşturun.
-2. Projenizin SQL Editor sekmesini açın.
+Uygulama, `.env` boş olsa veya internet olmasa dahi gömülü varlıklar
+(`assets/data/daily_verses.json`, `assets/data/daily_hadiths.json`) sayesinde offline çalışır.
 
-### 2. SQL Migration'larını Çalıştırma
-Proje kök dizinindeki `supabase/migrations/` klasöründeki SQL dosyalarını sırayla çalıştırın:
-- `20261002000000_create_daily_content.sql`: Tabloları (`daily_verses`, `daily_hadiths`), indeksleri ve salt-okunur RLS (`Row Level Security`) politikasını oluşturur.
-- `20261002000001_seed_daily_content.sql`: 30 otantik Âyet ve 30 muteber Hadis (Buhari, Müslim vb.) veritabanına ekler.
+1. [supabase.com](https://supabase.com) üzerinde bir proje oluşturun.
+2. SQL Editor'de sırayla çalıştırın:
+   - `supabase/migrations/20261002000000_create_daily_content.sql` (tablolar + salt-okunur RLS)
+   - `supabase/migrations/20261002000001_seed_daily_content.sql` (doğrulanmış içerik)
+3. **Project Settings → API** bölümünden Project URL ve `anon` key'i kopyalayın.
+   (`service_role` anahtarını asla uygulamaya koymayın.)
+4. Depo kökünde:
 
-### 3. API Anahtarlarını Alma
-1. Supabase Dashboard üzerinde **Project Settings → API** bölümüne gidin.
-2. **Project URL** değerini kopyalayın.
-3. **Project API Keys** altındaki `anon` (public) anahtarını kopyalayın. *(Uyarı: `service_role` anahtarını asla uygulamaya koymayın!)*
-
-### 4. `.env` Dosyasını Tanımlama
-Proje ana dizinindeki `.env` dosyasını açın (yoksa `.env.example` dosyasını kopyalayıp `.env` yapın) ve değerleri yapıştırın:
-```env
-SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_ANON_KEY=eyJhbGciOi...
+```bash
+cp .env.example .env
+# .env içine URL ve anon key'i yapıştırın
 ```
 
----
+`.env` gitignore'dadır; build, var olmasını gerektirmez (fallback: `assets/env/env.properties`).
 
-## 📱 Ana Ekran Widget'ları (Android AppWidgets)
+## Ezan Bildirimleri
 
-Vakit, Android için 5 farklı boyut ve fonksiyonda widget içerir:
+Uygulama, namaz vakitleri girdiğinde ve (isteğe bağlı) vakitten belirli dakikalar önce
+bildirim gönderebilir:
 
-1. **Küçük Widget (2x2 - `VakitSmallWidgetProvider`):** Sonraki vakit adı, ezan saati, donanım destekli canlı geri sayım sayacı (`ChronometerCountDown`) ve aktif kerahat rozeti.
-2. **Orta Boy Widget (4x2 - `VakitMediumWidgetProvider`):** Günün 6 vakti, vakit saatleri, aktif vaktin altında parlayan mat pirinç çizgi göstergesi ve kerahat durumu.
-3. **Zaman Şeridi Widget (4x1 - `VakitStripWidgetProvider`):** Ana ekranda tek satır yer kaplayan kompakt şerit; sonraki vakit ve canlı geri sayım.
-4. **Günün Âyeti Widget (4x2 - `VakitVerseWidgetProvider`):** Mushaf parşömen dokusunda günün âyeti ve sure/ayet numarası.
-5. **Günün Hadisi Widget (4x2 - `VakitHadithWidgetProvider`):** Günün hadis-i şerifi, ravisi ve tam muteber kaynak bilgisi.
+- **Ezan bildirimi:** vaktin girdiğini bildiren yüksek öncelikli bildirim.
+- **Vakit öncesi hatırlatma:** 5–45 dk arası ayarlanabilir (varsayılan 15 dk).
+- **Sessiz mod:** cami ve iş yerleri için ses çalmadan yalnızca titreşim (varsayılan açık).
 
-### Pil Dostu Mimari & Tetikleyiciler
-- **7 Günlük Çevrimdışı JSON:** Uygulama her açıldığında veya şehir değiştiğinde önümüzdeki 7 günün tüm vakitleri ve kerahat zamanları `shared_preferences` içine aktarılır.
-- **Hassas Alarm Yöneticisi (`VakitAlarmReceiver`):** Sürekli çalışan ağır bir background servisi yerine, yalnızca vakit değişim ve kerahat anlarında `AlarmManager.setExactAndAllowWhileIdle()` ile uyanarak widget RemoteViews'ı yeniler.
-- **Yeniden Başlatma & Zaman Alıcısı (`BootReceiver`):** Cihaz yeniden başladığında (`BOOT_COMPLETED`) veya saat/saat dilimi değiştiğinde widget'ları ve alarmları anında günceller.
-- **Deep-Link (`vakit://...`):** Widget'a tıklandığında uygulamanın ilgili ekranına (`/vakitler`, `/ayet`, `/hadis`, `/kible`) doğrudan geçiş yapılır.
+Pil dostu çalışma: sürekli servis yoktur; önümüzdeki 7 günün olayları hesaplanıp
+AlarmManager ile en yakın olay için uyulur, her tetiklenmede sıradaki kurulur.
+Android 13+ için ilk açılışta bildirim izni istenir. Kesin alarm izni (SCHEDULE_EXACT_ALARM)
+verilmezse bildirimler birkaç dakika gecikebilir.
 
----
+## Android Widget'ları
 
-## 🚀 Derleme ve Çalıştırma
+Beş widget: Küçük (2x2), Orta (4x2), Zaman Şeridi (4x1), Günün Âyeti (4x2), Günün Hadisi (4x2).
 
-### Bağımlılıkları İndirme
+- Uygulama her açıldığında veya şehir değiştiğinde önümüzdeki 7 günün vakitleri
+  `shared_preferences`'a aktarılır.
+- `VakitAlarmReceiver`, vakit değişim ve kerahat anlarında
+  `AlarmManager.setExactAndAllowWhileIdle()` ile uyanarak widget'ları yeniler.
+  Kesin alarm izni verilmediyse (Android 14+ varsayılan) `setAndAllowWhileIdle()` ile
+  yaklaşık tetiklemeye düşer; widget yine güncellenir, yalnızca birkaç dakika gecikebilir.
+- `BootReceiver`; cihaz yeniden başlatması, saat ve saat dilimi değişikliklerinde
+  widget'ları ve alarmları tazeler.
+- Widget tıklamaları `vakit://...` deep-link'iyle ilgili ekrana yönlenir.
+
+## Derleme ve Test
+
 ```bash
 flutter pub get
-```
-
-### Testleri Çalıştırma
-```bash
-flutter test
-```
-*Tüm Diyanet hesaplama uyumu (±2 dk), kerahat aralıkları, offline veri garantisi ve Kıble küresel matematik testleri eksiksiz geçer.*
-
-### Kod Analizi
-```bash
 flutter analyze
-```
-
-### Debug APK Derleme
-```bash
+flutter test
 flutter build apk --debug
-```
-
-### Release APK Derleme
-```bash
 flutter build apk --release
 ```
-Derlenen APK dosyası `build/app/outputs/flutter-apk/app-release.apk` dizininde üretilir.
 
----
+Testler namaz vakiti hesaplarını Diyanet'in resmi takvimiyle karşılaştırır (±2 dakika tolerans).
 
-## 📄 Lisans
-Bu proje açık kaynaklı olup eğitim ve ibadet kolaylığı amacıyla geliştirilmiştir.
+## Yol Haritası
+
+Bkz. [SORUNLAR_VE_YAPILACAKLAR.md](SORUNLAR_VE_YAPILACAKLAR.md) — ezan bildirimleri,
+ilçe bazlı vakitler, dünya şehirleri, dini günler takvimi ve yayın hazırlığı planı.
+
+## Lisans
+
+MIT — bkz. [LICENSE](LICENSE).

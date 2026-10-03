@@ -163,9 +163,33 @@ Bu dosya, "Vakit" namaz vakti mobil uygulamasının aşama aşama gelişimini, m
 
 ---
 
+---
+
+### ✅ Aşama 11: İçerik Doğrulama, Build Altyapısı, İzin Güvencesi, Ezan Bildirimleri & v1.5.0
+- [x] **1. Âyet & Hadis İçerik Doğrulama (kaynaklı düzeltme):**
+  - 30 günün âyetinin tamamı bağımsız kaynak (Tanzil uyumlu `QuranJSON` mushaf metni) ile harakat/alef varyantları normalize edilerek **30/30 birebir** doğrulandı; fark çıkan kayıtlar [assets/data/daily_verses.json](assets/data/daily_verses.json) içinde düzeltildi.
+  - 8 hadis (id 6, 7, 8, 10, 23, 25, 26, 28) kaynak, ravi ve tam metin yönünden düzeltildi: Müslim Müsâfirûn 265, Müslim Îmân 93 tam metni, Ebû Hüreyre ravi kaydı, eksik cümleler ve mealde Arapça metinde bulunmayan ifadeler çıkarıldı ([assets/data/daily_hadiths.json](assets/data/daily_hadiths.json)).
+  - Seed SQL, asset JSON'larından yeniden üretildi (`supabase/migrations/*_seed_daily_content.sql`).
+- [x] **2. `.env` Build Güvencesi:** `pubspec.yaml` varlıklarına `assets/env/` (boş şablon `env.properties`) eklendi; gerçek `.env` gitignore'da kalarak derleme dışında tutuldu. `EnvConfig` .env yoksa/boşsa çevrimdışı moda düşer — **release APK, `.env` olmadan da sorunsuz derlenir ve çalışır.**
+- [x] **3. Platform Klasörleri Temizliği:** Yalnızca Android hedeflendiğinden `linux/`, `macos/`, `windows/` ve `web/` klasörleri depodan kaldırıldı.
+- [x] **4. Lisans & README:** [LICENSE](LICENSE) (MIT, dini içeriğin kaynak korunması notuyla) eklendi; [README.md](README.md) abartılı/emoji yığınından arındırılıp "İçerik ve Mealler" (kaynak + doğrulama) ve "Ezan Bildirimleri" bölümleriyle güncellendi.
+- [x] **5. Alarm & Bildirim İzinleri (Play politikası uyumu):**
+  - `USE_EXACT_ALARM` izni **kaldırıldı** (Play Store politika ihlali riski); yerine `SCHEDULE_EXACT_ALARM` + `POST_NOTIFICATIONS` eklendi.
+  - Kotlin alarmlarında `canScheduleExactAlarms()` kontrolü, izin yoksa `setAndAllowWhileIdle` yedeği ve `SecurityException` koruması uygulandı.
+  - `MainActivity` bildirim izni isteğini (kod `5001`) `onCreate` içinde yapıyor.
+- [x] **6. Diyanet Türkiye Geneli Testi:** [diyanet_turkey_wide_test.dart](test/features/prayer_times/diyanet_turkey_wide_test.dart) eklendi — 7 farklı enlem/boylam (İstanbul, Ankara, Erzurum, İzmir, Diyarbakır, Hakkâri, Edirne) için AlAdhan `method=13` (Diyanet yöntemi) referans değerleriyle **±2 dk** uyum ve İstanbul-Hakkâri akşam farkı (55-63 dk) doğrulaması. Referanslar gömülüdür, test çevrimdışı çalışır.
+- [x] **7. Ezan Bildirimleri (yeni özellik):**
+  - **Flutter tarafı:** `NotificationSchedulerService.scheduleFromCity` her vakit için 7 günlük olay üretir ve `HomeWidget.saveWidgetData('notif_events_json', ...)` ile native tarafa yazar; `HomeWidgetService.syncAllWidgets` içine bağlandı (şehir/ayar değişince otomatik yeniden planlama).
+  - **Native tarafı:** [NotificationAlarmReceiver.kt](android/app/src/main/kotlin/com/vakit/vakit/NotificationAlarmReceiver.kt) vakti gelen olayı bildirir ve sonraki olay için alarm kurar (`requestCode 2001`, aksiyon `com.vakit.vakit.ACTION_NOTIFICATION_ALARM`); `BootReceiver` yeniden başlatmada planı tazeler. Bildirimler yalnızca platform API'siyle üretilir (androidx.core bağımlılığı yok).
+  - **Kanallar:** `vakit_adhan` (HIGH — ezan) ve `vakit_pre_alert` (ön hatırlatma); `MainActivity` MethodChannel `com.vakit.vakit/notifications` üzerinden kanalları kurar ve izni ister.
+  - **Ayarlar:** `adhan_notification_enabled` (açık), `pre_alert_enabled` (kapalı), `pre_alert_minutes` (15), `adhan_silent_mode` (sessiz); Ayarlar ekranında "EZAN BİLDİRİMLERİ" bölümü (2 anahtar + slider + sessiz mod) ve değişimde `_resyncNotificationAlarms` ile anında yeniden planlama.
+- [x] **8. Doğrulama & Release:** `flutter analyze` 0 hata, **27/27 test geçti**, hem debug hem release APK hatasız derlendi; birikmiş tüm değişiklikler `v1.5.0` etiketiyle GitHub'a push edildi.
+
+---
+
 ## 🏆 Sonuç
 
-Projenin tüm aşamaları (Aşama 0 - Aşama 10) %100 tamamlanmış, unit ve widget testleri başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş, kullanıcının fiziksel testleri doğrultusunda widget inflate ve pusula sensör sorunları kökten çözülmüş, tüm arayüze yapay zeka klişelerinden uzak lüks bir modernite kazandırılmış, kıble ekranındaki saniyelik rebuild fırtınası kökten onarılarak `v1.4.0` sürümü yayımlanmıştır.
+Projenin tüm aşamaları (Aşama 0 - Aşama 11) %100 tamamlanmış, unit ve widget testleri (27/27) başarıyla geçmiş, `flutter analyze` 0 hata ile temizlenmiş, kullanıcının fiziksel testleri doğrultusunda widget inflate ve pusula sensör sorunları kökten çözülmüş, âyet/hadis içeriği kaynaklarıyla birebir doğrulanmış, alarm/bildirim izinleri Play politikasına uygun hale getirilmiş, tüm arayüze yapay zeka klişelerinden uzak lüks bir modernite kazandırılmış, kıble ekranındaki saniyelik rebuild fırtınası kökten onarılmış ve ezan bildirimleri eklenerek `v1.5.0` sürümü yayımlanmıştır.
 
 
 

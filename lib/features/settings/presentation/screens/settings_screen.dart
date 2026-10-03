@@ -129,7 +129,123 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // 3. GÖRÜNÜM & TEMA
+            // 3. EZAN BİLDİRİMLERİ
+            _buildSectionHeader(context, 'EZAN BİLDİRİMLERİ'),
+            const SizedBox(height: 6),
+            Text(
+              'Namaz vakti girdiğinde ve vakit öncesinde cihaz bildirimi al.',
+              style: AppTypography.bodySmall(
+                color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildSettingsContainer(
+              isDark: isDark,
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    secondary: Icon(
+                      Icons.notifications_active_outlined,
+                      color: AppColors.brassGold,
+                    ),
+                    title: Text(
+                      'Ezan Bildirimi',
+                      style: AppTypography.bodyLarge(
+                        color: isDark ? AppColors.darkText : AppColors.ink,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Vakit girdiğinde bildirim göster',
+                      style: AppTypography.bodySmall(
+                        color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+                      ),
+                    ),
+                    value: settings.adhanNotificationEnabled,
+                    activeThumbColor: AppColors.brassGold,
+                    onChanged: (val) => notifier.setAdhanNotification(val),
+                  ),
+                  Divider(
+                    color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.1),
+                    height: 1,
+                  ),
+                  SwitchListTile(
+                    secondary: Icon(
+                      Icons.timer_outlined,
+                      color: AppColors.brassGold,
+                    ),
+                    title: Text(
+                      'Vakit Öncesi Hatırlatma',
+                      style: AppTypography.bodyLarge(
+                        color: isDark ? AppColors.darkText : AppColors.ink,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Vakitten önce haber ver',
+                      style: AppTypography.bodySmall(
+                        color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+                      ),
+                    ),
+                    value: settings.preAlertEnabled,
+                    activeThumbColor: AppColors.brassGold,
+                    onChanged: (val) => notifier.setPreAlert(val),
+                  ),
+                  if (settings.preAlertEnabled)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Slider(
+                              value: settings.preAlertMinutes.toDouble(),
+                              min: 5,
+                              max: 45,
+                              divisions: 8,
+                              label: '${settings.preAlertMinutes} dk',
+                              activeColor: AppColors.clayAmber,
+                              onChanged: (val) => notifier.setPreAlertMinutes(val.round()),
+                            ),
+                          ),
+                          Text(
+                            '${settings.preAlertMinutes} dk önce',
+                            style: AppTypography.labelLarge(
+                              color: AppColors.clayAmber,
+                              isBold: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  Divider(
+                    color: isDark ? AppColors.darkBorder : AppColors.mossGreen.withValues(alpha: 0.1),
+                    height: 1,
+                  ),
+                  SwitchListTile(
+                    secondary: Icon(
+                      Icons.do_not_disturb_on_outlined,
+                      color: AppColors.brassGold,
+                    ),
+                    title: Text(
+                      'Sessiz Bildirim (Titreşim)',
+                      style: AppTypography.bodyLarge(
+                        color: isDark ? AppColors.darkText : AppColors.ink,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'Cami ve iş yerleri için: ses çalmadan yalnızca titreşim',
+                      style: AppTypography.bodySmall(
+                        color: isDark ? AppColors.darkMuted : AppColors.inkMuted,
+                      ),
+                    ),
+                    value: settings.adhanSilentMode,
+                    activeThumbColor: AppColors.brassGold,
+                    onChanged: (val) => notifier.setAdhanSilentMode(val),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // 4. GÖRÜNÜM & TEMA
             _buildSectionHeader(context, 'GÖRÜNÜM'),
             const SizedBox(height: 12),
             _buildSettingsContainer(
@@ -156,7 +272,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // 4. SUPABASE & ÇEVRİMİÇİ İÇERİK DURUMU
+            // 5. SUPABASE & ÇEVRİMİÇİ İÇERİK DURUMU
             _buildSectionHeader(context, 'VERİ & BULUT DURUMU'),
             const SizedBox(height: 12),
             _buildSettingsContainer(
@@ -200,7 +316,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // 5. UYGULAMA BİLGİSİ
+            // 6. UYGULAMA BİLGİSİ
             _buildSectionHeader(context, 'HAKKINDA'),
             const SizedBox(height: 12),
             _buildSettingsContainer(

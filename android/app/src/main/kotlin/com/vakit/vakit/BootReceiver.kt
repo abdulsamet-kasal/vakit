@@ -12,6 +12,8 @@ class BootReceiver : BroadcastReceiver() {
             Intent.ACTION_TIME_CHANGED,
             Intent.ACTION_TIMEZONE_CHANGED -> {
                 VakitWidgetHelper.updateAllWidgets(context)
+                // Ezan bildirimi alarmlarını da yeniden kur (boot sonrası kaybolur)
+                NotificationAlarmReceiver().scheduleNext(context)
             }
         }
     }

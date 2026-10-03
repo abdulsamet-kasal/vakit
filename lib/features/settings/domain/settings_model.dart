@@ -10,11 +10,28 @@ class AppSettingsModel {
   final KerahatConfig kerahatConfig;
   final ThemeMode themeMode;
 
+  // --- Ezan bildirimi ayarları ---
+  /// Vakit girdiğinde ezan bildirimi gösterilsin mi?
+  final bool adhanNotificationEnabled;
+
+  /// Vakit öncesi hatırlatma gösterilsin mi?
+  final bool preAlertEnabled;
+
+  /// Vakit öncesi hatırlatma süresi (dakika).
+  final int preAlertMinutes;
+
+  /// Bildirim sessiz mi (titreşim) yoksa cihaz sesiyle mi gelsin?
+  final bool adhanSilentMode;
+
   const AppSettingsModel({
     this.calculationMethod = CalculationMethod.turkey,
     this.madhab = Madhab.shafi,
     this.kerahatConfig = KerahatConfig.defaults,
     this.themeMode = ThemeMode.system,
+    this.adhanNotificationEnabled = true,
+    this.preAlertEnabled = false,
+    this.preAlertMinutes = 15,
+    this.adhanSilentMode = true,
   });
 
   AppSettingsModel copyWith({
@@ -22,12 +39,21 @@ class AppSettingsModel {
     Madhab? madhab,
     KerahatConfig? kerahatConfig,
     ThemeMode? themeMode,
+    bool? adhanNotificationEnabled,
+    bool? preAlertEnabled,
+    int? preAlertMinutes,
+    bool? adhanSilentMode,
   }) {
     return AppSettingsModel(
       calculationMethod: calculationMethod ?? this.calculationMethod,
       madhab: madhab ?? this.madhab,
       kerahatConfig: kerahatConfig ?? this.kerahatConfig,
       themeMode: themeMode ?? this.themeMode,
+      adhanNotificationEnabled:
+          adhanNotificationEnabled ?? this.adhanNotificationEnabled,
+      preAlertEnabled: preAlertEnabled ?? this.preAlertEnabled,
+      preAlertMinutes: preAlertMinutes ?? this.preAlertMinutes,
+      adhanSilentMode: adhanSilentMode ?? this.adhanSilentMode,
     );
   }
 

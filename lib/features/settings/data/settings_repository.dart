@@ -13,6 +13,12 @@ class SettingsRepository {
   static const _keySunsetKerahat = 'sunset_kerahat_min';
   static const _keyThemeMode = 'app_theme_mode';
 
+  // Ezan bildirimi ayarları
+  static const _keyAdhanNotification = 'adhan_notification_enabled';
+  static const _keyPreAlertEnabled = 'pre_alert_enabled';
+  static const _keyPreAlertMinutes = 'pre_alert_minutes';
+  static const _keyAdhanSilent = 'adhan_silent_mode';
+
   Future<AppSettingsModel> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -51,6 +57,10 @@ class SettingsRepository {
         sunsetBeforeMinutes: sunsetKerahat,
       ),
       themeMode: themeMode,
+      adhanNotificationEnabled: prefs.getBool(_keyAdhanNotification) ?? true,
+      preAlertEnabled: prefs.getBool(_keyPreAlertEnabled) ?? false,
+      preAlertMinutes: prefs.getInt(_keyPreAlertMinutes) ?? 15,
+      adhanSilentMode: prefs.getBool(_keyAdhanSilent) ?? true,
     );
   }
 
@@ -69,5 +79,10 @@ class SettingsRepository {
     } else {
       await prefs.remove(_keyThemeMode);
     }
+
+    await prefs.setBool(_keyAdhanNotification, settings.adhanNotificationEnabled);
+    await prefs.setBool(_keyPreAlertEnabled, settings.preAlertEnabled);
+    await prefs.setInt(_keyPreAlertMinutes, settings.preAlertMinutes);
+    await prefs.setBool(_keyAdhanSilent, settings.adhanSilentMode);
   }
 }
