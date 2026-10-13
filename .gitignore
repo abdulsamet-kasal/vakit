@@ -50,7 +50,14 @@ app.*.map.json
 # Environment files
 .env
 .env*.local
-hakkında.txt
 *.secret
+*.key
+*.pem
+*.jks
+*.keystore
+google-services.json
+GoogleService-Info.plist
+*serviceAccount*.json
+*credentials*.json
 
 

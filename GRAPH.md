@@ -187,7 +187,7 @@ graph LR
 
 | Alan | Değer |
 |---|---|
-| Proje URL | `https://***REMOVED***.supabase.co` (`.env` içinde: `SUPABASE_URL`) |
+| Proje URL | `.env.local` içinde: `NEXT_PUBLIC_SUPABASE_URL` (depo dokümanına yazılmaz) |
 | Anahtar | `SUPABASE_ANON_KEY` — **yalnızca** anon/public anahtar; `service_role` kesinlikle uygulamaya konmaz |
 | Başlatma | `main.dart` → `Supabase.initialize` (try/catch; başarısızsa çevrimdışı devam) |
 | Erişim | `anon` + `authenticated` rolleri için **salt okunur SELECT** RLS politikaları |
